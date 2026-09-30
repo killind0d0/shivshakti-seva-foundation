@@ -1,0 +1,188 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Quote, MapPin, ArrowRight, X, HeartHandshake } from "lucide-react";
+import { ImpactStory } from "@/data/foundationData";
+import TraditionalDivider from "./TraditionalDivider";
+
+interface ImpactStoriesProps {
+  stories: ImpactStory[];
+  onOpenDonation?: () => void;
+}
+
+export default function ImpactStories({ stories, onOpenDonation }: ImpactStoriesProps) {
+  const [selectedStory, setSelectedStory] = useState<ImpactStory | null>(null);
+
+  useEffect(() => {
+    if (!selectedStory) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedStory(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedStory]);
+
+  return (
+    <section
+      id="hamara-prabhav"
+      className="py-16 sm:py-24 bg-white border-b border-brand-maroon-100"
+      aria-label="प्रभाव एवं सेवा की कहानियाँ"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-3 mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-cream-200 text-brand-maroon-900 text-xs font-bold uppercase tracking-wider">
+            <span>आशा और आत्मबल</span>
+          </div>
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-maroon-950 tracking-tight">
+            सेवा की कहानियाँ
+          </h2>
+          <p className="text-base sm:text-lg text-brand-charcoal-600 font-normal leading-relaxed">
+            जब संकट में घिरा कोई परिवार हिम्मत हारने लगता है, तब आपका सहयोग उनके
+            लिए एक नया सवेरा बनकर आता है।
+          </p>
+          <TraditionalDivider color="gold" variant="diya" className="mt-2" />
+        </div>
+
+        {/* Stories Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {stories.map((story) => (
+            <div
+              key={story.id}
+              className="group bg-brand-cream-50/70 rounded-2xl overflow-hidden border border-brand-maroon-100/90 hover:border-brand-gold-400 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                {/* Dignified Image */}
+                <div className="relative h-56 w-full overflow-hidden bg-brand-cream-200">
+                  <Image
+                    src={story.image}
+                    alt={story.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 bg-brand-maroon-900/90 text-brand-gold-300 text-xs px-2.5 py-1 rounded-md font-semibold backdrop-blur-sm border border-brand-gold-500/30">
+                    {story.category}
+                  </div>
+                  <div className="absolute bottom-3 left-3 text-white text-xs flex items-center gap-1 font-medium">
+                    <MapPin className="w-3.5 h-3.5 text-brand-saffron-400" />
+                    <span>{story.location}</span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 space-y-4">
+                  <h3 className="font-heading text-xl font-bold text-brand-maroon-950 group-hover:text-brand-saffron-600 transition-colors line-clamp-2 leading-snug">
+                    {story.title}
+                  </h3>
+
+                  <div className="relative pl-6 border-l-2 border-brand-gold-500/70 py-1">
+                    <Quote className="w-4 h-4 text-brand-gold-600 absolute left-1 top-0 opacity-70" />
+                    <p className="text-xs sm:text-sm italic text-brand-charcoal-700 leading-snug font-medium">
+                      "{story.quote}"
+                    </p>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-brand-charcoal-600 leading-relaxed line-clamp-3">
+                    {story.summary}
+                  </p>
+                </div>
+              </div>
+
+              {/* Bottom Action */}
+              <div className="px-6 pb-6 pt-2">
+                <button
+                  onClick={() => setSelectedStory(story)}
+                  className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-brand-maroon-900 text-brand-maroon-900 hover:text-white border border-brand-maroon-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow-md active:scale-95"
+                >
+                  <span>पूरी कहानी पढ़ें</span>
+                  <ArrowRight className="w-4 h-4 text-brand-gold-500 transform group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Story Full Modal */}
+      {selectedStory && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="story-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
+          onClick={() => setSelectedStory(null)}
+        >
+          <div
+            className="bg-white max-w-xl w-full rounded-3xl shadow-2xl border-2 border-brand-gold-400/50 overflow-hidden flex flex-col max-h-[90vh] animate-scaleIn"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative h-60 w-full bg-brand-cream-200">
+              <Image
+                src={selectedStory.image}
+                alt={selectedStory.title}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-maroon-950/90 via-transparent to-black/30" />
+              <button
+                onClick={() => setSelectedStory(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 text-white hover:bg-brand-maroon-800 transition"
+                aria-label="कहानी बंद करें"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <span className="text-xs text-brand-gold-300 font-bold uppercase tracking-wider">
+                  {selectedStory.category} • {selectedStory.location}
+                </span>
+                <h3
+                  id="story-modal-title"
+                  className="font-heading text-xl sm:text-2xl font-bold leading-snug mt-1"
+                >
+                  {selectedStory.title}
+                </h3>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-4 text-brand-charcoal-800 text-sm leading-relaxed">
+              <div className="p-4 rounded-xl bg-brand-cream-100 border-l-4 border-brand-gold-500 italic text-brand-maroon-950 font-medium">
+                "{selectedStory.quote}"
+              </div>
+
+              <div className="space-y-3 font-normal text-base text-brand-charcoal-700 leading-relaxed">
+                <p>{selectedStory.fullStory}</p>
+              </div>
+
+              <div className="p-3 rounded-lg bg-brand-cream-50 border border-brand-cream-300 text-xs text-brand-charcoal-600 flex items-center gap-2">
+                <HeartHandshake className="w-4 h-4 text-brand-saffron-600 flex-shrink-0" />
+                <span>
+                  इस परिवार को यह सहायता जन-सहयोग द्वारा उपलब्ध कराई गई।
+                </span>
+              </div>
+            </div>
+
+            <div className="p-4 bg-brand-cream-50 border-t border-brand-maroon-100 flex items-center justify-between">
+              <a
+                href="#sahyog-karein"
+                onClick={() => setSelectedStory(null)}
+                className="px-4 py-2 rounded-xl bg-brand-saffron-600 hover:bg-brand-saffron-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition"
+              >
+                <HeartHandshake className="w-4 h-4" />
+                <span>इस सेवा में सहयोग दें</span>
+              </a>
+              <button
+                onClick={() => setSelectedStory(null)}
+                className="px-5 py-2 rounded-xl bg-brand-maroon-800 text-white font-semibold text-xs hover:bg-brand-maroon-900 transition"
+              >
+                बंद करें
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

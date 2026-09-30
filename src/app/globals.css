@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800&family=Rozha+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-devanagari: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Rozha One', 'Noto Sans Devanagari', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-devanagari);
+}
+
+body {
+  color: #1c1917;
+  background-color: #fbf8f1;
+  overflow-x: hidden;
+  line-height: 1.65;
+}
+
+/* Accessibility high-contrast mode */
+body.high-contrast {
+  filter: contrast(115%);
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Focus styles for WCAG 2.2 AA accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #ea580c;
+  outline-offset: 3px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #fbf8f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #7c1119;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5e0d13;
+}
+
+/* Print styling */
+@media print {
+  header, footer, .no-print {
+    display: none !important;
+  }
+}
+
+/* Subtle decorative border inspired by Indian traditional motifs */
+.border-sacred-gold {
+  border-image: linear-gradient(to right, #b58d24, #d4af37, #f2e7b8, #d4af37, #b58d24) 1;
+}
+
+.bg-pattern-subtle {
+  background-image: radial-gradient(#d4af37 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Traditional Indian Jali (जाली) Architectural Pattern */
+.bg-pattern-jali {
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4af37' fill-opacity='0.045' fill-rule='evenodd'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 6 L34 20 L20 34 L6 20 Z' /%3E%3Ccircle cx='20' cy='20' r='2.5' /%3E%3Ccircle cx='0' cy='0' r='2' /%3E%3Ccircle cx='40' cy='0' r='2' /%3E%3Ccircle cx='0' cy='40' r='2' /%3E%3Ccircle cx='40' cy='40' r='2' /%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Traditional Floral Mandala Pattern */
+.bg-pattern-mandala {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23b58d24' stroke-width='0.7' stroke-opacity='0.07' fill='none'%3E%3Ccircle cx='30' cy='30' r='10' /%3E%3Ccircle cx='30' cy='30' r='18' /%3E%3Cpath d='M30 12 C30 20 48 30 30 38 C30 20 12 30 30 12 Z' /%3E%3Cpath d='M12 30 C20 30 30 48 38 30 C20 30 30 12 12 30 Z' /%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Traditional Indian Card Frame with Antique Gold Trimming */
+.card-royal-traditional {
+  position: relative;
+  background: #ffffff;
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 10px 30px -10px rgba(124, 17, 25, 0.08), 0 0 0 1px rgba(212, 175, 55, 0.15);
+}
+
+.text-shadow-sm {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Continuous Marquee Ticker */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 100s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes festive-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-festive-marquee {
+  display: inline-flex;
+  width: max-content;
+  animation: festive-marquee 20s linear infinite;
+  will-change: transform;
+}
+
+.animate-festive-marquee:hover,
+.animate-festive-marquee:active {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+    overflow-x: auto;
+  }
+}
+
+/* Modal and Element Entrance Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: floatGentle 4.5s ease-in-out infinite;
+}
+
+/* Classical Indian Parchment (हस्तनिर्मित कागज़) Texture */
+.bg-parchment-traditional {
+  background-color: #fbf7ee;
+  background-image: 
+    radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 0% 0%, rgba(124, 17, 25, 0.03) 0%, transparent 40%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+}
+
+/* Traditional Gold Foil (स्वर्ण पत्र) Shimmer Border */
+.border-gold-foil {
+  border-image: linear-gradient(135deg, #d4af37, #fef3c7 40%, #b45309 70%, #d4af37 100%) 1;
+}
+
+.gold-foil-text {
+  background: linear-gradient(135deg, #92400e 0%, #b45309 30%, #d97706 70%, #78350f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Devanagari Breathing Typography */
+.devanagari-relaxed {
+  line-height: 1.85 !important;
+}
+
+/* Indian Classical Drop Cap (आरंभिक सुसज्जित अक्षर) */
+.dropcap-traditional::first-letter {
+  float: left;
+  font-size: 3.25rem;
+  line-height: 0.85;
+  padding-top: 4px;
+  padding-right: 10px;
+  padding-bottom: 2px;
+  color: #7c1119;
+  font-family: var(--font-heading), serif;
+  font-weight: 800;
+  text-shadow: 1px 1px 0px rgba(212, 175, 55, 0.6);
+}
+
+/* Zero Overlap Guarantee & Scroll Lock: Prevent background bleed and hide floating widgets when mobile drawer or modal is open */
+body.mobile-menu-active,
+body.modal-open {
+  overflow: hidden !important;
+}
+
+body.mobile-menu-active #floating-quick-action,
+body.mobile-menu-active aside[aria-label*="त्वरित सेवा"],
+body.mobile-menu-active button[aria-label*="शीर्ष पर जाएँ"],
+body.modal-open #floating-quick-action,
+body.modal-open aside[aria-label*="त्वरित सेवा"],
+body.modal-open button[aria-label*="शीर्ष पर जाएँ"] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
