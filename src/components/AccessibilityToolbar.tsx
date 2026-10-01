@@ -65,11 +65,11 @@ export default function AccessibilityToolbar({
     <div
       role="region"
       aria-label="सुगमता एवं त्वरित संपर्क पट्टी"
-      className="bg-brand-maroon-950 text-brand-cream-200 text-[11px] sm:text-xs py-1 px-3 sm:px-6 border-b border-brand-maroon-900/80 select-none"
+      className="bg-brand-maroon-950 text-brand-cream-200 text-[11px] sm:text-xs py-1 px-2 sm:px-6 border-b border-brand-maroon-900/80 select-none w-full max-w-full overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-2 w-full min-w-0">
         {/* Urgent Helpline Link - Ultra-slim single line */}
-        <div className="flex items-center gap-1.5 min-w-0">
+        <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 flex-shrink">
           <span className="inline-flex items-center justify-center p-0.5 rounded-full bg-brand-saffron-500 text-white animate-pulse flex-shrink-0">
             <PhoneCall className="w-2.5 h-2.5" />
           </span>
@@ -78,24 +78,26 @@ export default function AccessibilityToolbar({
           </span>
           <a
             href="tel:+919117135379"
-            className="font-bold text-brand-gold-400 hover:text-white transition-colors underline underline-offset-2 truncate"
+            className="font-bold text-brand-gold-400 hover:text-white transition-colors underline underline-offset-2 truncate text-[11px] sm:text-xs"
             title="हेल्पलाइन पर सीधे कॉल करें"
           >
-            <span className="sm:hidden font-sans font-bold">+91 91171 35379 (२४×७)</span>
+            <span className="xs:hidden font-sans font-bold">91171 35379</span>
+            <span className="hidden xs:inline sm:hidden font-sans font-bold">+91 91171 35379</span>
             <span className="hidden sm:inline font-sans font-bold">+91 91171 35379 (२४×७ सदैव उपलब्ध)</span>
           </a>
         </div>
 
         {/* Accessibility options & Assistance request */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
           {/* Quick assistance modal button */}
           <button
             onClick={onOpenHelp}
-            className="flex items-center gap-1.5 px-2.5 py-1 sm:py-0.5 min-h-[28px] sm:min-h-0 rounded-full bg-brand-saffron-600 hover:bg-brand-saffron-500 text-white font-semibold text-[10px] sm:text-xs transition shadow-sm whitespace-nowrap active:scale-95"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full bg-brand-saffron-600 hover:bg-brand-saffron-500 text-white font-semibold text-[10px] sm:text-xs transition shadow-sm whitespace-nowrap active:scale-95"
             aria-label="सहायता हेतु तुरंत अनुरोध दर्ज करें"
           >
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>सहायता मांगें</span>
+            <HelpCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            <span className="hidden xs:inline">सहायता मांगें</span>
+            <span className="xs:hidden">सहायता</span>
           </button>
 
           {/* Font resizing - Visible on tablet/desktop */}
@@ -153,11 +155,12 @@ export default function AccessibilityToolbar({
           {/* Admin & Staff Portal Link */}
           <button
             onClick={onOpenAdmin}
-            className="inline-flex items-center gap-1.5 text-brand-gold-300 hover:text-white text-[10px] sm:text-[11px] font-bold underline underline-offset-2 transition whitespace-nowrap pl-1.5 py-1 sm:py-0.5 min-h-[28px] sm:min-h-0 rounded hover:bg-white/10 active:scale-95"
+            className="inline-flex items-center gap-1 text-brand-gold-300 hover:text-white text-[10px] sm:text-[11px] font-bold underline underline-offset-2 transition whitespace-nowrap pl-1 py-0.5 rounded hover:bg-white/10 active:scale-95"
             title="प्रशासक एवं सेवादार लॉगिन पोर्टल"
           >
-            <Lock className="w-3 h-3 text-brand-gold-400" />
-            <span>एडमिन / सेवादार लॉगिन</span>
+            <Lock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-brand-gold-400" />
+            <span className="hidden sm:inline">एडमिन / सेवादार लॉगिन</span>
+            <span className="sm:hidden">एडमिन</span>
           </button>
         </div>
       </div>

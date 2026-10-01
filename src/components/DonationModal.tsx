@@ -23,6 +23,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
+import PaymentAppBadges from "./PaymentAppBadges";
 
 interface DonationModalProps {
   isOpen: boolean;
@@ -59,7 +60,7 @@ export default function DonationModal({
   const effectiveAmount = customAmount ? parseFloat(customAmount) : (selectedAmount || 0);
 
   const upiLink = useMemo(() => {
-    const cleanUpi = donationConfig?.upiId || "9117135379@upi";
+    const cleanUpi = donationConfig?.upiId || "9177135379@mairtel";
     const cleanName = donationConfig?.accountName || "शिवशक्ति सेवा फाउंडेशन";
     const base = `upi://pay?pa=${encodeURIComponent(cleanUpi)}&pn=${encodeURIComponent(cleanName)}&cu=INR&tn=${encodeURIComponent("शिवशक्ति सेवा सहयोग")}`;
     return effectiveAmount > 0 ? `${base}&am=${effectiveAmount}` : base;
@@ -290,7 +291,7 @@ export default function DonationModal({
                     <QrCode className="w-24 h-24 text-brand-maroon-950 opacity-80" />
                   )}
                   <span className="text-[10px] text-brand-charcoal-500 font-bold mt-1">
-                    PhonePe • GPay • Paytm
+                    PhonePe • GPay • Paytm • BHIM
                   </span>
                 </div>
 
@@ -306,10 +307,10 @@ export default function DonationModal({
                   </div>
 
                   <div className="font-mono text-xs sm:text-sm font-bold text-brand-maroon-950 break-all p-2.5 rounded-xl bg-white border border-brand-maroon-200 shadow-inner flex items-center justify-between">
-                    <span>{donationConfig?.upiId || "9117135379@upi"}</span>
+                    <span>{donationConfig?.upiId || "9177135379@mairtel"}</span>
                     <button
                       type="button"
-                      onClick={() => handleCopy(donationConfig?.upiId || "9117135379@upi", "modal-upi")}
+                      onClick={() => handleCopy(donationConfig?.upiId || "9177135379@mairtel", "modal-upi")}
                       className="ml-2 p-1.5 rounded-lg bg-brand-cream-100 hover:bg-brand-cream-200 text-brand-maroon-900 transition flex-shrink-0"
                       title="यूपीआई कॉपी करें"
                     >
@@ -324,7 +325,7 @@ export default function DonationModal({
                   <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
                     <button
                       type="button"
-                      onClick={() => handleCopy(donationConfig?.upiId || "9117135379@upi", "modal-upi-btn")}
+                      onClick={() => handleCopy(donationConfig?.upiId || "9177135379@mairtel", "modal-upi-btn")}
                       className="w-full sm:w-auto px-4 py-2 rounded-xl bg-brand-maroon-800 hover:bg-brand-maroon-900 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95"
                     >
                       {copiedField === "modal-upi-btn" ? (
@@ -346,6 +347,15 @@ export default function DonationModal({
                       <Smartphone className="w-3.5 h-3.5" />
                       <span>सीधे UPI ऐप से भुगतान करें</span>
                     </a>
+                  </div>
+
+                  {/* Glowing Payment App Logos */}
+                  <div className="pt-2 border-t border-brand-maroon-100/70">
+                    <div className="text-[10px] font-bold text-brand-charcoal-600 uppercase tracking-wider mb-1.5 text-center sm:text-left flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-brand-saffron-600" />
+                      <span>स्वीकृत यूपीआई ऐप्स (Accepted UPI Apps)</span>
+                    </div>
+                    <PaymentAppBadges size="sm" className="justify-center sm:justify-start" />
                   </div>
                 </div>
               </div>

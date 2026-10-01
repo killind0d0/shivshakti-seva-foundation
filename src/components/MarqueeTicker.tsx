@@ -73,25 +73,24 @@ export default function MarqueeTicker() {
   return (
     <aside
       aria-label="ताज़ा समाचार एवं गतिविधियाँ स्क्रॉलर"
-      className="relative z-20 bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 text-white border-y border-brand-gold-500/40 shadow-inner overflow-hidden select-none"
+      className="relative z-20 w-full max-w-full bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 text-white border-y border-brand-gold-500/40 shadow-inner overflow-hidden select-none"
     >
-      <div className="flex items-center">
+      <div className="flex items-center w-full max-w-full min-w-0">
         {/* Left Fixed Label */}
-        <div className="flex-shrink-0 z-10 px-3 sm:px-5 py-2.5 bg-gradient-to-r from-brand-saffron-700 to-brand-maroon-900 border-r border-brand-gold-400/50 shadow-md flex items-center gap-2">
+        <div className="flex-shrink-0 z-10 px-3 sm:px-4 py-2.5 bg-gradient-to-r from-brand-saffron-700 to-brand-maroon-900 border-r border-brand-gold-400/50 shadow-md flex items-center gap-1.5 sm:gap-2">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-gold-300"></span>
           </span>
           <span className="font-heading text-xs sm:text-sm font-bold tracking-wide text-brand-gold-200 flex items-center gap-1.5 whitespace-nowrap">
             <Sparkles className="w-3.5 h-3.5 text-brand-gold-400 inline" />
-            <span className="hidden xs:inline">नवीनतम सूचनाएँ</span>
-            <span className="xs:hidden">ताज़ा</span>
+            <span>ताज़ा खबर</span>
           </span>
         </div>
 
         {/* Marquee Track */}
         <div
-          className="relative flex-1 overflow-hidden py-2"
+          className="relative flex-1 min-w-0 overflow-hidden py-2"
           role="marquee"
           aria-live="polite"
         >

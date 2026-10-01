@@ -469,7 +469,7 @@ export const initialFoundationData: FoundationData = {
     },
   ],
   donationConfig: {
-    upiId: "9117135379@upi",
+    upiId: "9177135379@mairtel",
     accountName: "शिवशक्ति सेवा फाउंडेशन",
     bankName: "भारतीय स्टेट बैंक (State Bank of India)",
     accountNumber: "XXXXXXXXXXXX",

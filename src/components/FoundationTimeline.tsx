@@ -90,7 +90,7 @@ function TimelineCard({
 
       {/* Content Card */}
       <div
-        className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] ${
+        className={`ml-10 sm:ml-12 md:ml-0 w-[calc(100%-2.5rem)] sm:w-[calc(100%-3rem)] md:w-[calc(50%-2rem)] min-w-0 ${
           isEven ? "md:pr-8 md:text-right" : "md:pl-8 md:text-left"
         } transition-all duration-700 ${
           isInView
@@ -132,8 +132,8 @@ export default function FoundationTimeline() {
       className="py-16 sm:py-24 bg-brand-cream-50 border-b border-brand-maroon-100 relative overflow-hidden"
       aria-label="संस्था की सेवा यात्रा"
     >
-      <RangoliCorner position="top-left" />
-      <RangoliCorner position="top-right" />
+      <RangoliCorner position="top-left" size={240} className="hidden md:block" />
+      <RangoliCorner position="top-right" size={240} className="hidden md:block" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}

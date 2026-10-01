@@ -48,7 +48,13 @@ export default function Home() {
     try {
       const saved = localStorage.getItem("ssf_foundation_data");
       if (saved) {
-        setData(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        // Automatically migrate any legacy UPI ID
+        if (parsed?.donationConfig?.upiId === "9117135379@upi") {
+          parsed.donationConfig.upiId = "9177135379@mairtel";
+          localStorage.setItem("ssf_foundation_data", JSON.stringify(parsed));
+        }
+        setData(parsed);
       }
     } catch (e) {
       console.error(e);
@@ -111,7 +117,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-brand-cream-100 font-sans selection:bg-brand-saffron-500 selection:text-white pb-16 md:pb-0">
+    <div className="flex flex-col min-h-screen w-full max-w-full overflow-x-hidden bg-brand-cream-100 font-sans selection:bg-brand-saffron-500 selection:text-white pb-16 md:pb-0">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-brand-maroon-900 focus:text-white focus:rounded-lg focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-gold-500 font-heading text-sm"
@@ -146,6 +152,9 @@ export default function Home() {
         onToggleMobileMenu={setIsMobileMenuOpen}
       />
 
+      {/* 4. Top Live Marquee Ticker (Shifted back to its prominent original position below Header) */}
+      <MarqueeTicker />
+
       {/* Ambient Sacred Logo Watermark */}
       <div
         className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden select-none"
@@ -158,7 +167,7 @@ export default function Home() {
       </div>
 
       {/* ========== MAIN CONTENT — Clean Single-Page Scroll ========== */}
-      <main id="main-content" tabIndex={-1} className="relative z-10 flex-1 focus:outline-none">
+      <main id="main-content" tabIndex={-1} className="relative z-10 flex-1 w-full max-w-full overflow-x-hidden focus:outline-none">
 
         {/* SECTION 1: Hero Banner */}
         <Hero
@@ -174,9 +183,6 @@ export default function Home() {
           onOpenHelp={handleOpenGeneralHelp}
           onOpenDonation={() => setDonationModalOpen(true)}
         />
-
-        {/* Live Marquee Ticker (below hero, non-intrusive) */}
-        <MarqueeTicker />
 
         {/* SECTION 4: About Us — Who We Are, 4 Pillars, Philosophy */}
         <div id="hamare-bare-mein">

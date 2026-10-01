@@ -241,8 +241,8 @@ export default function Header({
           : "bg-white shadow-xs py-2 border-b border-brand-maroon-100/60"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-3 min-h-[4.75rem] sm:min-h-[5.25rem] lg:min-h-[5.75rem] py-1 sm:py-1.5">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-1.5 sm:gap-3 min-h-[4rem] sm:min-h-[5.25rem] lg:min-h-[5.75rem] py-1 sm:py-1.5">
           {/* 1. Official Logo & Compact Brand Title */}
           <a
             href="#mukhya-prishth"
@@ -250,7 +250,7 @@ export default function Header({
               e.preventDefault();
               handleNavClick("#mukhya-prishth");
             }}
-            className="flex items-center gap-2.5 sm:gap-3.5 group focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 rounded-xl p-1 transition flex-shrink-0"
+            className="flex items-center gap-2 sm:gap-3.5 group focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 rounded-xl p-0.5 sm:p-1 transition min-w-0"
             aria-label="शिवशक्ति सेवा फाउंडेशन मुख्य पृष्ठ"
           >
             <div className="relative flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
@@ -259,16 +259,16 @@ export default function Header({
                 alt="शिवशक्ति सेवा फाउंडेशन आधिकारिक प्रतीक"
                 width={84}
                 height={84}
-                className="object-contain rounded-full shadow-md drop-shadow-md w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 border-2 border-brand-gold-400/70 p-0.5 bg-brand-maroon-950/10"
+                className="object-contain rounded-full shadow-md drop-shadow-md w-11 h-11 xs:w-13 xs:h-13 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 border-2 border-brand-gold-400/70 p-0.5 bg-brand-maroon-950/10"
                 priority
               />
             </div>
 
-            <div className="flex flex-col">
-              <span className="font-heading text-lg sm:text-xl lg:text-2xl font-extrabold tracking-tight text-brand-maroon-950 leading-tight group-hover:text-brand-saffron-600 transition-colors whitespace-nowrap">
+            <div className="flex flex-col min-w-0">
+              <span className="font-heading text-[15px] xs:text-base sm:text-xl lg:text-2xl font-extrabold tracking-tight text-brand-maroon-950 leading-tight group-hover:text-brand-saffron-600 transition-colors whitespace-nowrap">
                 शिवशक्ति सेवा फाउंडेशन
               </span>
-              <span className="text-[11px] font-semibold text-brand-maroon-700 tracking-wider hidden sm:block">
+              <span className="text-[10px] sm:text-[11px] font-semibold text-brand-maroon-700 tracking-wider hidden sm:block">
                 मानव सेवा • करुणा • सामाजिक उत्थान
               </span>
             </div>
@@ -420,7 +420,7 @@ export default function Header({
           </nav>
 
           {/* 3. Right Action Buttons: Sleek & Compact */}
-          <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             {/* Quick Phone Call Button on Desktop */}
             <a
               href="tel:+919117135379"
@@ -434,17 +434,17 @@ export default function Header({
             {/* Primary CTA (सहयोग करें) */}
             <button
               onClick={onOpenDonation}
-              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-brand-maroon-800 via-brand-maroon-700 to-brand-maroon-900 hover:from-brand-maroon-700 hover:to-brand-maroon-800 rounded-xl shadow-xs hover:shadow-md transition active:scale-95 border-b-2 border-brand-gold-500 whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-sm font-bold text-white bg-gradient-to-r from-brand-maroon-800 via-brand-maroon-700 to-brand-maroon-900 hover:from-brand-maroon-700 hover:to-brand-maroon-800 rounded-xl shadow-xs hover:shadow-md transition active:scale-95 border-b-2 border-brand-gold-500 whitespace-nowrap"
               aria-label="संस्था को सहयोग प्रदान करें"
             >
-              <HeartHandshake className="w-4 h-4 text-brand-gold-400" />
+              <HeartHandshake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-gold-400" />
               <span>सहयोग करें</span>
             </button>
 
             {/* Mobile / Tablet Menu Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-xl text-brand-maroon-900 hover:bg-brand-cream-200 focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 transition"
+              className="lg:hidden p-1 sm:p-1.5 rounded-xl text-brand-maroon-900 hover:bg-brand-cream-200 focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 transition"
               aria-expanded={mobileMenuOpen}
               aria-label={mobileMenuOpen ? "मेनू बंद करें" : "मेनू खोलें"}
             >

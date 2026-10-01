@@ -20,6 +20,7 @@ import { FoundationData } from "@/data/foundationData";
 import TraditionalDivider from "./TraditionalDivider";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
 import ShareCard from "./ShareCard";
+import PaymentAppBadges from "./PaymentAppBadges";
 
 interface DonationSectionProps {
   donationConfig: FoundationData["donationConfig"];
@@ -38,7 +39,7 @@ export default function DonationSection({
   const effectiveAmount = customAmount ? parseFloat(customAmount) : (selectedAmount || 0);
 
   const upiLink = useMemo(() => {
-    const cleanUpi = donationConfig.upiId || "9117135379@upi";
+    const cleanUpi = donationConfig.upiId || "9177135379@mairtel";
     const cleanName = donationConfig.accountName || "शिवशक्ति सेवा फाउंडेशन";
     const base = `upi://pay?pa=${encodeURIComponent(cleanUpi)}&pn=${encodeURIComponent(cleanName)}&cu=INR&tn=${encodeURIComponent("शिवशक्ति सेवा फाउंडेशन जनसहयोग")}`;
     return effectiveAmount > 0 ? `${base}&am=${effectiveAmount}` : base;
@@ -292,6 +293,15 @@ export default function DonationSection({
                       <Smartphone className="w-4 h-4 text-emerald-200" />
                       <span>UPI ऐप द्वारा सीधे भुगतान करें</span>
                     </a>
+
+                    {/* Small Glowing Logos for PhonePe, Paytm, Google Pay, Amazon Pay, BHIM */}
+                    <div className="mt-4 pt-3.5 border-t border-brand-cream-200/80 w-full">
+                      <div className="text-[10px] font-bold text-brand-maroon-900/80 uppercase tracking-wider mb-2 text-center flex items-center justify-center gap-1.5">
+                        <Sparkles className="w-3 h-3 text-brand-saffron-600" />
+                        <span>स्वीकृत यूपीआई ऐप्स • instant payment</span>
+                      </div>
+                      <PaymentAppBadges size="sm" />
+                    </div>
                   </div>
 
                   {/* Right: UPI ID & Copy Details */}
