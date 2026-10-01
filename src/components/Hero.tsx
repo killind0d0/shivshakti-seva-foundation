@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { HeartHandshake, Eye, ShieldCheck, Sparkles, ChevronRight, Phone } from "lucide-react";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
@@ -10,7 +10,34 @@ interface HeroProps {
   onOpenHelp: () => void;
 }
 
+const fullVerse = "॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ।\nसर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ॥";
+
 export default function Hero({ onOpenDonation, onOpenHelp }: HeroProps) {
+  const [displayedVerse, setDisplayedVerse] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplayedVerse(fullVerse);
+      return;
+    }
+
+    let currentIndex = 0;
+    let timer: NodeJS.Timeout;
+
+    const step = () => {
+      if (currentIndex < fullVerse.length) {
+        currentIndex++;
+        setDisplayedVerse(fullVerse.slice(0, currentIndex));
+        const char = fullVerse[currentIndex - 1];
+        const delay = char === "।" || char === "॥" ? 350 : 45;
+        timer = setTimeout(step, delay);
+      }
+    };
+
+    timer = setTimeout(step, 400);
+    return () => clearTimeout(timer);
+  }, []);
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -78,9 +105,11 @@ export default function Hero({ onOpenDonation, onOpenHelp }: HeroProps) {
                 </span>
                 <span className="w-6 h-[2px] bg-brand-gold-400"></span>
               </div>
-              <p className="font-heading text-sm sm:text-base lg:text-lg text-brand-gold-200 leading-relaxed font-bold italic text-center py-1">
-                ॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ।<br />
-                सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ॥
+              <p className="font-heading text-sm sm:text-base lg:text-lg text-brand-gold-200 leading-relaxed font-bold italic text-center py-1 whitespace-pre-line min-h-[3.25rem]">
+                {displayedVerse}
+                {displayedVerse.length < fullVerse.length && (
+                  <span className="inline-block w-1.5 h-4 ml-1 bg-brand-gold-400 animate-pulse align-middle" />
+                )}
               </p>
               {/* Hindi Meaning for Common Public */}
               <div className="pt-2 border-t border-brand-gold-400/30 text-center">

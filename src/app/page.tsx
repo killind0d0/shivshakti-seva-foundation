@@ -28,7 +28,10 @@ import NeedHelpModal from "@/components/NeedHelpModal";
 import AdminModal from "@/components/AdminModal";
 import FloatingQuickAction from "@/components/FloatingQuickAction";
 import FestivalGreetingBanner from "@/components/FestivalGreetingBanner";
-import FestivalTheme from "@/components/FestivalTheme";
+import StickyDonateBar from "@/components/StickyDonateBar";
+import FoundationTimeline from "@/components/FoundationTimeline";
+import EventCountdown from "@/components/EventCountdown";
+import HelpTracker from "@/components/HelpTracker";
 import { initialFoundationData, FoundationData } from "@/data/foundationData";
 
 export default function Home() {
@@ -108,6 +111,11 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-brand-cream-100 font-sans selection:bg-brand-saffron-500 selection:text-white">
+      <a href="#main-content" 
+         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-brand-maroon-900 focus:text-white focus:rounded-lg focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-gold-500 font-heading text-sm"
+      >
+        मुख्य सामग्री पर जाएँ
+      </a>
       {/* Top Scroll Reading Progress Indicator */}
       <div
         className="fixed top-0 left-0 right-0 h-[3.5px] bg-gradient-to-r from-brand-saffron-500 via-brand-gold-400 to-brand-saffron-600 z-50 transition-all duration-100 ease-out origin-left pointer-events-none shadow-sm"
@@ -162,6 +170,9 @@ export default function Home() {
         {/* 5. About Us Section (Mission, Philosophy & 4 Pillars) */}
         <AboutSection />
 
+        {/* 5b. Foundation Journey / Milestones Timeline */}
+        <FoundationTimeline />
+
         {/* 6. Founder & Chief Sevadaar's Vision Letter (Breaks Card Fatigue & Adds Human Trust) */}
         <FoundersVision />
 
@@ -172,6 +183,9 @@ export default function Home() {
             onOpenHelpWithService={handleOpenHelpWithService}
           />
         </div>
+
+        {/* 7b. Help Request Tracker */}
+        <HelpTracker onOpenHelpModal={handleOpenGeneralHelp} />
 
         {/* 8. Daily Community Service Pledge (Interactive Micro-Moment & Blessing Counter) */}
         <DailySankalpWidget />
@@ -210,6 +224,9 @@ export default function Home() {
 
         {/* 13. Prominent & Tasteful Donation Section (UPI, Bank, QR) */}
         <DonationSection donationConfig={data.donationConfig} />
+
+        {/* 13b. Upcoming Welfare Event Countdown & RSVP */}
+        <EventCountdown />
 
         {/* 14. News & Activities */}
         <NewsSection news={data.news} />
@@ -257,8 +274,10 @@ export default function Home() {
         }
       />
 
+      {/* Sticky Mobile Donate CTA */}
+      <StickyDonateBar onOpenDonation={() => setDonationModalOpen(true)} />
+
       {/* Indian Festive Theme Auto-Decorator & Visual Preview */}
-      <FestivalTheme />
     </div>
   );
 }

@@ -1,5 +1,20 @@
 import type { Metadata, Viewport } from "next";
+import { Noto_Sans_Devanagari, Rozha_One } from "next/font/google";
 import "./globals.css";
+
+const notoSansDevanagari = Noto_Sans_Devanagari({
+  subsets: ["devanagari"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-noto",
+});
+
+const rozhaOne = Rozha_One({
+  subsets: ["devanagari"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-rozha",
+});
 
 export const viewport: Viewport = {
   themeColor: "#7c1119",
@@ -9,7 +24,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shivshaktisevafoundation.org"),
+  metadataBase: new URL("https://shivshakti-seva-foundation-delta.vercel.app"),
   title: "शिवशक्ति सेवा फाउंडेशन | मानव सेवा • राहत कार्य • पुनर्वास",
   description:
     "शिवशक्ति सेवा फाउंडेशन गरीब, जरूरतमंद, असहाय और प्राकृतिक आपदा से प्रभावित लोगों की सेवा, राहत, भोजन वितरण, शिक्षा एवं स्वास्थ्य सहायता के लिए समर्पित संस्था है।",
@@ -32,7 +47,7 @@ export const metadata: Metadata = {
     title: "शिवशक्ति सेवा फाउंडेशन | सेवा केवल सहायता नहीं, मानवता के प्रति हमारा दायित्व है",
     description:
       "गरीब, असहाय और आपदा प्रभावित परिवारों के साथ मिलकर राहत, पुनर्वास और सम्मानपूर्ण जीवन निर्माण के लिए समर्पित संस्था।",
-    url: "https://shivshaktisevafoundation.org",
+    url: "https://shivshakti-seva-foundation-delta.vercel.app",
     siteName: "शिवशक्ति सेवा फाउंडेशन",
     images: [
       {
@@ -56,6 +71,7 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/icon-192.png",
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -76,8 +92,8 @@ export default function RootLayout({
               "@type": "NGO",
               name: "शिवशक्ति सेवा फाउंडेशन",
               alternateName: "Shivshakti Seva Foundation",
-              url: "https://shivshaktisevafoundation.org",
-              logo: "https://shivshaktisevafoundation.org/images/logo/official_logo.png",
+              url: "https://shivshakti-seva-foundation-delta.vercel.app",
+              logo: "https://shivshakti-seva-foundation-delta.vercel.app/images/logo/official_logo.png",
               description:
                 "गरीब और जरूरतमंद लोगों की सहायता, बाढ़ एवं प्राकृतिक आपदा राहत, भोजन वितरण और पुनर्वास कार्यों के लिए समर्पित संस्था।",
               areaServed: "भारत",
@@ -87,7 +103,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-brand-cream-100 text-brand-charcoal-900 antialiased selection:bg-brand-saffron-500 selection:text-white">
+      <body className={`min-h-screen bg-brand-cream-100 text-brand-charcoal-900 antialiased selection:bg-brand-saffron-500 selection:text-white ${notoSansDevanagari.variable} ${rozhaOne.variable}`}>
         {children}
       </body>
     </html>

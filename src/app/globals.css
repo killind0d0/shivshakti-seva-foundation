@@ -1,12 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800&family=Rozha+One&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-devanagari: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: 'Rozha One', 'Noto Sans Devanagari', serif;
+  --font-devanagari: var(--font-noto), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: var(--font-rozha), var(--font-noto), serif;
 }
 
 html {

@@ -14,10 +14,12 @@ import {
   ExternalLink,
   Sparkles,
   Smartphone,
+  Share2,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
 import TraditionalDivider from "./TraditionalDivider";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
+import ShareCard from "./ShareCard";
 
 interface DonationSectionProps {
   donationConfig: FoundationData["donationConfig"];
@@ -31,6 +33,7 @@ export default function DonationSection({
   const [customAmount, setCustomAmount] = useState<string>("");
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const effectiveAmount = customAmount ? parseFloat(customAmount) : (selectedAmount || 0);
 
@@ -61,6 +64,18 @@ export default function DonationSection({
     { value: 2100, label: "₹ २,१००", impact: "बाढ़ पीड़ित परिवार हेतु आपातकालीन किट" },
     { value: 5100, label: "₹ ५,१००", impact: "स्वास्थ्य शिविर एवं गंभीर औषधि संबल" },
   ];
+
+  const getImpactMessage = (amount: number): string => {
+    if (amount <= 0) return "कृपया राशि चुनें या दर्ज करें";
+    if (amount <= 300) return "🍚 १ परिवार को ३ दिन का पौष्टिक राशन";
+    if (amount <= 700) return "🍚 १ परिवार को १ सप्ताह का राशन एवं दैनिक भोजन";
+    if (amount <= 1500) return "📚 १ बच्चे की ३ माह की शिक्षा सामग्री व पुस्तकें";
+    if (amount <= 3000) return "💊 १ बुजुर्ग की १ माह की स्वास्थ्य सेवा एवं औषधि";
+    if (amount <= 6000) return "🧵 १ बहन के लिए सिलाई मशीन व प्रशिक्षण";
+    if (amount <= 15000) return "🏠 १ आपदा पीड़ित परिवार का पुनर्वास एवं संबल";
+    if (amount <= 30000) return "🏥 १ गाँव में निःशुल्क स्वास्थ्य शिविर का आयोजन";
+    return "🌟 सम्पूर्ण गाँव के लिए बहुआयामी सेवा अभियान";
+  };
 
   const handleCopy = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);
@@ -149,6 +164,56 @@ export default function DonationSection({
                   placeholder="उदा. ५,०००"
                   className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-brand-maroon-200 text-sm focus:outline-none focus:border-brand-saffron-500 focus:ring-1 focus:ring-brand-saffron-500 bg-white"
                 />
+              </div>
+            </div>
+
+            {/* Interactive Impact Calculator */}
+            <div className="mt-6 pt-5 border-t border-brand-cream-300">
+              <label
+                htmlFor="impact-slider"
+                className="block text-xs font-semibold text-brand-charcoal-700 mb-3"
+              >
+                ✦ प्रभाव देखें — स्लाइडर खिसकाएँ:
+              </label>
+              <input
+                id="impact-slider"
+                type="range"
+                min={100}
+                max={51000}
+                step={100}
+                value={effectiveAmount || 500}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
+                  setSelectedAmount(null);
+                  setCustomAmount(val.toString());
+                }}
+                className="w-full h-2.5 bg-brand-cream-300 rounded-full appearance-none cursor-pointer
+                           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6
+                           [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-saffron-600
+                           [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white
+                           [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer
+                           [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:h-6
+                           [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-brand-saffron-600
+                           [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white
+                           [&::-moz-range-thumb]:shadow-lg [&::-moz-range-thumb]:cursor-pointer"
+                aria-label="दान राशि स्लाइडर"
+                aria-valuemin={100}
+                aria-valuemax={51000}
+                aria-valuenow={effectiveAmount || 500}
+                aria-valuetext={`₹ ${(effectiveAmount || 500).toLocaleString("en-IN")}`}
+              />
+              <div className="flex justify-between text-[10px] text-brand-charcoal-400 mt-1 px-0.5">
+                <span>₹ १००</span>
+                <span>₹ ५१,०००</span>
+              </div>
+              {/* Impact Preview */}
+              <div className="mt-4 p-4 bg-gradient-to-r from-brand-saffron-50 to-brand-cream-100 rounded-2xl border border-brand-saffron-200/60 text-center">
+                <div className="text-2xl sm:text-3xl font-heading text-brand-maroon-900 font-extrabold tracking-tight">
+                  ₹ {(effectiveAmount || 0).toLocaleString("en-IN")}
+                </div>
+                <p className="text-sm sm:text-base text-brand-maroon-700 mt-1.5 font-medium leading-relaxed">
+                  {getImpactMessage(effectiveAmount)}
+                </p>
               </div>
             </div>
           </div>
@@ -374,9 +439,28 @@ export default function DonationSection({
                 {donationConfig.taxExemptionNote}
               </span>
             </div>
+
+            {/* Share Contribution Certificate */}
+            <div className="mt-4 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShareModalOpen(true)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-gold-500 to-brand-gold-600 hover:from-brand-gold-600 hover:to-brand-gold-700 text-brand-maroon-950 font-heading font-bold text-xs sm:text-sm shadow-md hover:shadow-lg active:scale-95 transition cursor-pointer"
+              >
+                <Share2 className="w-4 h-4 text-brand-maroon-900" />
+                <span>सहयोग प्रमाण पत्र / संदेश साझा करें</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Share Card Modal */}
+      <ShareCard
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        defaultAmount={effectiveAmount}
+      />
     </section>
   );
 }

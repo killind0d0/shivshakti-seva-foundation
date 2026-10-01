@@ -69,8 +69,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["'Noto Sans Devanagari'", "system-ui", "-apple-system", "sans-serif"],
-        heading: ["'Rozha One'", "'Noto Sans Devanagari'", "serif"],
+        sans: ["var(--font-devanagari)"],
+        heading: ["var(--font-heading)"],
       },
       keyframes: {
         fadeIn: {

@@ -121,7 +121,7 @@ export default function FeaturedCampaign({
               <div className="space-y-1.5">
                 <div className="w-full bg-brand-maroon-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-brand-maroon-800">
                   <div
-                    className="bg-gradient-to-r from-brand-gold-500 via-brand-saffron-500 to-brand-gold-400 h-full rounded-full transition-all duration-1000 ease-out"
+                    className="bg-gradient-to-r from-brand-gold-500 via-brand-saffron-400 to-brand-gold-500 bg-[length:200%_100%] animate-shimmer h-full rounded-full transition-all duration-1000 ease-out"
                     style={{ width: isInView ? `${campaign.percent}%` : "0%" }}
                     role="progressbar"
                     aria-valuenow={isInView ? campaign.percent : 0}
@@ -133,6 +133,9 @@ export default function FeaturedCampaign({
                   <span>{campaign.percent}% लक्ष्य पूर्ण</span>
                   <span>शेष आवश्यकता प्रगति पर</span>
                 </div>
+                <p className="text-[10px] text-brand-cream-400/70 text-right mt-0.5">
+                  अंतिम अद्यतन: ०१ अक्टूबर २०२६
+                </p>
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row gap-2.5">

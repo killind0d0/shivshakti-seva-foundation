@@ -14,6 +14,7 @@ interface PhotoGalleryProps {
 export default function PhotoGallery({ photos }: PhotoGalleryProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const categories = [
     { id: "all", name: "सभी चित्र" },
@@ -155,6 +156,14 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fadeIn"
           onClick={closeLightbox}
+          onTouchStart={(e) => setTouchStartX(e.changedTouches[0].screenX)}
+          onTouchEnd={(e) => {
+            if (touchStartX === null) return;
+            const touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) nextPhoto();
+            if (touchEndX - touchStartX > 50) prevPhoto();
+            setTouchStartX(null);
+          }}
         >
           <div
             className="relative max-w-4xl w-full bg-brand-maroon-950 text-white rounded-2xl overflow-hidden shadow-2xl border border-brand-maroon-800"

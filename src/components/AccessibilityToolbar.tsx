@@ -16,6 +16,21 @@ export default function AccessibilityToolbar({
   const [highContrast, setHighContrast] = useState<boolean>(false);
 
   useEffect(() => {
+    try {
+      const savedFont = localStorage.getItem("ssf_font_size") as "normal" | "large" | "xlarge";
+      if (savedFont) setFontSize(savedFont);
+      
+      const savedContrast = localStorage.getItem("ssf_high_contrast") === "true";
+      if (savedContrast) {
+        setHighContrast(true);
+        document.body.classList.add("high-contrast");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  useEffect(() => {
     const root = document.documentElement;
     if (fontSize === "normal") {
       root.style.fontSize = "16px";
@@ -24,14 +39,25 @@ export default function AccessibilityToolbar({
     } else if (fontSize === "xlarge") {
       root.style.fontSize = "20px";
     }
+    try {
+      localStorage.setItem("ssf_font_size", fontSize);
+    } catch (e) {
+      console.error(e);
+    }
   }, [fontSize]);
 
   const toggleHighContrast = () => {
-    setHighContrast(!highContrast);
-    if (!highContrast) {
+    const newVal = !highContrast;
+    setHighContrast(newVal);
+    if (newVal) {
       document.body.classList.add("high-contrast");
     } else {
       document.body.classList.remove("high-contrast");
+    }
+    try {
+      localStorage.setItem("ssf_high_contrast", String(newVal));
+    } catch (e) {
+      console.error(e);
     }
   };
 

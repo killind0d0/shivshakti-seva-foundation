@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   HeartHandshake,
   MapPin,
@@ -204,20 +205,30 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
             © २०२६ शिवशक्ति सेवा फाउंडेशन। सर्वाधिकार सुरक्षित।
           </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setPolicyModal("privacy")}
-              className="hover:text-brand-gold-400 underline transition"
-            >
-              गोपनीयता नीति
-            </button>
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            <div className="flex flex-col items-center gap-0.5">
+              <button
+                onClick={() => setPolicyModal("privacy")}
+                className="hover:text-brand-gold-400 underline transition"
+              >
+                गोपनीयता नीति
+              </button>
+              <Link href="/privacy" className="text-[10px] text-brand-gold-500/80 hover:text-brand-gold-400 transition-colors">
+                (विस्तृत पृष्ठ)
+              </Link>
+            </div>
             <span>•</span>
-            <button
-              onClick={() => setPolicyModal("terms")}
-              className="hover:text-brand-gold-400 underline transition"
-            >
-              नियम एवं शर्तें
-            </button>
+            <div className="flex flex-col items-center gap-0.5">
+              <button
+                onClick={() => setPolicyModal("terms")}
+                className="hover:text-brand-gold-400 underline transition"
+              >
+                नियम एवं शर्तें
+              </button>
+              <Link href="/terms" className="text-[10px] text-brand-gold-500/80 hover:text-brand-gold-400 transition-colors">
+                (विस्तृत पृष्ठ)
+              </Link>
+            </div>
             {onOpenAdmin && (
               <>
                 <span>•</span>
@@ -309,7 +320,14 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
               )}
             </div>
 
-            <div className="p-4 bg-brand-cream-50 border-t border-brand-maroon-100 flex justify-end">
+            <div className="p-4 bg-brand-cream-50 border-t border-brand-maroon-100 flex items-center justify-between">
+              <Link 
+                href={policyModal === "privacy" ? "/privacy" : "/terms"}
+                className="text-brand-maroon-700 hover:text-brand-maroon-900 underline text-xs font-semibold"
+                onClick={() => setPolicyModal(null)}
+              >
+                संपूर्ण विवरण पढ़ें
+              </Link>
               <button
                 onClick={() => setPolicyModal(null)}
                 className="px-4 py-1.5 rounded-lg bg-brand-maroon-800 text-white font-semibold text-xs"

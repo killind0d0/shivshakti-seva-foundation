@@ -34,6 +34,7 @@ export default function NeedHelpModal({
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [createdTrackingId, setCreatedTrackingId] = useState<string>("");
 
   if (!isOpen) return null;
 
@@ -46,14 +47,19 @@ export default function NeedHelpModal({
     setError(null);
     setSubmitting(true);
 
+    const reqId = `SSF-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
+    setCreatedTrackingId(reqId);
+
     setTimeout(() => {
       // Store locally for Admin
       try {
         const stored = JSON.parse(localStorage.getItem("ssf_help_requests") || "[]");
         stored.push({
           ...formData,
+          requestId: reqId,
           date: new Date().toLocaleDateString("hi-IN"),
           id: Date.now(),
+          status: "प्राप्त हुआ (जाँच जारी)",
         });
         localStorage.setItem("ssf_help_requests", JSON.stringify(stored));
       } catch (err) {
@@ -123,13 +129,20 @@ export default function NeedHelpModal({
               <h3 className="font-heading text-xl font-bold text-emerald-950">
                 घबराएं नहीं, आपका संदेश हमें मिल गया है।
               </h3>
+              {createdTrackingId && (
+                <div className="bg-white p-3 rounded-xl border border-emerald-200 inline-block text-center shadow-xs">
+                  <p className="text-xs text-brand-charcoal-600 font-medium">आपका अनुरोध ट्रैकिंग क्रमांक (Tracking ID):</p>
+                  <p className="text-xl font-heading font-bold text-brand-maroon-900 tracking-wider mt-0.5">{createdTrackingId}</p>
+                  <p className="text-[11px] text-emerald-700 mt-0.5">वेबसाइट पर 'अनुरोध स्थिति' से प्रगति देख सकते हैं</p>
+                </div>
+              )}
               <p className="text-sm text-emerald-900 leading-relaxed">
                 शिवशक्ति सेवा फाउंडेशन का सेवा दल आपके द्वारा दिए गए फोन नंबर पर
                 शीघ्र ही संपर्क करेगा। ईश्वर आपको संबल प्रदान करें।
               </p>
               <button
                 onClick={onClose}
-                className="mt-3 px-6 py-2 rounded-lg bg-brand-maroon-800 text-white font-bold text-sm"
+                className="mt-3 px-6 py-2 rounded-lg bg-brand-maroon-800 text-white font-bold text-sm hover:bg-brand-maroon-900 transition"
               >
                 बंद करें
               </button>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://shivshaktisevafoundation.org/sitemap.xml
+Sitemap: https://shivshakti-seva-foundation-delta.vercel.app/sitemap.xml
