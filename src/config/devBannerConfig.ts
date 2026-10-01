@@ -1,24 +1,32 @@
 /**
- * Development & Setup Banner Configuration
+ * Under Development & Maintenance Screen Configuration
  * 
- * To show the "Enter API details to start the website" banner:
- *   Set `enabled: true`
+ * When `maintenanceMode: true`:
+ *   The entire website is shielded behind a majestic "Under Development & Setup" screen.
+ *   Visitors cannot see or scroll through the website content.
+ *   It announces that the website is in development and waiting for API setup.
+ *   Developers can enter the passkey (`developerPasscode`) or click "डेवलपर अनलॉक" to preview.
  * 
- * To hide/disable it:
- *   Set `enabled: false`
+ * When `maintenanceMode: false`:
+ *   The website is 100% visible and accessible to everyone.
  * 
- * You can also toggle this live in the browser console:
- *   localStorage.setItem("ssf_dev_banner", "true");  // Enable
- *   localStorage.setItem("ssf_dev_banner", "false"); // Disable
+ * You can also toggle this instantly in browser console without code changes:
+ *   localStorage.setItem("ssf_maintenance_mode", "false"); location.reload(); // Live to everyone
+ *   localStorage.setItem("ssf_maintenance_mode", "true");  location.reload(); // Shielded
  */
 
 export const devBannerConfig = {
-  // Master toggle: set to true to display, false to hide
-  enabled: true,
+  // Master switch: Set to true to hide the website behind the Under Development screen.
+  // Set to false when work is finished to make the site fully live.
+  maintenanceMode: true,
 
-  // Bilingual messaging as requested
-  titleHindi: "वेबसाइट सेटअप एवं विकास मोड (Development Mode)",
-  messageHindi: "वेबसाइट को पूर्णतः सक्रिय करने हेतु आवश्यक API विवरण दर्ज करें",
-  messageEnglish: "Enter API details to start and activate the website",
-  badgeText: "कॉन्फ़िगरेशन प्रतीक्षित (Setup Pending)",
+  // Simple passkey for developer / admin to unlock the preview on any device
+  developerPasscode: "sj2026",
+
+  // Public display texts
+  titleHindi: "वेबसाइट निर्माण एवं तकनीकी सेटअप प्रगति पर है",
+  titleEnglish: "Website Currently Under Development",
+  noticeHindi: "वेबसाइट को पूर्णतः सक्रिय करने हेतु आवश्यक API विवरण दर्ज करें एवं तकनीकी सत्यापन पूरा करें।",
+  noticeEnglish: "Enter API details to complete activation and start the website.",
+  developerCredit: "अभिकल्पन एवं तकनीकी प्रबंधन: एस.जे. डिजिटल्स (SJ Digitals)",
 };
