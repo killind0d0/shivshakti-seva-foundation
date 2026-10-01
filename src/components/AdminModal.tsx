@@ -95,7 +95,7 @@ const defaultStaffAccounts: StaffAccount[] = [
   },
   {
     id: "STAFF-101",
-    name: "आकाश गिरि / अमित कुमार",
+    name: "आकाश जयदेव गिरि / अमित कुमार",
     phone: "9117135379",
     password: "staff@123",
     roleTitle: "क्षेत्रीय सेवादार",
@@ -239,7 +239,7 @@ export default function AdminModal({
     if (isAdminMatch) {
       const adminUser: CurrentUser = {
         id: "admin",
-        name: "आकाश गिरि (मुख्य प्रशासक)",
+        name: "आकाश जयदेव गिरि (मुख्य प्रशासक)",
         role: "admin",
       };
       setCurrentUser(adminUser);

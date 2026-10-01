@@ -87,9 +87,11 @@ export default function FoundersVision() {
                   />
                 </div>
                 <div>
-                  <div className="font-heading text-xl sm:text-2xl font-black text-brand-maroon-950 tracking-wide">
-                    आकाश गिरि
-                  </div>
+                  <h3 className="tracking-wide">
+                    <span className="founder-shimmer-title text-xl sm:text-2xl font-black">
+                      आकाश जयदेव गिरि (Akash Jaidev Giri)
+                    </span>
+                  </h3>
                   <div className="text-xs sm:text-sm font-semibold text-brand-maroon-800 mt-0.5">
                     संस्थापक एवं मुख्य सेवादार
                   </div>
@@ -150,7 +152,7 @@ export default function FoundersVision() {
 
                 <Image
                   src="/images/founder.png"
-                  alt="आकाश गिरि — संस्थापक एवं मुख्य सेवादार (शिवशक्ति सेवा फाउंडेशन)"
+                  alt="आकाश जयदेव गिरि (Akash Jaidev Giri) — संस्थापक एवं मुख्य सेवादार (शिवशक्ति सेवा फाउंडेशन)"
                   fill
                   sizes="(max-width: 768px) 100vw, 440px"
                   className="object-contain object-bottom group-hover:scale-[1.02] transition-transform duration-500 drop-shadow-2xl"
@@ -169,11 +171,13 @@ export default function FoundersVision() {
               {/* Founder Information & Dedication (Cleanly placed below the uncropped photo) */}
               <div className="p-5 sm:p-6 bg-gradient-to-b from-white via-brand-cream-50/50 to-brand-cream-100/40 border-t border-brand-gold-300/40">
                 <div className="text-center mb-4">
-                  <h4 className="font-heading text-2xl font-black text-brand-maroon-950 tracking-wide">
-                    आकाश गिरि
+                  <h4 className="tracking-wide">
+                    <span className="founder-shimmer-title text-xl sm:text-2xl font-black">
+                      आकाश जयदेव गिरि (Akash Jaidev Giri)
+                    </span>
                   </h4>
                   <p className="text-xs sm:text-sm font-semibold text-brand-saffron-700 mt-1">
-                    संस्थापक • शिवशक्ति सेवा फाउंडेशन
+                    संस्थापक एवं मुख्य सेवादार • शिवशक्ति सेवा फाउंडेशन
                   </p>
                   <p className="text-xs text-brand-charcoal-700 italic mt-2 bg-white/80 p-2.5 rounded-xl border border-brand-gold-300/30 shadow-2xs leading-relaxed">
                     “सेवा केवल सहायता नहीं, मानवता के प्रति हमारा परम पावन दायित्व है।”

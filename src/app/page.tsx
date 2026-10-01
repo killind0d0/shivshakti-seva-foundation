@@ -117,7 +117,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen w-full max-w-full overflow-x-hidden bg-brand-cream-100 font-sans selection:bg-brand-saffron-500 selection:text-white pb-16 md:pb-0">
+    <div className="flex flex-col min-h-screen w-full bg-brand-cream-100 font-sans selection:bg-brand-saffron-500 selection:text-white pb-16 md:pb-0">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-brand-maroon-900 focus:text-white focus:rounded-lg focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-gold-500 font-heading text-sm"
@@ -167,7 +167,7 @@ export default function Home() {
       </div>
 
       {/* ========== MAIN CONTENT — Clean Single-Page Scroll ========== */}
-      <main id="main-content" tabIndex={-1} className="relative z-10 flex-1 w-full max-w-full overflow-x-hidden focus:outline-none">
+      <main id="main-content" tabIndex={-1} className="relative z-10 flex-1 w-full focus:outline-none">
 
         {/* SECTION 1: Hero Banner */}
         <Hero

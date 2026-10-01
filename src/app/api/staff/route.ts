@@ -23,7 +23,7 @@ const defaultStaffAccounts = [
   },
   {
     id: "STAFF-101",
-    name: "आकाश गिरि / अमित कुमार",
+    name: "आकाश जयदेव गिरि / अमित कुमार",
     phone: "9117135379",
     password: "staff@123",
     roleTitle: "क्षेत्रीय सेवादार",
