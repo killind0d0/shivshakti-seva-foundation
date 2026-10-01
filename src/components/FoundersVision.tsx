@@ -77,26 +77,28 @@ export default function FoundersVision() {
             {/* Signature & Seal Block */}
             <div className="mt-8 pt-6 border-t border-brand-maroon-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
               <div className="flex items-center gap-3.5">
-                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-brand-gold-500 shadow-md shrink-0 bg-brand-cream-200">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-brand-gold-500 shadow-md shrink-0 bg-brand-cream-200 ring-2 ring-brand-maroon-900/10">
                   <Image
                     src="/images/founder.png"
-                    alt="आकाश गिरि — संस्थापक"
+                    alt="आकाश जयदेव गिरि (Akash Jaidev Giri) — संस्थापक एवं मुख्य सेवादार"
                     fill
                     sizes="64px"
                     className="object-cover object-top"
                   />
                 </div>
                 <div>
-                  <h3 className="tracking-wide">
-                    <span className="founder-shimmer-title text-xl sm:text-2xl font-black">
-                      आकाश जयदेव गिरि (Akash Jaidev Giri)
-                    </span>
-                  </h3>
-                  <div className="text-xs sm:text-sm font-semibold text-brand-maroon-800 mt-0.5">
-                    संस्थापक एवं मुख्य सेवादार
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-brand-gold-500/15 border border-brand-gold-500/40 text-[10px] font-bold text-brand-maroon-900 mb-1">
+                    <Award className="w-3 h-3 text-brand-gold-600" />
+                    <span>मुख्य मार्गदर्शक एवं प्रेरणास्रोत</span>
                   </div>
-                  <div className="text-[11px] text-brand-charcoal-500 font-medium mt-0.5">
-                    शिवशक्ति सेवा फाउंडेशन
+                  <h3 className="font-heading text-xl sm:text-2xl font-black text-brand-maroon-950 tracking-tight leading-tight">
+                    आकाश जयदेव गिरि
+                  </h3>
+                  <div className="font-serif text-xs sm:text-sm font-bold text-brand-saffron-800 tracking-wide">
+                    (Akash Jaidev Giri)
+                  </div>
+                  <div className="text-xs font-bold text-brand-maroon-900 mt-1">
+                    संस्थापक एवं मुख्य सेवादार • <span className="text-brand-charcoal-600 font-medium">शिवशक्ति सेवा फाउंडेशन</span>
                   </div>
                 </div>
               </div>
@@ -162,8 +164,8 @@ export default function FoundersVision() {
                 {/* Floating Top Badge (Doesn't cover body) */}
                 <div className="absolute top-4 left-4 z-10">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-maroon-900/90 text-brand-gold-300 text-[11px] font-bold tracking-wide backdrop-blur-md shadow-md border border-brand-gold-500/40">
-                    <Sparkles className="w-3.5 h-3.5 text-brand-gold-400" />
-                    <span>संस्थापक एवं मुख्य सेवादार</span>
+                    <Award className="w-3.5 h-3.5 text-brand-gold-400" />
+                    <span>संस्थापक एवं मुख्य मार्गदर्शक</span>
                   </div>
                 </div>
               </div>
@@ -171,15 +173,28 @@ export default function FoundersVision() {
               {/* Founder Information & Dedication (Cleanly placed below the uncropped photo) */}
               <div className="p-5 sm:p-6 bg-gradient-to-b from-white via-brand-cream-50/50 to-brand-cream-100/40 border-t border-brand-gold-300/40">
                 <div className="text-center mb-4">
-                  <h4 className="tracking-wide">
-                    <span className="founder-shimmer-title text-xl sm:text-2xl font-black">
-                      आकाश जयदेव गिरि (Akash Jaidev Giri)
-                    </span>
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-brand-maroon-900 via-amber-900 to-brand-maroon-950 text-brand-gold-300 text-xs font-bold tracking-wide shadow-sm border border-brand-gold-500/50 mb-2.5">
+                    <Award className="w-3.5 h-3.5 text-brand-gold-400" />
+                    <span>पावन प्रेरणास्रोत एवं मुख्य मार्गदर्शक</span>
+                  </div>
+                  <h4 className="font-heading text-2xl sm:text-3xl font-extrabold text-brand-maroon-950 tracking-normal leading-tight">
+                    आकाश जयदेव गिरि
                   </h4>
-                  <p className="text-xs sm:text-sm font-semibold text-brand-saffron-700 mt-1">
+                  <div className="font-serif text-sm sm:text-base font-bold text-brand-saffron-800 tracking-wider mt-0.5">
+                    (Akash Jaidev Giri)
+                  </div>
+
+                  {/* Traditional Auspicious Divider */}
+                  <div className="flex items-center justify-center gap-2.5 my-3" aria-hidden="true">
+                    <div className="h-px w-12 bg-gradient-to-r from-transparent to-brand-gold-500/80" />
+                    <div className="w-2 h-2 rotate-45 bg-brand-gold-500 ring-2 ring-brand-gold-200" />
+                    <div className="h-px w-12 bg-gradient-to-l from-transparent to-brand-gold-500/80" />
+                  </div>
+
+                  <p className="text-xs sm:text-sm font-bold text-brand-maroon-900 tracking-wide uppercase">
                     संस्थापक एवं मुख्य सेवादार • शिवशक्ति सेवा फाउंडेशन
                   </p>
-                  <p className="text-xs text-brand-charcoal-700 italic mt-2 bg-white/80 p-2.5 rounded-xl border border-brand-gold-300/30 shadow-2xs leading-relaxed">
+                  <p className="text-xs text-brand-charcoal-700 italic mt-3 bg-white/80 p-2.5 rounded-xl border border-brand-gold-300/30 shadow-2xs leading-relaxed">
                     “सेवा केवल सहायता नहीं, मानवता के प्रति हमारा परम पावन दायित्व है।”
                   </p>
                 </div>

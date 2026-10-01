@@ -257,35 +257,3 @@ body.modal-open button[aria-label*="शीर्ष पर जाएँ"] {
   visibility: hidden !important;
 }
 
-/* Continuous 3.5s lustrous white-gold shimmer sweep for Founder Name */
-@keyframes founder-shimmer-sweep {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.founder-shimmer-title {
-  font-family: var(--font-heading), 'Rozha One', serif;
-  background: linear-gradient(
-    90deg,
-    #2a0407 0%,
-    #7c1119 20%,
-    #b58d24 38%,
-    #ffffff 50%,
-    #fef08a 56%,
-    #d4af37 64%,
-    #7c1119 80%,
-    #2a0407 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  display: inline-block;
-  animation: founder-shimmer-sweep 3.5s linear infinite;
-  will-change: background-position;
-}
-
