@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Calendar, Tag, ArrowRight, X, Sparkles, Share2, Eye } from "lucide-react";
 import { NewsItem } from "@/data/foundationData";
 import TraditionalDivider from "./TraditionalDivider";
+import ModalPortal from "./ModalPortal";
 
 interface NewsSectionProps {
   news: NewsItem[];
@@ -164,58 +165,61 @@ export default function NewsSection({ news }: NewsSectionProps) {
 
       {/* News Full Modal with Scale-In Animation */}
       {selectedNews && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
-          onClick={() => setSelectedNews(null)}
-        >
+        <ModalPortal>
           <div
-            className="bg-white max-w-xl w-full rounded-3xl shadow-2xl border-2 border-brand-gold-400/50 overflow-hidden flex flex-col max-h-[85vh] animate-scaleIn"
-            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            className="modal-after-topbar flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-fadeIn"
+            onClick={() => setSelectedNews(null)}
           >
-            <div className="p-5 bg-gradient-to-r from-brand-maroon-950 to-brand-maroon-900 text-white flex items-center justify-between border-b border-brand-gold-500/30">
-              <div>
-                <span className="text-xs text-brand-gold-400 font-semibold">
-                  {selectedNews.category} • {selectedNews.date}
-                </span>
-                <h3 className="font-heading text-lg sm:text-xl font-bold text-brand-cream-50 mt-1">
-                  {selectedNews.title}
-                </h3>
+            <div
+              className="modal-card-after-topbar bg-white max-w-xl w-full rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-brand-gold-400/50 overflow-hidden flex flex-col animate-scaleIn my-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 sm:p-5 bg-gradient-to-r from-brand-maroon-950 to-brand-maroon-900 text-white flex items-center justify-between border-b border-brand-gold-500/30 gap-3">
+                <div>
+                  <span className="text-xs text-brand-gold-400 font-semibold">
+                    {selectedNews.category} • {selectedNews.date}
+                  </span>
+                  <h3 className="font-heading text-lg sm:text-xl font-bold text-brand-cream-50 mt-1">
+                    {selectedNews.title}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setSelectedNews(null)}
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium text-xs sm:text-sm flex items-center gap-1.5 transition border border-white/20 flex-shrink-0"
+                  aria-label="बंद करें"
+                >
+                  <span>बंद करें</span>
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                onClick={() => setSelectedNews(null)}
-                className="p-1.5 rounded-lg text-brand-cream-300 hover:text-white hover:bg-brand-maroon-800 transition"
-                aria-label="बंद करें"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
 
-            <div className="p-6 overflow-y-auto space-y-4 text-brand-charcoal-800 text-sm leading-relaxed">
-              <p className="text-base font-normal leading-relaxed">{selectedNews.fullContent}</p>
-              <div className="p-4 bg-brand-cream-100 rounded-xl text-xs text-brand-charcoal-700 border border-brand-cream-300">
-                स्थान एवं आगामी सेवा शिविर में सहयोग हेतु हमारे केंद्रीय हेल्पलाइन नंबर <strong className="text-brand-maroon-900">+91 91171 35379</strong> पर संपर्क करें।
+              <div className="p-5 sm:p-6 overflow-y-auto space-y-4 text-brand-charcoal-800 text-sm leading-relaxed">
+                <p className="text-sm sm:text-base font-normal leading-relaxed">{selectedNews.fullContent}</p>
+                <div className="p-4 bg-brand-cream-100 rounded-xl text-xs text-brand-charcoal-700 border border-brand-cream-300">
+                  स्थान एवं आगामी सेवा शिविर में सहयोग हेतु हमारे केंद्रीय हेल्पलाइन नंबर <strong className="text-brand-maroon-900">+91 91171 35379</strong> पर संपर्क करें।
+                </div>
               </div>
-            </div>
 
-            <div className="p-4 bg-brand-cream-50 border-t border-brand-maroon-100 flex items-center justify-between">
-              <button
-                onClick={() => handleShare(selectedNews)}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800"
-              >
-                <Share2 className="w-4 h-4" />
-                <span>व्हाट्सएप पर साझा करें</span>
-              </button>
-              <button
-                onClick={() => setSelectedNews(null)}
-                className="px-5 py-2 rounded-xl bg-brand-maroon-800 text-white font-bold text-xs hover:bg-brand-maroon-900 transition"
-              >
-                बंद करें
-              </button>
+              <div className="p-3.5 sm:p-4 bg-brand-cream-50 border-t border-brand-maroon-100 flex items-center justify-between">
+                <button
+                  onClick={() => handleShare(selectedNews)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span>व्हाट्सएप पर साझा करें</span>
+                </button>
+                <button
+                  onClick={() => setSelectedNews(null)}
+                  className="px-4 sm:px-5 py-2 rounded-xl bg-brand-maroon-800 text-white font-bold text-xs hover:bg-brand-maroon-900 transition"
+                >
+                  बंद करें
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
     </section>
   );

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import TraditionalDivider from "./TraditionalDivider";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
+import ModalPortal from "./ModalPortal";
 
 export default function AboutSection() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -165,120 +166,123 @@ export default function AboutSection() {
 
       {/* "और जानें" Comprehensive Modal */}
       {modalOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="about-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
-          onClick={() => setModalOpen(false)}
-        >
+        <ModalPortal>
           <div
-            className="bg-white max-w-2xl w-full rounded-3xl shadow-2xl border-2 border-brand-gold-400/50 overflow-hidden max-h-[90vh] flex flex-col animate-scaleIn"
-            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="about-modal-title"
+            className="modal-after-topbar flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-fadeIn"
+            onClick={() => setModalOpen(false)}
           >
-            {/* Modal Header */}
-            <div className="p-5 bg-brand-maroon-950 text-white flex items-center justify-between border-b border-brand-maroon-800">
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/images/logo/logo_emblem.png"
-                  alt="शिवशक्ति सेवा फाउंडेशन"
-                  width={36}
-                  height={36}
-                  className="rounded-full"
-                />
-                <h3
-                  id="about-modal-title"
-                  className="font-heading text-xl font-bold text-brand-gold-300"
+            <div
+              className="modal-card-after-topbar bg-white max-w-2xl w-full rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-brand-gold-400/50 overflow-hidden flex flex-col animate-scaleIn my-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 bg-brand-maroon-950 text-white flex items-center justify-between border-b border-brand-maroon-800">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src="/images/logo/logo_emblem.png"
+                    alt="शिवशक्ति सेवा फाउंडेशन"
+                    width={36}
+                    height={36}
+                    className="rounded-full"
+                  />
+                  <h3
+                    id="about-modal-title"
+                    className="font-heading text-lg sm:text-xl font-bold text-brand-gold-300"
+                  >
+                    शिवशक्ति सेवा फाउंडेशन — विस्तृत परिचय
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setModalOpen(false)}
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium text-xs sm:text-sm flex items-center gap-1.5 transition border border-white/20"
+                  aria-label="संवाद बंद करें"
                 >
-                  शिवशक्ति सेवा फाउंडेशन — विस्तृत परिचय
-                </h3>
-              </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="p-1 rounded-lg text-brand-cream-300 hover:text-white hover:bg-brand-maroon-900 transition"
-                aria-label="संवाद बंद करें"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 overflow-y-auto space-y-4 text-brand-charcoal-800 text-sm leading-relaxed">
-              <div className="p-3.5 rounded-xl bg-brand-cream-100 border border-brand-gold-300/40 text-brand-maroon-950 font-medium">
-                "हमारा लक्ष्य केवल सहायता पहुँचाना नहीं, बल्कि हर जरूरतमंद भाई-बहन को
-                यह अहसास कराना है कि वे अकेले नहीं हैं—हम सब एक परिवार हैं।"
+                  <span>बंद करें</span>
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
-              <h4 className="font-bold text-base text-brand-maroon-900 pt-1">
-                हमारी नींव और प्रेरणा
-              </h4>
-              <p>
-                भगवान शिव के कल्याणकारी स्वरूप और माँ शक्ति की दयामयी ऊर्जा से
-                प्रेरित होकर संस्था का नाम <strong>शिवशक्ति सेवा फाउंडेशन</strong> रखा गया है।
-                हमारे प्रतीक चिन्ह में स्थित त्रिशूल अन्याय और अभाव के संहार का,
-                डमरू नव-सृजन की गूंज का, और हाथ व जलता हुआ दीपक निष्काम सेवा एवं
-                उम्मीद के प्रकाश का प्रतीक है।
-              </p>
+              {/* Modal Body */}
+              <div className="p-6 overflow-y-auto space-y-4 text-brand-charcoal-800 text-sm leading-relaxed">
+                <div className="p-3.5 rounded-xl bg-brand-cream-100 border border-brand-gold-300/40 text-brand-maroon-950 font-medium">
+                  "हमारा लक्ष्य केवल सहायता पहुँचाना नहीं, बल्कि हर जरूरतमंद भाई-बहन को
+                  यह अहसास कराना है कि वे अकेले नहीं हैं—हम सब एक परिवार हैं।"
+                </div>
 
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 border-2 border-brand-gold-400/40 text-center my-3 shadow-md">
-                <span className="text-[11px] font-bold text-brand-gold-400 uppercase tracking-wider block mb-1">
-                  शिवशक्ति सेवा फाउंडेशन का मूल सिद्धांत
-                </span>
-                <p className="font-heading text-sm sm:text-base font-semibold text-brand-gold-200 leading-relaxed italic">
-                  सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ।<br />
-                  सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ।
+                <h4 className="font-bold text-base text-brand-maroon-900 pt-1">
+                  हमारी नींव और प्रेरणा
+                </h4>
+                <p>
+                  भगवान शिव के कल्याणकारी स्वरूप और माँ शक्ति की दयामयी ऊर्जा से
+                  प्रेरित होकर संस्था का नाम <strong>शिवशक्ति सेवा फाउंडेशन</strong> रखा गया है।
+                  हमारे प्रतीक चिन्ह में स्थित त्रिशूल अन्याय और अभाव के संहार का,
+                  डमरू नव-सृजन की गूंज का, और हाथ व जलता हुआ दीपक निष्काम सेवा एवं
+                  उम्मीद के प्रकाश का प्रतीक है।
                 </p>
+
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 border-2 border-brand-gold-400/40 text-center my-3 shadow-md">
+                  <span className="text-[11px] font-bold text-brand-gold-400 uppercase tracking-wider block mb-1">
+                    शिवशक्ति सेवा फाउंडेशन का मूल सिद्धांत
+                  </span>
+                  <p className="font-heading text-sm sm:text-base font-semibold text-brand-gold-200 leading-relaxed italic">
+                    सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ।<br />
+                    सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ।
+                  </p>
+                </div>
+
+                <h4 className="font-bold text-base text-brand-maroon-900 pt-1">
+                  कार्यप्रणाली के मूल सिद्धांत
+                </h4>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span>
+                      <strong>पूर्ण निष्पक्षता:</strong> किसी भी व्यक्ति को सेवा
+                      देते समय उसकी जाति, संप्रदाय, भाषा या क्षेत्र का कोई भेद नहीं।
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span>
+                      <strong>सम्मान और गरिमा:</strong> हम कभी भी असहाय व्यक्तियों
+                      की लाचारी का प्रदर्शन या प्रचार नहीं करते। सहायता सदैव आदरपूर्वक
+                      दी जाती है।
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span>
+                      <strong>जमीनी क्रियान्वयन:</strong> कागजी दावों के स्थान पर
+                      हमारे स्वयंसेवक सीधे गांव-गांव, झुग्गी-झोपड़ियों और बाढ़
+                      प्रभावित इलाकों में उतरकर काम करते हैं।
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span>
+                      <strong>वित्तीय शुचिता:</strong> दाताओं द्वारा दिए गए प्रत्येक
+                      रुपये का पाई-पाई का हिसाब और प्रत्यक्ष उपयोग सुनिश्चित किया
+                      जाता है।
+                    </span>
+                  </li>
+                </ul>
               </div>
 
-              <h4 className="font-bold text-base text-brand-maroon-900 pt-1">
-                कार्यप्रणाली के मूल सिद्धांत
-              </h4>
-              <ul className="space-y-2">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>पूर्ण निष्पक्षता:</strong> किसी भी व्यक्ति को सेवा
-                    देते समय उसकी जाति, संप्रदाय, भाषा या क्षेत्र का कोई भेद नहीं।
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>सम्मान और गरिमा:</strong> हम कभी भी असहाय व्यक्तियों
-                    की लाचारी का प्रदर्शन या प्रचार नहीं करते। सहायता सदैव आदरपूर्वक
-                    दी जाती है।
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>जमीनी क्रियान्वयन:</strong> कागजी दावों के स्थान पर
-                    हमारे स्वयंसेवक सीधे गांव-गांव, झुग्गी-झोपड़ियों और बाढ़
-                    प्रभावित इलाकों में उतरकर काम करते हैं।
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>वित्तीय शुचिता:</strong> दाताओं द्वारा दिए गए प्रत्येक
-                    रुपये का पाई-पाई का हिसाब और प्रत्यक्ष उपयोग सुनिश्चित किया
-                    जाता है।
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="p-4 bg-brand-cream-50 border-t border-brand-maroon-100 flex justify-end">
-              <button
-                onClick={() => setModalOpen(false)}
-                className="px-5 py-2 rounded-lg bg-brand-maroon-800 text-white font-semibold text-sm hover:bg-brand-maroon-700 transition"
-              >
-                बंद करें
-              </button>
+              {/* Modal Footer */}
+              <div className="p-4 bg-brand-cream-50 border-t border-brand-maroon-100 flex justify-end">
+                <button
+                  onClick={() => setModalOpen(false)}
+                  className="px-5 py-2 rounded-lg bg-brand-maroon-800 text-white font-semibold text-sm hover:bg-brand-maroon-700 transition"
+                >
+                  बंद करें
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
     </section>
   );

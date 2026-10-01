@@ -64,6 +64,27 @@ export default function Header({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("mukhya-prishth");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const updateHeaderMetrics = () => {
+      if (headerRef.current) {
+        const rect = headerRef.current.getBoundingClientRect();
+        const bottom = Math.max(0, Math.round(rect.bottom));
+        const height = Math.round(rect.height);
+        document.documentElement.style.setProperty("--ssf-header-bottom", `${bottom}px`);
+        document.documentElement.style.setProperty("--ssf-header-height", `${height}px`);
+      }
+    };
+
+    updateHeaderMetrics();
+    window.addEventListener("scroll", updateHeaderMetrics, { passive: true });
+    window.addEventListener("resize", updateHeaderMetrics, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", updateHeaderMetrics);
+      window.removeEventListener("resize", updateHeaderMetrics);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -235,6 +256,8 @@ export default function Header({
 
   return (
     <header
+      ref={headerRef}
+      id="main-header"
       className={`sticky top-0 z-40 transition-all duration-300 w-full ${
         isScrolled
           ? "bg-white/95 backdrop-blur-md shadow-sm py-1.5 border-b border-brand-maroon-100/80"

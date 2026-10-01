@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { ServiceItem } from "@/data/foundationData";
 import TraditionalDivider from "./TraditionalDivider";
+import ModalPortal from "./ModalPortal";
 import RangoliCorner from "./RangoliCorner";
 
 interface ServicesSectionProps {
@@ -191,34 +192,39 @@ export default function ServicesSection({
 
       {/* Service Details Modal */}
       {selectedService && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="service-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn"
-        >
-          <div className="bg-white max-w-lg w-full rounded-2xl shadow-2xl border border-brand-maroon-200 overflow-hidden flex flex-col max-h-[90vh]">
-            {/* Modal Header */}
-            <div className="p-5 bg-brand-maroon-950 text-white flex items-center justify-between border-b border-brand-maroon-800">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-brand-maroon-900">
-                  {getIcon(selectedService.icon)}
+        <ModalPortal>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="service-modal-title"
+            className="modal-after-topbar p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-fadeIn"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSelectedService(null);
+            }}
+          >
+            <div className="bg-white max-w-lg w-full rounded-2xl shadow-2xl border border-brand-maroon-200 overflow-hidden flex flex-col modal-card-after-topbar animate-scaleIn">
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 bg-brand-maroon-950 text-white flex items-center justify-between border-b border-brand-maroon-800 shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-brand-maroon-900">
+                    {getIcon(selectedService.icon)}
+                  </div>
+                  <h3
+                    id="service-modal-title"
+                    className="font-heading text-lg sm:text-xl font-bold text-brand-gold-300"
+                  >
+                    {selectedService.title}
+                  </h3>
                 </div>
-                <h3
-                  id="service-modal-title"
-                  className="font-heading text-xl font-bold text-brand-gold-300"
+                <button
+                  onClick={() => setSelectedService(null)}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 hover:text-white transition font-bold text-xs border border-white/20 active:scale-95"
+                  aria-label="संवाद बंद करें"
                 >
-                  {selectedService.title}
-                </h3>
+                  <span className="hidden sm:inline">बंद करें</span>
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                onClick={() => setSelectedService(null)}
-                className="p-1 rounded-lg text-brand-cream-300 hover:text-white hover:bg-brand-maroon-900 transition"
-                aria-label="संवाद बंद करें"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
 
             {/* Modal Body */}
             <div className="p-6 overflow-y-auto space-y-4 text-brand-charcoal-800 text-sm">
@@ -276,6 +282,7 @@ export default function ServicesSection({
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
     </section>
   );

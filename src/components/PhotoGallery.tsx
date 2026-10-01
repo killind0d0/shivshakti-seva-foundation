@@ -6,6 +6,7 @@ import { ZoomIn, MapPin, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { GalleryPhoto } from "@/data/foundationData";
 import TraditionalDivider from "./TraditionalDivider";
 import RangoliCorner from "./RangoliCorner";
+import ModalPortal from "./ModalPortal";
 
 interface PhotoGalleryProps {
   photos: GalleryPhoto[];
@@ -151,84 +152,94 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
 
       {/* Lightbox Modal */}
       {activePhotoIndex !== null && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fadeIn"
-          onClick={closeLightbox}
-          onTouchStart={(e) => setTouchStartX(e.changedTouches[0].screenX)}
-          onTouchEnd={(e) => {
-            if (touchStartX === null) return;
-            const touchEndX = e.changedTouches[0].screenX;
-            if (touchStartX - touchEndX > 50) nextPhoto();
-            if (touchEndX - touchStartX > 50) prevPhoto();
-            setTouchStartX(null);
-          }}
-        >
+        <ModalPortal>
           <div
-            className="relative max-w-4xl w-full bg-brand-maroon-950 text-white rounded-2xl overflow-hidden shadow-2xl border border-brand-maroon-800"
-            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            className="modal-after-topbar p-3 sm:p-5 bg-black/95 backdrop-blur-md animate-fadeIn"
+            onClick={closeLightbox}
+            onTouchStart={(e) => setTouchStartX(e.changedTouches[0].screenX)}
+            onTouchEnd={(e) => {
+              if (touchStartX === null) return;
+              const touchEndX = e.changedTouches[0].screenX;
+              if (touchStartX - touchEndX > 50) nextPhoto();
+              if (touchEndX - touchStartX > 50) prevPhoto();
+              setTouchStartX(null);
+            }}
           >
-            {/* Close button */}
-            <button
-              onClick={closeLightbox}
-              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/60 hover:bg-brand-maroon-800 text-white transition"
-              aria-label="दीर्घा बंद करें"
+            <div
+              className="relative max-w-4xl w-full bg-brand-maroon-950 text-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-brand-maroon-800 modal-card-after-topbar flex flex-col animate-scaleIn"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X className="w-6 h-6" />
-            </button>
-
-            {/* Navigation arrows */}
-            <button
-              onClick={prevPhoto}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/60 hover:bg-brand-maroon-800 text-white transition"
-              aria-label="पिछला चित्र"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={nextPhoto}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/60 hover:bg-brand-maroon-800 text-white transition"
-              aria-label="अगला चित्र"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            {/* Image display */}
-            <div className="relative h-80 sm:h-[480px] w-full bg-black">
-              <Image
-                src={filteredPhotos[activePhotoIndex].imageUrl}
-                alt={filteredPhotos[activePhotoIndex].title}
-                fill
-                className="object-contain"
-              />
-            </div>
-
-            {/* Caption bar */}
-            <div className="p-5 bg-brand-maroon-950 border-t border-brand-maroon-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <div className="flex items-center gap-2 text-xs text-brand-gold-400 font-semibold mb-1">
-                  <span>{filteredPhotos[activePhotoIndex].categoryName}</span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-brand-saffron-400" />
-                    {filteredPhotos[activePhotoIndex].location}
+              {/* Dedicated Top Bar with Counter & Clear Close Button */}
+              <div className="p-3 sm:p-4 bg-brand-maroon-950 border-b border-brand-maroon-800/80 flex items-center justify-between z-30 shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs sm:text-sm font-bold text-brand-gold-300">
+                    छायाचित्र दीर्घा • {activePhotoIndex + 1} / {filteredPhotos.length}
                   </span>
                 </div>
-                <h4 className="font-heading text-lg font-bold text-brand-cream-50">
-                  {filteredPhotos[activePhotoIndex].title}
-                </h4>
-                <p className="text-xs sm:text-sm text-brand-cream-300 mt-0.5">
-                  {filteredPhotos[activePhotoIndex].caption}
-                </p>
+                <button
+                  onClick={closeLightbox}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition border border-white/20 active:scale-95 cursor-pointer"
+                  aria-label="दीर्घा बंद करें"
+                >
+                  <span>बंद करें</span>
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
-              <div className="text-xs text-brand-cream-400 text-right flex-shrink-0">
-                चित्र {activePhotoIndex + 1} / {filteredPhotos.length}
+              {/* Navigation arrows */}
+              <button
+                onClick={prevPhoto}
+                className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-brand-maroon-800 text-white transition shadow-md"
+                aria-label="पिछला चित्र"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={nextPhoto}
+                className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-brand-maroon-800 text-white transition shadow-md"
+                aria-label="अगला चित्र"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+
+              {/* Image display */}
+              <div className="relative h-64 sm:h-[420px] lg:h-[460px] w-full bg-black flex-1 min-h-[220px]">
+                <Image
+                  src={filteredPhotos[activePhotoIndex].imageUrl}
+                  alt={filteredPhotos[activePhotoIndex].title}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+
+              {/* Caption bar */}
+              <div className="p-4 sm:p-5 bg-brand-maroon-950 border-t border-brand-maroon-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+                <div>
+                  <div className="flex items-center gap-2 text-xs text-brand-gold-400 font-semibold mb-1">
+                    <span>{filteredPhotos[activePhotoIndex].categoryName}</span>
+                    <span>•</span>
+                    <span className="flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-brand-saffron-400" />
+                      {filteredPhotos[activePhotoIndex].location}
+                    </span>
+                  </div>
+                  <h4 className="font-heading text-base sm:text-lg font-bold text-brand-cream-50">
+                    {filteredPhotos[activePhotoIndex].title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-brand-cream-300 mt-0.5 line-clamp-2">
+                    {filteredPhotos[activePhotoIndex].caption}
+                  </p>
+                </div>
+
+                <div className="text-xs text-brand-cream-400 text-right flex-shrink-0">
+                  चित्र {activePhotoIndex + 1} / {filteredPhotos.length}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
     </section>
   );

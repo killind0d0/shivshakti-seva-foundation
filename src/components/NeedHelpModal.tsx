@@ -11,6 +11,7 @@ import {
   MapPin,
   HeartHandshake,
 } from "lucide-react";
+import ModalPortal from "./ModalPortal";
 
 interface NeedHelpModalProps {
   isOpen: boolean;
@@ -71,30 +72,37 @@ export default function NeedHelpModal({
     }, 600);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="help-modal-heading"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn"
-    >
-      <div className="bg-white max-w-lg w-full rounded-2xl shadow-2xl border-2 border-brand-saffron-500 overflow-hidden flex flex-col max-h-[92vh]">
-        {/* Urgent Header */}
-        <div className="p-4 bg-brand-saffron-600 text-white flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <HeartHandshake className="w-6 h-6 text-brand-gold-200" />
-            <h2 id="help-modal-heading" className="font-heading text-lg sm:text-xl font-bold">
-              सहायता सहायता केंद्र — "हम साथ हैं"
-            </h2>
+    <ModalPortal>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="help-modal-heading"
+        className="modal-after-topbar p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-fadeIn"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div className="bg-white max-w-lg w-full rounded-2xl shadow-2xl border-2 border-brand-saffron-500 overflow-hidden flex flex-col modal-card-after-topbar animate-scaleIn">
+          {/* Urgent Header */}
+          <div className="p-3.5 sm:p-4 bg-brand-saffron-600 text-white flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2">
+              <HeartHandshake className="w-5 h-5 sm:w-6 sm:h-6 text-brand-gold-200" />
+              <h2 id="help-modal-heading" className="font-heading text-base sm:text-xl font-bold">
+                सहायता सहायता केंद्र — "हम साथ हैं"
+              </h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-xl text-white hover:bg-brand-saffron-700 transition flex items-center gap-1 font-bold text-xs bg-black/20 active:scale-95"
+              aria-label="सहायता विंडो बंद करें"
+            >
+              <span className="hidden sm:inline">बंद करें</span>
+              <X className="w-5 h-5" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1 rounded-lg text-white hover:bg-brand-saffron-700 transition"
-            aria-label="सहायता विंडो बंद करें"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
 
         {/* Content */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-5 text-brand-charcoal-900">
@@ -271,5 +279,6 @@ export default function NeedHelpModal({
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

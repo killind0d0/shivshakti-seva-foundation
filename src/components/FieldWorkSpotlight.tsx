@@ -17,6 +17,7 @@ import {
   Upload,
 } from "lucide-react";
 import BeforeAfterSlider from "./BeforeAfterSlider";
+import ModalPortal from "./ModalPortal";
 
 interface FieldStory {
   id: string;
@@ -400,285 +401,299 @@ export default function FieldWorkSpotlight() {
 
       {/* Story Detail Modal */}
       {selectedStoryModal && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn"
-        >
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-brand-gold-300 relative">
-            {/* Modal Image Header */}
-            <div className="relative h-60 w-full">
-              <Image
-                src={selectedStoryModal.image}
-                alt={selectedStoryModal.title}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
-              <button
-                onClick={() => setSelectedStoryModal(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 hover:bg-black text-white transition"
-                aria-label="बंद करें"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <div className="absolute bottom-4 left-6 right-6">
-                <span
-                  className={`text-xs font-bold px-2.5 py-0.5 rounded ${selectedStoryModal.badgeColor} mb-2 inline-block`}
-                >
-                  {selectedStoryModal.category}
-                </span>
-                <h3 className="font-heading text-xl sm:text-2xl font-bold text-white leading-snug">
-                  {selectedStoryModal.title}
-                </h3>
-              </div>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 sm:p-8 space-y-6">
-              <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-brand-charcoal-600 pb-3 border-b border-brand-cream-300">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-brand-saffron-600" />
-                  <span>दिनांक: {selectedStoryModal.date}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-brand-saffron-600" />
-                  <span>स्थान: {selectedStoryModal.location}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Users className="w-4 h-4 text-brand-gold-600" />
-                  <span>लाभार्थी: {selectedStoryModal.beneficiaries}</span>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-heading text-base font-bold text-brand-maroon-900 mb-2">
-                  धरातल का वास्तविक विवरण
-                </h4>
-                <p className="text-sm sm:text-base text-brand-charcoal-700 leading-relaxed font-normal">
-                  {selectedStoryModal.fullStory}
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-heading text-base font-bold text-brand-maroon-900 mb-3">
-                  मुख्य परिणाम एवं प्रभाव
-                </h4>
-                <ul className="space-y-2">
-                  {selectedStoryModal.keyOutcomes.map((outcome, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-start gap-2.5 text-xs sm:text-sm text-brand-charcoal-800"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                      <span>{outcome}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="pt-4 border-t border-brand-cream-300 flex items-center justify-between">
-                <span className="text-xs text-brand-charcoal-500">
-                  शिवशक्ति सेवा फाउंडेशन • सेवा ही धर्म
-                </span>
+        <ModalPortal>
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="modal-after-topbar flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-fadeIn"
+            onClick={() => setSelectedStoryModal(null)}
+          >
+            <div
+              className="modal-card-after-topbar bg-white rounded-2xl sm:rounded-3xl max-w-2xl w-full overflow-y-auto shadow-2xl border border-brand-gold-300 relative my-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Image Header */}
+              <div className="relative h-56 sm:h-64 w-full flex-shrink-0">
+                <Image
+                  src={selectedStoryModal.image}
+                  alt={selectedStoryModal.title}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                 <button
                   onClick={() => setSelectedStoryModal(null)}
-                  className="px-5 py-2 rounded-xl bg-brand-maroon-900 text-white text-xs font-bold hover:bg-brand-maroon-950 transition"
+                  className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/75 hover:bg-black/90 text-white text-xs font-semibold flex items-center gap-1.5 border border-white/30 shadow-lg backdrop-blur-md transition z-10"
+                  aria-label="बंद करें"
                 >
-                  बंद करें
+                  <span>बंद करें</span>
+                  <X className="w-4 h-4" />
                 </button>
+                <div className="absolute bottom-4 left-5 right-5 sm:left-6 sm:right-6">
+                  <span
+                    className={`text-xs font-bold px-2.5 py-0.5 rounded ${selectedStoryModal.badgeColor} mb-2 inline-block`}
+                  >
+                    {selectedStoryModal.category}
+                  </span>
+                  <h3 className="font-heading text-lg sm:text-2xl font-bold text-white leading-snug">
+                    {selectedStoryModal.title}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-5 sm:p-7 space-y-5">
+                <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-brand-charcoal-600 pb-3 border-b border-brand-cream-300">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-brand-saffron-600" />
+                    <span>दिनांक: {selectedStoryModal.date}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4 text-brand-saffron-600" />
+                    <span>स्थान: {selectedStoryModal.location}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Users className="w-4 h-4 text-brand-gold-600" />
+                    <span>लाभार्थी: {selectedStoryModal.beneficiaries}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-heading text-base font-bold text-brand-maroon-900 mb-2">
+                    धरातल का वास्तविक विवरण
+                  </h4>
+                  <p className="text-sm sm:text-base text-brand-charcoal-700 leading-relaxed font-normal">
+                    {selectedStoryModal.fullStory}
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-heading text-base font-bold text-brand-maroon-900 mb-3">
+                    मुख्य परिणाम एवं प्रभाव
+                  </h4>
+                  <ul className="space-y-2">
+                    {selectedStoryModal.keyOutcomes.map((outcome, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-2.5 text-xs sm:text-sm text-brand-charcoal-800"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                        <span>{outcome}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t border-brand-cream-300 flex items-center justify-between">
+                  <span className="text-xs text-brand-charcoal-500">
+                    शिवशक्ति सेवा फाउंडेशन • सेवा ही धर्म
+                  </span>
+                  <button
+                    onClick={() => setSelectedStoryModal(null)}
+                    className="px-5 py-2 rounded-xl bg-brand-maroon-900 text-white text-xs font-bold hover:bg-brand-maroon-950 transition"
+                  >
+                    बंद करें
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* Upload/Share Field Report Modal */}
       {isUploadOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn"
-        >
-          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-brand-gold-400 relative">
-            <button
-              onClick={() => setIsUploadOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-brand-cream-200 text-brand-charcoal-600 transition"
-              aria-label="बंद करें"
+        <ModalPortal>
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="modal-after-topbar flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-fadeIn"
+            onClick={() => setIsUploadOpen(false)}
+          >
+            <div
+              className="modal-card-after-topbar bg-white rounded-2xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-2xl border border-brand-gold-400 relative overflow-y-auto my-auto"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X className="w-5 h-5" />
-            </button>
+              <button
+                onClick={() => setIsUploadOpen(false)}
+                className="absolute top-3.5 right-3.5 px-3 py-1.5 rounded-full bg-brand-cream-100 hover:bg-brand-cream-200 text-brand-charcoal-700 text-xs font-semibold flex items-center gap-1.5 border border-brand-maroon-200 shadow-sm transition z-10"
+                aria-label="बंद करें"
+              >
+                <span>बंद करें</span>
+                <X className="w-4 h-4" />
+              </button>
 
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-xl bg-brand-maroon-100 flex items-center justify-center">
-                <Upload className="w-5 h-5 text-brand-maroon-800" />
+              <div className="flex items-center gap-3 mb-5 pr-16 sm:pr-0">
+                <div className="w-10 h-10 rounded-xl bg-brand-maroon-100 flex items-center justify-center flex-shrink-0">
+                  <Upload className="w-5 h-5 text-brand-maroon-800" />
+                </div>
+                <div>
+                  <h3 className="font-heading text-lg sm:text-xl font-bold text-brand-maroon-950">
+                    धरातल कार्य एवं फ़ोटो साझा करें
+                  </h3>
+                  <p className="text-xs text-brand-charcoal-600">
+                    सेवादार या प्रत्यक्षदर्शी अपनी फील्ड रिपोर्ट यहाँ दर्ज करें
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-heading text-lg sm:text-xl font-bold text-brand-maroon-950">
-                  धरातल कार्य एवं फ़ोटो साझा करें
-                </h3>
-                <p className="text-xs text-brand-charcoal-600">
-                  सेवादार या प्रत्यक्षदर्शी अपनी फील्ड रिपोर्ट यहाँ दर्ज करें
-                </p>
-              </div>
-            </div>
 
-            {submitSuccess ? (
-              <div className="py-8 text-center space-y-3 bg-emerald-50 rounded-2xl border border-emerald-200">
-                <ShieldCheck className="w-12 h-12 text-emerald-600 mx-auto" />
-                <h4 className="font-heading text-lg font-bold text-emerald-900">
-                  आपकी धरातल रिपोर्ट सफलतापूर्वक दर्ज कर ली गई है!
-                </h4>
-                <p className="text-xs text-emerald-700 max-w-sm mx-auto">
-                  फाउंडेशन की टीम द्वारा सत्यापन के उपरांत यह विवरण व छायाचित्र स्पॉटलाइट में
-                  प्रदर्शित किया जाएगा। आपके सेवाभाव को नमन।
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {submitSuccess ? (
+                <div className="py-8 text-center space-y-3 bg-emerald-50 rounded-2xl border border-emerald-200">
+                  <ShieldCheck className="w-12 h-12 text-emerald-600 mx-auto" />
+                  <h4 className="font-heading text-lg font-bold text-emerald-900">
+                    आपकी धरातल रिपोर्ट सफलतापूर्वक दर्ज कर ली गई है!
+                  </h4>
+                  <p className="text-xs text-emerald-700 max-w-sm mx-auto">
+                    फाउंडेशन की टीम द्वारा सत्यापन के उपरांत यह विवरण व छायाचित्र स्पॉटलाइट में
+                    प्रदर्शित किया जाएगा। आपके सेवाभाव को नमन।
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                        आपका नाम *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="उदा. राहुल शर्मा"
+                        value={formData.reporterName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, reporterName: e.target.value })
+                        }
+                        className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                        संपर्क फ़ोन नंबर *
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="उदा. 9117135379"
+                        value={formData.reporterPhone}
+                        onChange={(e) =>
+                          setFormData({ ...formData, reporterPhone: e.target.value })
+                        }
+                        className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                        कार्य का प्रकार / श्रेणी
+                      </label>
+                      <select
+                        value={formData.category}
+                        onChange={(e) =>
+                          setFormData({ ...formData, category: e.target.value })
+                        }
+                        className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
+                      >
+                        <option value="बाढ़ एवं आपदा राहत">बाढ़ एवं आपदा राहत</option>
+                        <option value="महिला स्वावलंबन">महिला स्वावलंबन</option>
+                        <option value="अन्न एवं वस्त्र दान">अन्न एवं वस्त्र दान</option>
+                        <option value="स्वास्थ्य एवं चिकित्सा शिविर">
+                          स्वास्थ्य एवं चिकित्सा शिविर
+                        </option>
+                        <option value="सामाजिक कल्याण एवं शिक्षा">
+                          सामाजिक कल्याण एवं शिक्षा
+                        </option>
+                        <option value="धार्मिक व सांस्कृतिक रक्षा">
+                          धार्मिक व सांस्कृतिक रक्षा
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                        स्थान / क्षेत्र *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="उदा. पश्चिमी चंपारण / पटना"
+                        value={formData.location}
+                        onChange={(e) =>
+                          setFormData({ ...formData, location: e.target.value })
+                        }
+                        className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
-                      आपका नाम *
+                      सेवा अभियान का शीर्षक *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="उदा. राहुल शर्मा"
-                      value={formData.reporterName}
+                      placeholder="उदा. बाढ़ प्रभावित परिवारों को भोजन किट वितरण"
+                      value={formData.title}
                       onChange={(e) =>
-                        setFormData({ ...formData, reporterName: e.target.value })
+                        setFormData({ ...formData, title: e.target.value })
                       }
                       className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
-                      संपर्क फ़ोन नंबर *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="उदा. 9117135379"
-                      value={formData.reporterPhone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, reporterPhone: e.target.value })
-                      }
-                      className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
-                    />
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
-                      कार्य का प्रकार / श्रेणी
+                      धरातल सेवा का विवरण एवं अनुभव *
                     </label>
-                    <select
-                      value={formData.category}
+                    <textarea
+                      rows={3}
+                      required
+                      placeholder="कहाँ सेवा हुई, कितने लोगों तक सहायता पहुँची और क्या आवश्यकताएं हैं..."
+                      value={formData.storyDetails}
                       onChange={(e) =>
-                        setFormData({ ...formData, category: e.target.value })
+                        setFormData({ ...formData, storyDetails: e.target.value })
                       }
                       className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
+                    />
+                  </div>
+
+                  {/* Photo upload placeholder box */}
+                  <div className="p-3 border-2 border-dashed border-brand-gold-400 rounded-xl bg-brand-gold-50/50 text-center">
+                    <Camera className="w-5 h-5 text-brand-maroon-700 mx-auto mb-1" />
+                    <p className="text-[11px] font-bold text-brand-maroon-900">
+                      छायाचित्र / फ़ोटो चुनें (वैकल्पिक)
+                    </p>
+                    <p className="text-[10px] text-brand-charcoal-500 mb-2">
+                      PNG, JPG या JPEG (अधिकतम 10MB)
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="text-[11px] text-brand-charcoal-600 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-brand-maroon-800 file:text-white hover:file:bg-brand-maroon-900 cursor-pointer"
+                    />
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsUploadOpen(false)}
+                      className="px-4 py-2 rounded-lg border border-brand-charcoal-300 text-xs font-semibold text-brand-charcoal-700 hover:bg-brand-cream-100"
                     >
-                      <option value="बाढ़ एवं आपदा राहत">बाढ़ एवं आपदा राहत</option>
-                      <option value="महिला स्वावलंबन">महिला स्वावलंबन</option>
-                      <option value="अन्न एवं वस्त्र दान">अन्न एवं वस्त्र दान</option>
-                      <option value="स्वास्थ्य एवं चिकित्सा शिविर">
-                        स्वास्थ्य एवं चिकित्सा शिविर
-                      </option>
-                      <option value="सामाजिक कल्याण एवं शिक्षा">
-                        सामाजिक कल्याण एवं शिक्षा
-                      </option>
-                      <option value="धार्मिक व सांस्कृतिक रक्षा">
-                        धार्मिक व सांस्कृतिक रक्षा
-                      </option>
-                    </select>
+                      रद्द करें
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-lg bg-brand-saffron-600 hover:bg-brand-saffron-700 text-white text-xs font-bold shadow-md transition"
+                    >
+                      धरातल रिपोर्ट जमा करें
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
-                      स्थान / क्षेत्र *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="उदा. पश्चिमी चंपारण / पटना"
-                      value={formData.location}
-                      onChange={(e) =>
-                        setFormData({ ...formData, location: e.target.value })
-                      }
-                      className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
-                    सेवा अभियान का शीर्षक *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="उदा. बाढ़ प्रभावित परिवारों को भोजन किट वितरण"
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
-                    className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
-                    धरातल सेवा का विवरण एवं अनुभव *
-                  </label>
-                  <textarea
-                    rows={3}
-                    required
-                    placeholder="कहाँ सेवा हुई, कितने लोगों तक सहायता पहुँची और क्या आवश्यकताएं हैं..."
-                    value={formData.storyDetails}
-                    onChange={(e) =>
-                      setFormData({ ...formData, storyDetails: e.target.value })
-                    }
-                    className="w-full text-xs px-3 py-2 rounded-lg border border-brand-maroon-200 focus:border-brand-saffron-600 focus:outline-none bg-brand-cream-50"
-                  />
-                </div>
-
-                {/* Photo upload placeholder box */}
-                <div className="p-3 border-2 border-dashed border-brand-gold-400 rounded-xl bg-brand-gold-50/50 text-center">
-                  <Camera className="w-5 h-5 text-brand-maroon-700 mx-auto mb-1" />
-                  <p className="text-[11px] font-bold text-brand-maroon-900">
-                    छायाचित्र / फ़ोटो चुनें (वैकल्पिक)
-                  </p>
-                  <p className="text-[10px] text-brand-charcoal-500 mb-2">
-                    PNG, JPG या JPEG (अधिकतम 10MB)
-                  </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="text-[11px] text-brand-charcoal-600 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-brand-maroon-800 file:text-white hover:file:bg-brand-maroon-900 cursor-pointer"
-                  />
-                </div>
-
-                <div className="pt-2 flex items-center justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsUploadOpen(false)}
-                    className="px-4 py-2 rounded-lg border border-brand-charcoal-300 text-xs font-semibold text-brand-charcoal-700 hover:bg-brand-cream-100"
-                  >
-                    रद्द करें
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-5 py-2 rounded-lg bg-brand-saffron-600 hover:bg-brand-saffron-700 text-white text-xs font-bold shadow-md transition"
-                  >
-                    धरातल रिपोर्ट जमा करें
-                  </button>
-                </div>
-              </form>
-            )}
+                </form>
+              )}
+            </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
     </section>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { createPortal } from "react-dom";
+import ModalPortal from "./ModalPortal";
 import Image from "next/image";
 import QRCode from "qrcode";
 import {
@@ -125,15 +125,7 @@ export default function DonationModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="donation-modal-title"
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-fadeIn"
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 99999,
-      }}
+      className="modal-after-topbar p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-fadeIn"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose();
@@ -141,14 +133,14 @@ export default function DonationModal({
       }}
     >
       <div
-        className="bg-white max-w-2xl w-full rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-brand-maroon-800 overflow-hidden flex flex-col max-h-[92vh] animate-scaleIn transition-all"
+        className="bg-white max-w-2xl w-full rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-brand-maroon-800 overflow-hidden flex flex-col modal-card-after-topbar animate-scaleIn transition-all"
         style={{
           touchAction: "pan-y",
           WebkitOverflowScrolling: "touch",
         }}
       >
         {/* Header with Royal Theme */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 text-white flex items-center justify-between border-b-2 border-brand-gold-500/80 shadow-md">
+        <div className="p-4 sm:p-5 bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 text-white flex items-center justify-between border-b-2 border-brand-gold-500/80 shadow-md shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <Image
               src="/images/logo/logo_emblem.png"
@@ -171,10 +163,11 @@ export default function DonationModal({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-brand-cream-300 hover:text-white hover:bg-brand-maroon-800 transition flex-shrink-0"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 hover:text-white transition font-bold text-xs border border-white/20 active:scale-95 flex-shrink-0"
             aria-label="संवाद बंद करें"
           >
-            <X className="w-6 h-6" />
+            <span className="hidden sm:inline">बंद करें</span>
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -634,5 +627,5 @@ export default function DonationModal({
     </div>
   );
 
-  return createPortal(modalContent, document.body);
+  return <ModalPortal>{modalContent}</ModalPortal>;
 }

@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
+import ModalPortal from "./ModalPortal";
 
 export interface StaffAccount {
   id: string;
@@ -508,67 +509,74 @@ export default function AdminModal({
   const isAdmin = currentUser?.role === "admin";
   const perms = currentUser?.permissions;
 
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="admin-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn"
-    >
-      <div className="bg-white max-w-5xl w-full rounded-3xl shadow-2xl border-2 border-brand-maroon-300 overflow-hidden flex flex-col max-h-[92vh]">
-        
-        {/* Modal Top Bar */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 text-white flex items-center justify-between border-b-2 border-brand-gold-500/40 relative">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-brand-gold-500 text-brand-maroon-950 flex items-center justify-center font-bold shadow-md flex-shrink-0">
-              {currentUser ? (
-                isAdmin ? <ShieldCheck className="w-5 h-5" /> : <Users className="w-5 h-5" />
-              ) : (
-                <Lock className="w-5 h-5" />
-              )}
-            </div>
-            <div>
-              <h2
-                id="admin-modal-title"
-                className="font-heading text-lg sm:text-xl font-extrabold text-brand-cream-50 leading-tight"
-              >
-                {currentUser
-                  ? isAdmin
-                    ? "मुख्य प्रशासक प्रबंधन कक्ष (Full Admin Rights)"
-                    : `सेवादार पोर्टल • ${currentUser.name}`
-                  : "प्रशासक एवं सेवादार (Admin & Staff) लॉगिन"}
-              </h2>
-              <p className="text-xs text-brand-gold-300">
-                {currentUser
-                  ? isAdmin
-                    ? "संस्था विवरण, संपर्क सूत्र, सेवादार अधिकार व छायाचित्र पूर्ण नियंत्रण"
-                    : `अधिकृत सेवादार आईडी: ${currentUser.id} • प्राप्त अधिकार अनुसार सीमित संचालन`
-                  : "शिवशक्ति सेवा फाउंडेशन — आधिकारिक सुरक्षित प्रबंधन प्रणाली"}
-              </p>
-            </div>
-          </div>
+  if (!isOpen) return null;
 
-          <div className="flex items-center gap-2">
-            {currentUser && (
+  return (
+    <ModalPortal>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="admin-modal-title"
+        className="modal-after-topbar p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div className="bg-white max-w-5xl w-full rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-brand-maroon-300 overflow-hidden flex flex-col modal-card-after-topbar animate-scaleIn">
+          
+          {/* Modal Top Bar */}
+          <div className="p-4 sm:p-5 bg-gradient-to-r from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 text-white flex items-center justify-between border-b-2 border-brand-gold-500/40 relative shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-brand-gold-500 text-brand-maroon-950 flex items-center justify-center font-bold shadow-md flex-shrink-0">
+                {currentUser ? (
+                  isAdmin ? <ShieldCheck className="w-5 h-5" /> : <Users className="w-5 h-5" />
+                ) : (
+                  <Lock className="w-5 h-5" />
+                )}
+              </div>
+              <div>
+                <h2
+                  id="admin-modal-title"
+                  className="font-heading text-lg sm:text-xl font-extrabold text-brand-cream-50 leading-tight"
+                >
+                  {currentUser
+                    ? isAdmin
+                      ? "मुख्य प्रशासक प्रबंधन कक्ष (Full Admin Rights)"
+                      : `सेवादार पोर्टल • ${currentUser.name}`
+                    : "प्रशासक एवं सेवादार (Admin & Staff) लॉगिन"}
+                </h2>
+                <p className="text-xs text-brand-gold-300">
+                  {currentUser
+                    ? isAdmin
+                      ? "संस्था विवरण, संपर्क सूत्र, सेवादार अधिकार व छायाचित्र पूर्ण नियंत्रण"
+                      : `अधिकृत सेवादार आईडी: ${currentUser.id} • प्राप्त अधिकार अनुसार सीमित संचालन`
+                    : "शिवशक्ति सेवा फाउंडेशन — आधिकारिक सुरक्षित प्रबंधन प्रणाली"}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {currentUser && (
+                <button
+                  onClick={handleLogout}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-700/80 hover:bg-red-800 text-white text-xs font-bold transition shadow-xs"
+                  title="सत्र समाप्त करें"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">लॉगआउट</span>
+                </button>
+              )}
               <button
-                onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-700/80 hover:bg-red-800 text-white text-xs font-bold transition shadow-xs"
-                title="सत्र समाप्त करें"
+                onClick={onClose}
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 hover:text-white transition font-bold text-xs border border-white/20 active:scale-95"
+                aria-label="पोर्टल बंद करें"
+                title="बंद करें"
               >
-                <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">लॉगआउट</span>
+                <span>बंद करें</span>
+                <X className="w-4 h-4" />
               </button>
-            )}
-            <button
-              onClick={onClose}
-              className="p-1.5 rounded-xl text-brand-cream-300 hover:text-white hover:bg-white/10 transition"
-              aria-label="पोर्टल बंद करें"
-              title="बंद करें"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            </div>
           </div>
-        </div>
 
         {/* 1. LOGIN SCREEN (If not authenticated) */}
         {!currentUser ? (
@@ -2058,5 +2066,6 @@ export default function AdminModal({
 
       </div>
     </div>
+    </ModalPortal>
   );
 }
