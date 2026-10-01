@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import AccessibilityToolbar from "@/components/AccessibilityToolbar";
+import DevSetupBanner from "@/components/DevSetupBanner";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import QuickImpactBar from "@/components/QuickImpactBar";
@@ -131,6 +132,9 @@ export default function Home() {
         style={{ transform: `scaleX(${scrollProgress / 100})` }}
         aria-hidden="true"
       />
+
+      {/* Development & Setup Status Banner (Toggleable in src/config/devBannerConfig.ts) */}
+      <DevSetupBanner />
 
       {/* 1. Accessibility Toolbar (compact top bar) */}
       <AccessibilityToolbar
