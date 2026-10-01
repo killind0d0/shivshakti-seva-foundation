@@ -20,11 +20,15 @@ import {
   Heart,
 } from "lucide-react";
 
+import type { TabKey } from "@/components/SectionNavHub";
+
 interface HeaderProps {
   onOpenDonation: () => void;
   onOpenHelp: () => void;
   isMobileMenuOpen?: boolean;
   onToggleMobileMenu?: (open: boolean) => void;
+  activeTab?: TabKey;
+  onSelectTab?: (tab: TabKey, anchorId?: string) => void;
 }
 
 export default function Header({
@@ -32,6 +36,8 @@ export default function Header({
   onOpenHelp,
   isMobileMenuOpen,
   onToggleMobileMenu,
+  activeTab,
+  onSelectTab,
 }: HeaderProps) {
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -119,15 +125,45 @@ export default function Header({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const hrefToTabMap: Record<string, TabKey> = {
+    "#mukhya-prishth": "home",
+    "#hamare-bare-mein": "about",
+    "#sansthapak-sandesh": "about",
+    "#hamari-sevayein": "services",
+    "#feild-work-spotlight": "services",
+    "#mahila-pratiyogita": "services",
+    "#hamare-abhiyan": "services",
+    "#hamara-prabhav": "donate",
+    "#chitra-deergha": "events",
+    "#samachar": "events",
+    "#whatsapp-community": "events",
+    "#seva-sankalp": "volunteer",
+    "#sampark": "volunteer",
+  };
+
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false);
     setDropdownOpen(false);
-    setTimeout(() => {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 60);
+    const targetTab = hrefToTabMap[href] || "home";
+    const anchor = href.startsWith("#") ? href.substring(1) : undefined;
+    if (onSelectTab) {
+      onSelectTab(targetTab, anchor);
+    } else {
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 60);
+    }
+  };
+
+  const isLinkActive = (href: string) => {
+    if (activeTab) {
+      const mapped = hrefToTabMap[href];
+      if (mapped) return activeTab === mapped;
+    }
+    return activeSection === href.replace("#", "");
   };
 
   // Main primary links shown directly on desktop
@@ -275,7 +311,7 @@ export default function Header({
             aria-label="मुख्य नेविगेशन"
           >
             {primaryLinks.slice(0, 3).map((link) => {
-              const isActive = activeSection === link.href.replace("#", "");
+              const isActive = isLinkActive(link.href);
               return (
                 <a
                   key={link.href}
@@ -297,9 +333,7 @@ export default function Header({
 
             {/* Special Initiatives Dropdown ("विशेष पहल ▾") */}
             {(() => {
-              const isSpecialActive = specialLinks.some(
-                (item) => item.href.replace("#", "") === activeSection
-              );
+              const isSpecialActive = specialLinks.some((item) => isLinkActive(item.href));
               return (
                 <div
                   ref={dropdownRef}
@@ -338,8 +372,7 @@ export default function Header({
                       <div className="space-y-1">
                         {specialLinks.map((item) => {
                           const IconComponent = item.icon;
-                          const isItemActive =
-                            activeSection === item.href.replace("#", "");
+                          const isItemActive = isLinkActive(item.href);
                           return (
                             <a
                               key={item.href}
@@ -396,7 +429,7 @@ export default function Header({
 
             {/* Remaining Primary Links */}
             {primaryLinks.slice(3).map((link) => {
-              const isActive = activeSection === link.href.replace("#", "");
+              const isActive = isLinkActive(link.href);
               return (
                 <a
                   key={link.href}
@@ -517,7 +550,7 @@ export default function Header({
                 {/* Complete Categorized Navigation List */}
                 <nav className="flex flex-col gap-1.5" aria-label="मोबाइल नेविगेशन">
                   {allMobileLinks.map((link) => {
-                    const isItemActive = activeSection === link.href.replace("#", "");
+                    const isItemActive = isLinkActive(link.href);
                     return (
                       <a
                         key={link.href}

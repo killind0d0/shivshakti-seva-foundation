@@ -16,12 +16,15 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import type { TabKey } from "@/components/SectionNavHub";
+
 interface FooterProps {
   onOpenDonation: () => void;
   onOpenAdmin?: () => void;
+  onSelectTab?: (tab: TabKey, anchorId?: string) => void;
 }
 
-export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
+export default function Footer({ onOpenDonation, onOpenAdmin, onSelectTab }: FooterProps) {
   const [policyModal, setPolicyModal] = useState<"privacy" | "terms" | null>(null);
   const [visitorCount, setVisitorCount] = useState<number>(148924);
 
@@ -54,6 +57,29 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
     { label: "संपर्क करें", href: "#sampark" },
   ];
 
+  const hrefToTabMap: Record<string, TabKey> = {
+    "#mukhya-prishth": "home",
+    "#hamare-bare-mein": "about",
+    "#hamari-sevayein": "services",
+    "#mahila-pratiyogita": "services",
+    "#whatsapp-community": "events",
+    "#hamare-abhiyan": "services",
+    "#chitra-deergha": "events",
+    "#samachar": "events",
+    "#sampark": "volunteer",
+  };
+
+  const handleFooterLink = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    const targetTab = hrefToTabMap[href] || "home";
+    const anchor = href.startsWith("#") ? href.substring(1) : undefined;
+    if (onSelectTab) {
+      onSelectTab(targetTab, anchor);
+    } else {
+      window.location.hash = href;
+    }
+  };
+
   return (
     <footer className="bg-brand-maroon-950 text-white border-t-2 border-brand-gold-500 relative">
       {/* Upper Footer: Logo, Mission, Quick Links, Help */}
@@ -61,8 +87,11 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Foundation Profile & Brand */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-13 h-13 rounded-full bg-brand-maroon-900/80 p-1 flex items-center justify-center flex-shrink-0 shadow-md">
+            <div
+              onClick={(e) => handleFooterLink(e, "#mukhya-prishth")}
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <div className="w-13 h-13 rounded-full bg-brand-maroon-900/80 p-1 flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform">
                 <Image
                   src="/images/logo/logo_emblem.png"
                   alt="शिवशक्ति सेवा फाउंडेशन"
@@ -72,7 +101,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                 />
               </div>
               <div>
-                <h3 className="font-heading text-xl sm:text-2xl font-bold text-brand-cream-50 leading-tight">
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-brand-cream-50 leading-tight group-hover:text-brand-gold-300 transition-colors">
                   शिवशक्ति सेवा फाउंडेशन
                 </h3>
                 <p className="text-xs text-brand-gold-400 font-medium">
@@ -104,7 +133,8 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="hover:text-brand-gold-400 hover:underline transition-colors block py-0.5"
+                    onClick={(e) => handleFooterLink(e, link.href)}
+                    className="hover:text-brand-gold-400 hover:underline transition-colors block py-0.5 cursor-pointer"
                   >
                     {link.label}
                   </a>
