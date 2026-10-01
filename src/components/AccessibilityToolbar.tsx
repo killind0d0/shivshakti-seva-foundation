@@ -81,8 +81,7 @@ export default function AccessibilityToolbar({
             className="font-bold text-brand-gold-400 hover:text-white transition-colors underline underline-offset-2 truncate text-[11px] sm:text-xs"
             title="हेल्पलाइन पर सीधे कॉल करें"
           >
-            <span className="xs:hidden font-sans font-bold">91171 35379</span>
-            <span className="hidden xs:inline sm:hidden font-sans font-bold">+91 91171 35379</span>
+            <span className="sm:hidden font-sans font-bold">+91 91171 35379</span>
             <span className="hidden sm:inline font-sans font-bold">+91 91171 35379 (२४×७ सदैव उपलब्ध)</span>
           </a>
         </div>
@@ -96,8 +95,8 @@ export default function AccessibilityToolbar({
             aria-label="सहायता हेतु तुरंत अनुरोध दर्ज करें"
           >
             <HelpCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            <span className="hidden xs:inline">सहायता मांगें</span>
-            <span className="xs:hidden">सहायता</span>
+            <span className="hidden sm:inline">सहायता मांगें</span>
+            <span className="sm:hidden">सहायता</span>
           </button>
 
           {/* Font resizing - Visible on tablet/desktop */}

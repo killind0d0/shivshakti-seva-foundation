@@ -18,6 +18,7 @@ import {
   Laptop,
   CheckCircle2,
   MessageCircle,
+  ExternalLink,
 } from "lucide-react";
 import ModalPortal from "./ModalPortal";
 
@@ -368,27 +369,42 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
             </div>
 
             {/* Right: Direct High-Converting CTA Buttons */}
-            <div className="flex flex-row sm:flex-col lg:flex-row items-center gap-2.5 shrink-0 w-full sm:w-auto justify-center">
+            <div className="flex flex-col sm:flex-row lg:flex-row items-stretch sm:items-center gap-2.5 shrink-0 w-full sm:w-auto justify-center">
+              {/* Official Website Link */}
               <a
-                href={`https://api.whatsapp.com/send?phone=919117135379&text=${encodeURIComponent(
+                href="https://www.suryajyoti.digital"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-brand-gold-500/15 hover:bg-brand-gold-500/25 text-brand-gold-300 hover:text-brand-gold-200 font-bold text-xs sm:text-sm border border-brand-gold-400/40 transition-all duration-200 active:scale-95 whitespace-nowrap shadow-sm group"
+                title="SJ Digitals की आधिकारिक वेबसाइट खोलें"
+              >
+                <Globe className="w-3.5 h-3.5 text-brand-gold-400 group-hover:rotate-12 transition-transform" />
+                <span>www.suryajyoti.digital</span>
+                <ExternalLink className="w-3 h-3 text-brand-gold-400/70" />
+              </a>
+
+              {/* WhatsApp Chat Button */}
+              <a
+                href={`https://api.whatsapp.com/send?phone=917004185301&text=${encodeURIComponent(
                   "नमस्ते SJ Digitals! मैंने शिवशक्ति सेवा फाउंडेशन की वेबसाइट देखी। मुझे भी अपने संस्थान / व्यापार के लिए ऐसी ही शानदार वेबसाइट और डिजिटल सेवाओं की आवश्यकता है। कृपया मार्गदर्शन करें।"
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-emerald-900/40 border border-emerald-400/30 transition-all duration-200 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-emerald-900/40 border border-emerald-400/30 transition-all duration-200 active:scale-95 whitespace-nowrap"
                 title="SJ Digitals से व्हाट्सएप पर संपर्क करें"
               >
                 <MessageCircle className="w-4 h-4 fill-white/20" />
-                <span className="whitespace-nowrap">व्हाट्सएप पर बात करें</span>
+                <span>व्हाट्सएप करें</span>
               </a>
 
+              {/* Direct Call Button */}
               <a
-                href="tel:+919117135379"
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 hover:text-white font-semibold text-xs sm:text-sm border border-brand-gold-400/30 transition-all duration-200 active:scale-95 whitespace-nowrap"
+                href="tel:+917004185301"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 hover:text-white font-semibold text-xs sm:text-sm border border-brand-gold-400/30 transition-all duration-200 active:scale-95 whitespace-nowrap"
                 title="SJ Digitals को सीधे कॉल करें"
               >
                 <Phone className="w-3.5 h-3.5 text-brand-gold-400" />
-                <span>+91 91171 35379</span>
+                <span className="font-sans font-bold">+91 70041 85301</span>
               </a>
             </div>
 
@@ -396,7 +412,18 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
 
           {/* Micro Bottom Attribution Bar */}
           <div className="mt-3.5 text-center text-[10px] sm:text-[11px] text-brand-gold-300/70 flex items-center justify-center gap-2 flex-wrap">
-            <span>© SJ Digitals • नवाचार, गरिमा एवं विश्वसनीयता</span>
+            <a
+              href="https://www.suryajyoti.digital"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-gold-300 hover:text-brand-gold-200 underline font-semibold flex items-center gap-1"
+            >
+              <span>www.suryajyoti.digital</span>
+            </a>
+            <span>•</span>
+            <a href="tel:+917004185301" className="hover:text-white font-sans font-medium">
+              फोन: +91 70041 85301
+            </a>
             <span>•</span>
             <span>Bihar & Pan-India Web Engineering</span>
             <span>•</span>
