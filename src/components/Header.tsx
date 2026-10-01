@@ -431,13 +431,13 @@ export default function Header({
               <span className="font-sans font-bold tracking-wide">91171 35379</span>
             </a>
 
-            {/* Primary CTA (सहयोग करें) */}
+            {/* Primary CTA (सहयोग करें) — Hidden on mobile UI as sticky footer button is present */}
             <button
               onClick={onOpenDonation}
-              className="inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-sm font-bold text-white bg-gradient-to-r from-brand-maroon-800 via-brand-maroon-700 to-brand-maroon-900 hover:from-brand-maroon-700 hover:to-brand-maroon-800 rounded-xl shadow-xs hover:shadow-md transition active:scale-95 border-b-2 border-brand-gold-500 whitespace-nowrap"
+              className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-brand-maroon-800 via-brand-maroon-700 to-brand-maroon-900 hover:from-brand-maroon-700 hover:to-brand-maroon-800 rounded-xl shadow-xs hover:shadow-md transition active:scale-95 border-b-2 border-brand-gold-500 whitespace-nowrap"
               aria-label="संस्था को सहयोग प्रदान करें"
             >
-              <HeartHandshake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-gold-400" />
+              <HeartHandshake className="w-4 h-4 text-brand-gold-400" />
               <span>सहयोग करें</span>
             </button>
 
