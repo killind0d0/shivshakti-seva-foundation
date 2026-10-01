@@ -46,7 +46,7 @@ export default function DailySankalpWidget() {
   };
 
   const shareText = encodeURIComponent(
-    "मैंने आज शिवशक्ति सेवा फाउंडेशन के साथ समाज में निःस्वार्थ सेवा का पावन संकल्प लिया। आप भी जुड़ें: https://shivshaktisevafoundation.org"
+    "मैंने आज शिवशक्ति सेवा फाउंडेशन के साथ समाज में निःस्वार्थ सेवा का पावन संकल्प लिया। आप भी जुड़ें: https://shivshaktisevafoundation.in"
   );
   const shareWhatsappUrl = `https://wa.me/?text=${shareText}`;
 

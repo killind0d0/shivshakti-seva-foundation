@@ -11,6 +11,7 @@ import {
   AlertCircle,
   HelpCircle,
   Share2,
+  Globe,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
 import RangoliCorner from "./RangoliCorner";
@@ -169,6 +170,26 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       className="text-sm font-semibold text-brand-maroon-950 mt-0.5 font-mono hover:text-brand-saffron-600 transition block"
                     >
                       {data.email}
+                    </a>
+                  </div>
+                </div>
+
+                {/* Official Website */}
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-lg bg-brand-cream-200 text-brand-saffron-600 flex-shrink-0">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-brand-charcoal-500 uppercase tracking-wider">
+                      आधिकारिक वेबसाइट:
+                    </span>
+                    <a
+                      href="https://shivshaktisevafoundation.in"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-sans font-bold text-brand-maroon-950 mt-0.5 hover:text-brand-saffron-600 transition block tracking-wide"
+                    >
+                      www.shivshaktisevafoundation.in
                     </a>
                   </div>
                 </div>

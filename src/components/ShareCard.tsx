@@ -29,7 +29,7 @@ export default function ShareCard({
 
   if (!isOpen) return null;
 
-  const shareText = `मैंने शिवशक्ति सेवा फाउंडेशन के माध्यम से दीन-दुखियों एवं बाढ़ पीड़ितों की सहायता में सहयोग किया है।\n\n"नर सेवा ही नारायण सेवा है"\n\nआप भी इस सेवा यज्ञ से जुड़ें: https://shivshakti-seva-foundation-delta.vercel.app/`;
+  const shareText = `मैंने शिवशक्ति सेवा फाउंडेशन के माध्यम से दीन-दुखियों एवं बाढ़ पीड़ितों की सहायता में सहयोग किया है।\n\n"नर सेवा ही नारायण सेवा है"\n\nआप भी इस सेवा यज्ञ से जुड़ें: https://shivshaktisevafoundation.in/`;
 
   const handleCopy = async () => {
     try {
@@ -47,7 +47,7 @@ export default function ShareCard({
         await navigator.share({
           title: "शिवशक्ति सेवा फाउंडेशन — मेरा सहयोग",
           text: shareText,
-          url: "https://shivshakti-seva-foundation-delta.vercel.app/",
+          url: "https://shivshaktisevafoundation.in/",
         });
       } catch {
         // ignore cancel

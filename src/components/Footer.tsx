@@ -14,6 +14,7 @@ import {
   Lock,
   Eye,
   Sparkles,
+  Globe,
 } from "lucide-react";
 
 interface FooterProps {
@@ -157,6 +158,17 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                 </a>
               </div>
               <div className="flex items-start gap-2">
+                <Globe className="w-4 h-4 text-brand-gold-400 flex-shrink-0 mt-0.5" />
+                <a
+                  href="https://shivshaktisevafoundation.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-brand-gold-300 transition font-sans text-xs tracking-wide"
+                >
+                  www.shivshaktisevafoundation.in
+                </a>
+              </div>
+              <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-brand-saffron-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <span className="block font-semibold">मुख्य कार्यालय: माँ मंगलागौरी, गया जी (बिहार)</span>
@@ -215,7 +227,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
       <div className="bg-brand-maroon-950/95 border-t border-brand-maroon-900 py-6 text-xs text-brand-cream-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            © २०२६ शिवशक्ति सेवा फाउंडेशन। सर्वाधिकार सुरक्षित।
+            © २०२६ शिवशक्ति सेवा फाउंडेशन (shivshaktisevafoundation.in)। सर्वाधिकार सुरक्षित।
           </div>
 
           <div className="flex items-center gap-4 flex-wrap justify-center">

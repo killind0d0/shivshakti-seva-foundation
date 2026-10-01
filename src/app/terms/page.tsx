@@ -92,6 +92,7 @@ export default function TermsOfUsePage() {
             <p>माँ मंगलागौरी, गया जी (बिहार) - ८२३००१</p>
             <p>ईमेल: <a href="mailto:akashgiri91171@gmail.com" className="text-brand-maroon-700 hover:underline">akashgiri91171@gmail.com</a></p>
             <p>फोन: <a href="tel:+919117135379" className="text-brand-maroon-700 hover:underline">+91 91171 35379</a></p>
+            <p>वेबसाइट: <a href="https://shivshaktisevafoundation.in" className="text-brand-maroon-700 hover:underline">www.shivshaktisevafoundation.in</a></p>
           </div>
         </div>
       </div>

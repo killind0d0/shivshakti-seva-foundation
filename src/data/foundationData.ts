@@ -64,6 +64,7 @@ export interface FoundationData {
   phone: string;
   emergencyPhone: string;
   email: string;
+  website?: string;
   address: string;
   mapsUrl?: string;
   officeHours: string;
@@ -105,6 +106,7 @@ export const initialFoundationData: FoundationData = {
   phone: "+91 91171 35379",
   emergencyPhone: "+91 91171 35379 (24×7 हेल्पलाइन)",
   email: "akashgiri91171@gmail.com",
+  website: "https://shivshaktisevafoundation.in",
   address: "माँ मंगलागौरी, गया जी (बिहार) - 823001",
   mapsUrl: "https://maps.app.goo.gl/T3QqWjCGMkx9KVJr9?g_st=ac",
   officeHours: "24×7 सदैव उपलब्ध (दिन-रात सेवा में तत्पर)",
