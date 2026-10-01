@@ -76,15 +76,26 @@ export default function FoundersVision() {
 
             {/* Signature & Seal Block */}
             <div className="mt-8 pt-6 border-t border-brand-maroon-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-              <div>
-                <div className="font-heading text-xl sm:text-2xl font-black text-brand-maroon-950 tracking-wide">
-                  आकाश गिरि
+              <div className="flex items-center gap-3.5">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-brand-gold-500 shadow-md shrink-0 bg-brand-cream-200">
+                  <Image
+                    src="/images/founder.png"
+                    alt="आकाश गिरि — संस्थापक"
+                    fill
+                    sizes="64px"
+                    className="object-cover object-top"
+                  />
                 </div>
-                <div className="text-xs sm:text-sm font-semibold text-brand-maroon-800 mt-0.5">
-                  संस्थापक एवं मुख्य सेवादार
-                </div>
-                <div className="text-[11px] text-brand-charcoal-500 font-medium mt-0.5">
-                  शिवशक्ति सेवा फाउंडेशन
+                <div>
+                  <div className="font-heading text-xl sm:text-2xl font-black text-brand-maroon-950 tracking-wide">
+                    आकाश गिरि
+                  </div>
+                  <div className="text-xs sm:text-sm font-semibold text-brand-maroon-800 mt-0.5">
+                    संस्थापक एवं मुख्य सेवादार
+                  </div>
+                  <div className="text-[11px] text-brand-charcoal-500 font-medium mt-0.5">
+                    शिवशक्ति सेवा फाउंडेशन
+                  </div>
                 </div>
               </div>
 
@@ -124,27 +135,31 @@ export default function FoundersVision() {
             </div>
           </div>
 
-          {/* Right Column (5 cols): Visual Ground Truth & Sacred Pillars */}
+          {/* Right Column (5 cols): Visual Founder Portrait & Sacred Pillars */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Visual Ground Photo Card with Gold Border */}
+            {/* Visual Founder Portrait Card with Gold Border */}
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white group">
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden">
+              <div className="relative h-80 sm:h-96 w-full overflow-hidden bg-brand-cream-200">
                 <Image
-                  src="/images/gallery/sevadar-working.png"
-                  alt="शिवशक्ति सेवा फाउंडेशन धरातल पर सेवा कार्य"
+                  src="/images/founder.png"
+                  alt="आकाश गिरि — संस्थापक एवं मुख्य सेवादार"
                   fill
                   sizes="(max-width: 768px) 100vw, 45vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-maroon-950/80 via-brand-maroon-950/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-maroon-950/90 via-brand-maroon-950/20 to-transparent" />
                 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-brand-gold-500 text-brand-maroon-950 text-[10px] font-extrabold uppercase tracking-wide mb-1.5 shadow-sm">
-                    <Heart className="w-3 h-3 fill-current" />
-                    <span>धरातल की हकीकत</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-saffron-600 text-white text-[11px] font-bold uppercase tracking-wide mb-1.5 shadow-md">
+                    <Sparkles className="w-3.5 h-3.5 text-brand-gold-300" />
+                    <span>संस्थापक एवं मुख्य सेवादार</span>
                   </div>
-                  <p className="font-heading text-base font-bold drop-shadow-sm">
+                  <h4 className="font-heading text-xl font-bold drop-shadow-sm text-white">
+                    आकाश गिरि
+                  </h4>
+                  <p className="text-xs text-brand-gold-200 font-medium mt-0.5">
                     हर पीड़ित की पुकार तक स्वयं पहुँचना ही हमारा संकल्प है
                   </p>
                 </div>
@@ -153,16 +168,16 @@ export default function FoundersVision() {
               <div className="p-5 bg-gradient-to-b from-white to-brand-cream-50 border-t border-brand-gold-400/20">
                 <div className="grid grid-cols-2 gap-3 text-center">
                   <div className="p-3 rounded-2xl bg-brand-cream-100/80 border border-brand-gold-400/30">
-                    <div className="text-xl sm:text-2xl font-black text-brand-maroon-950 font-heading">
-                      १००%
+                    <div className="text-xl sm:text-2xl font-sans font-extrabold text-brand-maroon-950 tabular-nums">
+                      100%
                     </div>
                     <div className="text-[11px] font-bold text-brand-maroon-800 mt-0.5">
                       निःस्वार्थ समर्पण
                     </div>
                   </div>
                   <div className="p-3 rounded-2xl bg-brand-cream-100/80 border border-brand-gold-400/30">
-                    <div className="text-xl sm:text-2xl font-black text-brand-maroon-950 font-heading">
-                      २४×७
+                    <div className="text-xl sm:text-2xl font-sans font-extrabold text-brand-maroon-950 tabular-nums">
+                      24×7
                     </div>
                     <div className="text-[11px] font-bold text-brand-maroon-800 mt-0.5">
                       सेवा तत्परता
