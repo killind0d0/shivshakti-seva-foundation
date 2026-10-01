@@ -16,15 +16,12 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import type { TabKey } from "@/components/SectionNavHub";
-
 interface FooterProps {
   onOpenDonation: () => void;
   onOpenAdmin?: () => void;
-  onSelectTab?: (tab: TabKey, anchorId?: string) => void;
 }
 
-export default function Footer({ onOpenDonation, onOpenAdmin, onSelectTab }: FooterProps) {
+export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
   const [policyModal, setPolicyModal] = useState<"privacy" | "terms" | null>(null);
   const [visitorCount, setVisitorCount] = useState<number>(148924);
 
@@ -57,26 +54,12 @@ export default function Footer({ onOpenDonation, onOpenAdmin, onSelectTab }: Foo
     { label: "संपर्क करें", href: "#sampark" },
   ];
 
-  const hrefToTabMap: Record<string, TabKey> = {
-    "#mukhya-prishth": "home",
-    "#hamare-bare-mein": "about",
-    "#hamari-sevayein": "services",
-    "#mahila-pratiyogita": "services",
-    "#whatsapp-community": "events",
-    "#hamare-abhiyan": "services",
-    "#chitra-deergha": "events",
-    "#samachar": "events",
-    "#sampark": "volunteer",
-  };
-
   const handleFooterLink = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
-    const targetTab = hrefToTabMap[href] || "home";
-    const anchor = href.startsWith("#") ? href.substring(1) : undefined;
-    if (onSelectTab) {
-      onSelectTab(targetTab, anchor);
-    } else {
-      window.location.hash = href;
+    const element = document.querySelector(href);
+    if (element) {
+      const top = element.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     }
   };
 

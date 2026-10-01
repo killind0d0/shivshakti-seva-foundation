@@ -32,7 +32,7 @@ import StickyDonateBar from "@/components/StickyDonateBar";
 import FoundationTimeline from "@/components/FoundationTimeline";
 import EventCountdown from "@/components/EventCountdown";
 import HelpTracker from "@/components/HelpTracker";
-import SectionNavHub, { TabKey, SectionFooterNav } from "@/components/SectionNavHub";
+import QuickAccessBar from "@/components/SectionNavHub";
 import { initialFoundationData, FoundationData } from "@/data/foundationData";
 
 export default function Home() {
@@ -42,111 +42,6 @@ export default function Home() {
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState<string | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<TabKey>("home");
-
-  const handleTabChange = (tab: TabKey, anchorId?: string) => {
-    setActiveTab(tab);
-    if (typeof window !== "undefined") {
-      const newHash = anchorId
-        ? `#${anchorId}`
-        : tab === "home"
-        ? "#mukhya-prishth"
-        : `#${tab}`;
-      window.history.pushState(null, "", newHash);
-    }
-
-    if (anchorId) {
-      setTimeout(() => {
-        const el = document.getElementById(anchorId);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        } else {
-          const hubEl = document.getElementById("section-hub-nav");
-          if (hubEl) {
-            const topOffset = hubEl.getBoundingClientRect().top + window.scrollY - 75;
-            window.scrollTo({ top: Math.max(0, topOffset), behavior: "smooth" });
-          }
-        }
-      }, 70);
-    } else if (tab === "home") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      setTimeout(() => {
-        const hubEl = document.getElementById("section-hub-nav");
-        if (hubEl) {
-          const topOffset = hubEl.getBoundingClientRect().top + window.scrollY - 75;
-          window.scrollTo({ top: Math.max(0, topOffset), behavior: "smooth" });
-        }
-      }, 50);
-    }
-  };
-
-  // Sync tab with URL hash on mount and hash changes
-  useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.toLowerCase();
-      if (!hash || hash.includes("mukhya") || hash.includes("home")) {
-        setActiveTab("home");
-        return;
-      }
-      if (
-        hash.includes("bare-mein") ||
-        hash.includes("sansthapak") ||
-        hash.includes("timeline") ||
-        hash.includes("about")
-      ) {
-        setActiveTab("about");
-      } else if (
-        hash.includes("karya") ||
-        hash.includes("sevayein") ||
-        hash.includes("spotlight") ||
-        hash.includes("pratiyogita") ||
-        hash.includes("abhiyan") ||
-        hash.includes("services")
-      ) {
-        setActiveTab("services");
-      } else if (
-        hash.includes("help") ||
-        hash.includes("anurodh") ||
-        hash.includes("sahayata") ||
-        hash.includes("tracking") ||
-        hash.includes("tracker")
-      ) {
-        setActiveTab("help");
-      } else if (
-        hash.includes("sahyog") ||
-        hash.includes("prabhav") ||
-        hash.includes("pardarshita") ||
-        hash.includes("contributions") ||
-        hash.includes("donate")
-      ) {
-        setActiveTab("donate");
-      } else if (
-        hash.includes("shiviram") ||
-        hash.includes("samachar") ||
-        hash.includes("chitra") ||
-        hash.includes("gallery") ||
-        hash.includes("whatsapp") ||
-        hash.includes("events")
-      ) {
-        setActiveTab("events");
-      } else if (
-        hash.includes("sankalp") ||
-        hash.includes("swayamsevak") ||
-        hash.includes("volunteer") ||
-        hash.includes("sampark") ||
-        hash.includes("contact")
-      ) {
-        setActiveTab("volunteer");
-      } else if (hash.includes("all") || hash.includes("sampurna")) {
-        setActiveTab("all");
-      }
-    };
-
-    handleHash();
-    window.addEventListener("hashchange", handleHash);
-    return () => window.removeEventListener("hashchange", handleHash);
-  }, []);
 
   // Load custom CMS updates from localStorage on mount
   useEffect(() => {
@@ -160,7 +55,7 @@ export default function Home() {
     }
   }, []);
 
-  // Lock body scroll and prevent background touch bleed when any modal is open
+  // Lock body scroll when any modal is open
   const isAnyModalOpen = donationModalOpen || helpModalOpen || adminModalOpen;
   useEffect(() => {
     if (isAnyModalOpen) {
@@ -223,39 +118,35 @@ export default function Home() {
       >
         मुख्य सामग्री पर जाएँ
       </a>
-      {/* Top Scroll Reading Progress Indicator */}
+
+      {/* Top Scroll Progress Indicator */}
       <div
-        className="fixed top-0 left-0 right-0 h-[3.5px] bg-gradient-to-r from-brand-saffron-500 via-brand-gold-400 to-brand-saffron-600 z-50 transition-all duration-100 ease-out origin-left pointer-events-none shadow-sm"
+        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-brand-saffron-500 via-brand-gold-400 to-brand-saffron-600 z-50 transition-all duration-100 ease-out origin-left pointer-events-none"
         style={{ transform: `scaleX(${scrollProgress / 100})` }}
         aria-hidden="true"
       />
 
-      {/* 1. Accessibility & Urgent Assistance Top Bar */}
+      {/* 1. Accessibility Toolbar (compact top bar) */}
       <AccessibilityToolbar
         onOpenHelp={handleOpenGeneralHelp}
         onOpenAdmin={() => setAdminModalOpen(true)}
       />
 
-      {/* 2. Divine Festival Greeting Ribbon */}
+      {/* 2. Festival Greeting Banner */}
       <FestivalGreetingBanner
         config={data.festivalGreeting}
         onOpenAdmin={() => setAdminModalOpen(true)}
       />
 
-      {/* 3. Responsive Header with Section-Wise Navigation Link Integration */}
+      {/* 3. Main Header — single sticky navigation */}
       <Header
         onOpenDonation={() => setDonationModalOpen(true)}
         onOpenHelp={handleOpenGeneralHelp}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={setIsMobileMenuOpen}
-        activeTab={activeTab}
-        onSelectTab={handleTabChange}
       />
 
-      {/* Top Live Marquee Ticker */}
-      <MarqueeTicker />
-
-      {/* Ambient Sacred Logo Watermark across website background */}
+      {/* Ambient Sacred Logo Watermark */}
       <div
         className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden select-none"
         aria-hidden="true"
@@ -266,156 +157,131 @@ export default function Home() {
         />
       </div>
 
+      {/* ========== MAIN CONTENT — Clean Single-Page Scroll ========== */}
       <main id="main-content" tabIndex={-1} className="relative z-10 flex-1 focus:outline-none">
-        {/* 4. Cinematic Hero & Quick Impact Stats (Shown on Home and Full Page view) */}
-        {(activeTab === "home" || activeTab === "all") && (
-          <div id="mukhya-prishth" className="animate-fadeIn">
-            <Hero
-              onOpenDonation={() => setDonationModalOpen(true)}
-              onOpenHelp={handleOpenGeneralHelp}
-            />
-            <QuickImpactBar stats={data.stats} />
-          </div>
-        )}
 
-        {/* 5. Section Navigation Hub (Always accessible: sticky bar + Gateway Dashboard on Home) */}
-        <SectionNavHub
-          activeTab={activeTab}
-          onSelectTab={handleTabChange}
+        {/* SECTION 1: Hero Banner */}
+        <Hero
+          onOpenDonation={() => setDonationModalOpen(true)}
+          onOpenHelp={handleOpenGeneralHelp}
+        />
+
+        {/* SECTION 2: Quick Impact Trust Bar (verified stats) */}
+        <QuickImpactBar stats={data.stats} />
+
+        {/* SECTION 3: Quick Access Bar (Help · Donate · Programs · Call) */}
+        <QuickAccessBar
           onOpenHelp={handleOpenGeneralHelp}
           onOpenDonation={() => setDonationModalOpen(true)}
         />
 
-        {/* SECTION 1: About Us, History & Founder's Vision */}
-        {(activeTab === "about" || activeTab === "all") && (
-          <section id="hamare-bare-mein" aria-label="हमारे बारे में" className="animate-fadeIn">
-            <AboutSection />
-            <div id="foundation-timeline">
-              <FoundationTimeline />
-            </div>
-            <div id="sansthapak-sandesh">
-              <FoundersVision />
-            </div>
-            <SectionFooterNav activeTab="about" onSelectTab={handleTabChange} />
-          </section>
-        )}
+        {/* Live Marquee Ticker (below hero, non-intrusive) */}
+        <MarqueeTicker />
 
-        {/* SECTION 2: Welfare Programs & Ground Field Work */}
-        {(activeTab === "services" || activeTab === "all") && (
-          <section id="hamari-sevayein" aria-label="सेवा प्रकल्प" className="animate-fadeIn">
-            <ServicesSection
-              services={data.services}
-              onOpenHelpWithService={handleOpenHelpWithService}
-            />
-            <div id="feild-work-spotlight">
-              <FieldWorkSpotlight />
-            </div>
-            <div id="mahila-pratiyogita">
-              <WomenEmpowermentCompetition />
-            </div>
-            <div id="hamare-abhiyan">
-              <FeaturedCampaign
-                campaign={data.featuredCampaign}
-                onOpenDonation={() => setDonationModalOpen(true)}
-              />
-            </div>
-            <SectionFooterNav activeTab="services" onSelectTab={handleTabChange} />
-          </section>
-        )}
+        {/* SECTION 4: About Us — Who We Are, 4 Pillars, Philosophy */}
+        <div id="hamare-bare-mein">
+          <AboutSection />
+        </div>
 
-        {/* SECTION 3: 24x7 Help Center & Live Tracking */}
-        {(activeTab === "help" || activeTab === "all") && (
-          <section id="sahayata-kendra" aria-label="सहायता केंद्र" className="animate-fadeIn">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-4">
-              <div className="bg-gradient-to-r from-red-700 via-brand-maroon-900 to-red-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-brand-gold-400">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                  <div className="space-y-2 text-center md:text-left">
-                    <span className="text-xs uppercase tracking-widest font-bold text-brand-gold-300">
-                      २४×७ आपातकालीन सेवा प्रकोष्ठ • गया जी एवं संपूर्ण बिहार
-                    </span>
-                    <h3 className="font-heading text-2xl sm:text-3xl font-bold">
-                      क्या आपको या किसी परिचित को तत्काल सहायता चाहिए?
-                    </h3>
-                    <p className="text-sm text-brand-cream-100 max-w-xl">
-                      राशन, बाढ़ राहत, चिकित्सा सेवा या आपातकालीन संबल हेतु सीधे हमारे सेवा दल से संपर्क करें या नीचे ऑनलाइन आवेदन भेजें।
-                    </p>
-                  </div>
-                  <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full sm:w-auto">
-                    <button
-                      onClick={handleOpenGeneralHelp}
-                      className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white text-brand-maroon-950 font-heading font-bold text-sm hover:bg-brand-cream-100 shadow-md transition cursor-pointer"
-                    >
-                      नया सहायता अनुरोध दर्ज करें
-                    </button>
-                    <a
-                      href="tel:+919117135379"
-                      className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-gold-500 text-brand-maroon-950 font-heading font-bold text-sm hover:bg-brand-gold-400 shadow-md transition text-center"
-                    >
-                      📞 91171 35379 पर तुरंत कॉल करें
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <HelpTracker onOpenHelpModal={handleOpenGeneralHelp} />
-            <SectionFooterNav activeTab="help" onSelectTab={handleTabChange} />
-          </section>
-        )}
+        {/* SECTION 5: Founder's Vision & Chief Sevadar Letter */}
+        <div id="sansthapak-sandesh">
+          <FoundersVision />
+        </div>
 
-        {/* SECTION 4: Donations, Impact & Transparency */}
-        {(activeTab === "donate" || activeTab === "all") && (
-          <section id="sahyog-dan" aria-label="सहयोग व दान" className="animate-fadeIn">
-            <DonationSection donationConfig={data.donationConfig} />
-            <HowContributionsHelp />
-            <div id="hamara-prabhav">
-              <ImpactStories stories={data.stories} />
-            </div>
-            <div id="pardarshita">
-              <TransparencySection />
-            </div>
-            <SectionFooterNav activeTab="donate" onSelectTab={handleTabChange} />
-          </section>
-        )}
+        {/* SECTION 6: Foundation Journey / Milestones Timeline */}
+        <div id="foundation-timeline">
+          <FoundationTimeline />
+        </div>
 
-        {/* SECTION 5: Events, Media & Indian Photo Gallery */}
-        {(activeTab === "events" || activeTab === "all") && (
-          <section id="ayojan-gallery" aria-label="आयोजन व गैलरी" className="animate-fadeIn">
-            <EventCountdown />
-            <div id="chitra-deergha">
-              <PhotoGallery photos={data.gallery} />
-            </div>
-            <div id="samachar">
-              <NewsSection news={data.news} />
-            </div>
-            <div id="whatsapp-community">
-              <WhatsAppCommunity phoneNumber={data.phone} />
-            </div>
-            <SectionFooterNav activeTab="events" onSelectTab={handleTabChange} />
-          </section>
-        )}
+        {/* SECTION 7: Our 10 Core Welfare Services */}
+        <div id="hamari-sevayein">
+          <ServicesSection
+            services={data.services}
+            onOpenHelpWithService={handleOpenHelpWithService}
+          />
+        </div>
 
-        {/* SECTION 6: Volunteer Registration, Daily Pledge & Contact */}
-        {(activeTab === "volunteer" || activeTab === "all") && (
-          <section id="sampark-karyalay" aria-label="जुड़ें व संपर्क" className="animate-fadeIn">
-            <div id="seva-sankalp">
-              <DailySankalpWidget />
-            </div>
-            <div id="swayamsevak">
-              <VolunteerSection />
-            </div>
-            <div id="sampark">
-              <ContactSection data={data} />
-            </div>
-            <SectionFooterNav activeTab="volunteer" onSelectTab={handleTabChange} />
-          </section>
-        )}
+        {/* SECTION 8: Ground Field Work Spotlight & Stories */}
+        <div id="feild-work-spotlight">
+          <FieldWorkSpotlight />
+        </div>
+
+        {/* SECTION 9: Women Empowerment & Self-Reliance Skill Competition */}
+        <div id="mahila-pratiyogita">
+          <WomenEmpowermentCompetition />
+        </div>
+
+        {/* SECTION 10: Featured Relief Campaign (Flood Relief) */}
+        <div id="hamare-abhiyan">
+          <FeaturedCampaign
+            campaign={data.featuredCampaign}
+            onOpenDonation={() => setDonationModalOpen(true)}
+          />
+        </div>
+
+        {/* SECTION 11: Donation Section (UPI, Bank, QR) */}
+        <div id="sahyog-dan">
+          <DonationSection donationConfig={data.donationConfig} />
+        </div>
+
+        {/* SECTION 12: How Contributions Help (Transparent Journey) */}
+        <HowContributionsHelp />
+
+        {/* SECTION 13: Impact Stories */}
+        <div id="hamara-prabhav">
+          <ImpactStories stories={data.stories} />
+        </div>
+
+        {/* SECTION 14: Transparency & Accountability */}
+        <div id="pardarshita">
+          <TransparencySection />
+        </div>
+
+        {/* SECTION 15: Upcoming Event Countdown & RSVP */}
+        <div id="ayojan-shiviram">
+          <EventCountdown />
+        </div>
+
+        {/* SECTION 16: News & Activities */}
+        <div id="samachar">
+          <NewsSection news={data.news} />
+        </div>
+
+        {/* SECTION 17: Photo Gallery */}
+        <div id="chitra-deergha">
+          <PhotoGallery photos={data.gallery} />
+        </div>
+
+        {/* SECTION 18: WhatsApp Community */}
+        <div id="whatsapp-community">
+          <WhatsAppCommunity phoneNumber={data.phone} />
+        </div>
+
+        {/* SECTION 19: Help Tracker */}
+        <div id="sahayata-tracker">
+          <HelpTracker onOpenHelpModal={handleOpenGeneralHelp} />
+        </div>
+
+        {/* SECTION 20: Daily Service Pledge */}
+        <div id="seva-sankalp">
+          <DailySankalpWidget />
+        </div>
+
+        {/* SECTION 21: Volunteer Registration */}
+        <div id="swayamsevak">
+          <VolunteerSection />
+        </div>
+
+        {/* SECTION 22: Contact Section */}
+        <div id="sampark">
+          <ContactSection data={data} />
+        </div>
       </main>
 
-      {/* 6. Comprehensive Hindi Footer with Section Navigation */}
+      {/* Footer */}
       <Footer
         onOpenDonation={() => setDonationModalOpen(true)}
         onOpenAdmin={() => setAdminModalOpen(true)}
-        onSelectTab={handleTabChange}
       />
 
       {/* Global Modals */}
@@ -439,7 +305,7 @@ export default function Home() {
         onResetData={handleResetData}
       />
 
-      {/* Floating 24x7 Quick Action Bar */}
+      {/* Floating Quick Action Bar */}
       <FloatingQuickAction
         phoneNumber={data.phone}
         onOpenHelp={handleOpenGeneralHelp}

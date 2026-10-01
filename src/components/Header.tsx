@@ -20,15 +20,11 @@ import {
   Heart,
 } from "lucide-react";
 
-import type { TabKey } from "@/components/SectionNavHub";
-
 interface HeaderProps {
   onOpenDonation: () => void;
   onOpenHelp: () => void;
   isMobileMenuOpen?: boolean;
   onToggleMobileMenu?: (open: boolean) => void;
-  activeTab?: TabKey;
-  onSelectTab?: (tab: TabKey, anchorId?: string) => void;
 }
 
 export default function Header({
@@ -36,8 +32,6 @@ export default function Header({
   onOpenHelp,
   isMobileMenuOpen,
   onToggleMobileMenu,
-  activeTab,
-  onSelectTab,
 }: HeaderProps) {
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -125,44 +119,19 @@ export default function Header({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const hrefToTabMap: Record<string, TabKey> = {
-    "#mukhya-prishth": "home",
-    "#hamare-bare-mein": "about",
-    "#sansthapak-sandesh": "about",
-    "#hamari-sevayein": "services",
-    "#feild-work-spotlight": "services",
-    "#mahila-pratiyogita": "services",
-    "#hamare-abhiyan": "services",
-    "#hamara-prabhav": "donate",
-    "#chitra-deergha": "events",
-    "#samachar": "events",
-    "#whatsapp-community": "events",
-    "#seva-sankalp": "volunteer",
-    "#sampark": "volunteer",
-  };
-
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false);
     setDropdownOpen(false);
-    const targetTab = hrefToTabMap[href] || "home";
-    const anchor = href.startsWith("#") ? href.substring(1) : undefined;
-    if (onSelectTab) {
-      onSelectTab(targetTab, anchor);
-    } else {
-      setTimeout(() => {
-        const element = document.querySelector(href);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 60);
-    }
+    setTimeout(() => {
+      const element = document.querySelector(href);
+      if (element) {
+        const top = element.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+      }
+    }, 60);
   };
 
   const isLinkActive = (href: string) => {
-    if (activeTab) {
-      const mapped = hrefToTabMap[href];
-      if (mapped) return activeTab === mapped;
-    }
     return activeSection === href.replace("#", "");
   };
 
