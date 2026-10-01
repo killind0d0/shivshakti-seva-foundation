@@ -79,9 +79,6 @@ function TimelineCard({
         isEven ? "md:flex-row" : "md:flex-row-reverse"
       } flex-row`}
     >
-      {/* Timeline Line */}
-      <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-gold-400 to-brand-maroon-200 md:-translate-x-1/2" />
-
       {/* Timeline Dot */}
       <div
         className={`absolute left-5 md:left-1/2 w-10 h-10 rounded-full border-3 border-brand-gold-500 bg-white shadow-lg flex items-center justify-center -translate-x-1/2 z-10 transition-all duration-700 ${
@@ -156,6 +153,12 @@ export default function FoundationTimeline() {
 
         {/* Timeline */}
         <div className="relative space-y-10 md:space-y-14">
+          {/* Continuous Timeline Central Spine Line */}
+          <div
+            className="absolute left-5 md:left-1/2 top-4 bottom-4 w-0.5 bg-gradient-to-b from-brand-gold-400 via-brand-saffron-500 to-brand-maroon-200 md:-translate-x-1/2"
+            aria-hidden="true"
+          />
+
           {milestones.map((milestone, index) => (
             <TimelineCard
               key={`${milestone.year}-${milestone.title}`}

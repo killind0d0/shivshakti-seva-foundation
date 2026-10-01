@@ -284,7 +284,7 @@ export default function Header({
                     e.preventDefault();
                     handleNavClick(link.href);
                   }}
-                  className={`px-2.5 py-1 text-xs xl:text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${
+                  className={`px-1.5 xl:px-2.5 py-1 text-[11px] xl:text-xs 2xl:text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${
                     isActive
                       ? "text-brand-maroon-950 font-bold bg-amber-100/90 shadow-2xs border-b-2 border-brand-saffron-600"
                       : "text-brand-charcoal-700 hover:text-brand-maroon-900 hover:bg-brand-cream-100"
@@ -310,7 +310,7 @@ export default function Header({
                   <button
                     type="button"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className={`px-2.5 py-1 text-xs xl:text-sm font-semibold rounded-lg transition-colors inline-flex items-center gap-1 whitespace-nowrap ${
+                    className={`px-1.5 xl:px-2.5 py-1 text-[11px] xl:text-xs 2xl:text-sm font-semibold rounded-lg transition-colors inline-flex items-center gap-1 whitespace-nowrap ${
                       dropdownOpen
                         ? "bg-brand-maroon-900 text-white"
                         : isSpecialActive
@@ -356,7 +356,7 @@ export default function Header({
                             >
                               <div
                                 className={`p-1.5 rounded-lg flex-shrink-0 mt-0.5 transition-colors ${
-                                  isItemActive
+                                   isItemActive
                                     ? "bg-brand-maroon-900 text-white"
                                     : "bg-brand-cream-200 text-brand-maroon-900 group-hover:bg-brand-maroon-900 group-hover:text-white"
                                 }`}
@@ -405,7 +405,7 @@ export default function Header({
                     e.preventDefault();
                     handleNavClick(link.href);
                   }}
-                  className={`px-2.5 py-1 text-xs xl:text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${
+                  className={`px-1.5 xl:px-2.5 py-1 text-[11px] xl:text-xs 2xl:text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${
                     isActive
                       ? "text-brand-maroon-950 font-bold bg-amber-100/90 shadow-2xs border-b-2 border-brand-saffron-600"
                       : "text-brand-charcoal-700 hover:text-brand-maroon-900 hover:bg-brand-cream-100"
@@ -418,7 +418,7 @@ export default function Header({
           </nav>
 
           {/* 3. Right Action Buttons: Sleek & Compact */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
             {/* Quick Phone Call Button on Desktop */}
             <a
               href="tel:+919117135379"
