@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-// Convert standard digit string to Devanagari numerals
+// Return standard Arabic/English digits for clear, universal readability
 export function toHindiNumerals(numStr: string | number): string {
-  const hindiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-  return String(numStr).replace(/[0-9]/g, (digit) => hindiDigits[parseInt(digit, 10)]);
+  return String(numStr);
 }
 
 // Convert number to Indian formatted string (e.g., 50,000)
@@ -26,7 +25,7 @@ export function useCountUp({
   start = 0,
   duration = 2000,
   isInView = true,
-  toHindi = true,
+  toHindi = false,
 }: UseCountUpOptions) {
   const [current, setCurrent] = useState(start);
 

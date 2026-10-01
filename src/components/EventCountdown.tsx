@@ -156,7 +156,7 @@ export default function EventCountdown() {
               <div className="lg:col-span-6 space-y-4">
                 <div className="flex items-center gap-3 text-brand-gold-400 font-semibold text-sm sm:text-base">
                   <Calendar className="w-5 h-5 text-brand-saffron-400 shrink-0" />
-                  <span>गुरुवार, १५ अक्टूबर २०२६ • प्रातः ०९:०० बजे से</span>
+                  <span>गुरुवार, 15 अक्टूबर 2026 • प्रातः 09:00 बजे से</span>
                 </div>
                 <div className="flex items-start gap-3 text-brand-cream-100 text-sm sm:text-base">
                   <MapPin className="w-5 h-5 text-brand-saffron-400 shrink-0 mt-0.5" />
@@ -200,8 +200,8 @@ export default function EventCountdown() {
                         key={idx}
                         className="bg-brand-maroon-950/80 border border-brand-gold-500/50 rounded-2xl p-3 sm:p-4 text-center shadow-inner"
                       >
-                        <span className="block text-2xl sm:text-4xl font-heading font-bold text-brand-gold-400">
-                          {toHindiNumerals(String(slot.val).padStart(2, "0"))}
+                        <span className="block text-2xl sm:text-4xl font-sans font-extrabold text-brand-gold-400 tabular-nums">
+                          {String(slot.val).padStart(2, "0")}
                         </span>
                         <span className="text-[11px] sm:text-xs text-brand-cream-200 font-medium">
                           {slot.label}
@@ -299,7 +299,7 @@ export default function EventCountdown() {
                     pattern="[0-9]{10}"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="१० अंकों का मोबाइल नंबर"
+                    placeholder="10 अंकों का मोबाइल नंबर"
                     className="w-full px-4 py-2.5 rounded-xl border border-brand-cream-400 bg-brand-cream-50/50 text-brand-maroon-950 text-sm focus:border-brand-saffron-600 focus:bg-white focus:outline-none transition"
                   />
                 </div>
@@ -314,10 +314,10 @@ export default function EventCountdown() {
                   onChange={(e) => setAttendees(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-brand-cream-400 bg-brand-cream-50/50 text-brand-maroon-950 text-sm focus:border-brand-saffron-600 focus:bg-white focus:outline-none transition"
                 >
-                  <option value="1">१ व्यक्ति (स्वयं)</option>
-                  <option value="2">२ व्यक्ति (पारिवारिक सदस्य सहित)</option>
-                  <option value="3">३ व्यक्ति</option>
-                  <option value="4+">४ या अधिक व्यक्ति</option>
+                  <option value="1">1 व्यक्ति (स्वयं)</option>
+                  <option value="2">2 व्यक्ति (पारिवारिक सदस्य सहित)</option>
+                  <option value="3">3 व्यक्ति</option>
+                  <option value="4+">4 या अधिक व्यक्ति</option>
                 </select>
               </div>
 

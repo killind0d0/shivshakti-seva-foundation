@@ -1,20 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans_Devanagari, Rozha_One } from "next/font/google";
 import "./globals.css";
-
-const notoSansDevanagari = Noto_Sans_Devanagari({
-  subsets: ["devanagari"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-  variable: "--font-noto",
-});
-
-const rozhaOne = Rozha_One({
-  subsets: ["devanagari"],
-  weight: "400",
-  display: "swap",
-  variable: "--font-rozha",
-});
 
 export const viewport: Viewport = {
   themeColor: "#7c1119",
@@ -103,7 +88,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`min-h-screen bg-brand-cream-100 text-brand-charcoal-900 antialiased selection:bg-brand-saffron-500 selection:text-white ${notoSansDevanagari.variable} ${rozhaOne.variable}`}>
+      <body className="min-h-screen bg-brand-cream-100 text-brand-charcoal-900 antialiased selection:bg-brand-saffron-500 selection:text-white">
         {children}
       </body>
     </html>

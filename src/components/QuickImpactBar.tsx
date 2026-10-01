@@ -51,7 +51,7 @@ function AnimatedStatCard({
     end: parsed.targetNumber,
     duration: 1800,
     isInView,
-    toHindi: true,
+    toHindi: false,
   });
 
   return (
@@ -60,7 +60,7 @@ function AnimatedStatCard({
         {icon}
       </div>
       <div className="space-y-0.5">
-        <div className="font-heading text-2xl sm:text-3xl font-extrabold text-brand-maroon-900 group-hover:text-brand-saffron-600 tracking-tight transition-colors">
+        <div className="font-sans text-2xl sm:text-3xl font-extrabold text-brand-maroon-900 group-hover:text-brand-saffron-600 tracking-tight transition-colors tabular-nums">
           {parsed.isNumeric ? (
             <>
               {parsed.prefix}

@@ -59,21 +59,21 @@ export default function DonationSection({
   }, [upiLink]);
 
   const predefinedAmounts = [
-    { value: 500, label: "₹ ५००", impact: "१ परिवार को १ सप्ताह का राशन" },
-    { value: 1100, label: "₹ १,१००", impact: "१ बालक की १ माह की शिक्षा व पुस्तकें" },
-    { value: 2100, label: "₹ २,१००", impact: "बाढ़ पीड़ित परिवार हेतु आपातकालीन किट" },
-    { value: 5100, label: "₹ ५,१००", impact: "स्वास्थ्य शिविर एवं गंभीर औषधि संबल" },
+    { value: 500, label: "₹ 500", impact: "1 परिवार को 1 सप्ताह का राशन" },
+    { value: 1100, label: "₹ 1,100", impact: "1 बालक की 1 माह की शिक्षा व पुस्तकें" },
+    { value: 2100, label: "₹ 2,100", impact: "बाढ़ पीड़ित परिवार हेतु आपातकालीन किट" },
+    { value: 5100, label: "₹ 5,100", impact: "स्वास्थ्य शिविर एवं गंभीर औषधि संबल" },
   ];
 
   const getImpactMessage = (amount: number): string => {
     if (amount <= 0) return "कृपया राशि चुनें या दर्ज करें";
-    if (amount <= 300) return "🍚 १ परिवार को ३ दिन का पौष्टिक राशन";
-    if (amount <= 700) return "🍚 १ परिवार को १ सप्ताह का राशन एवं दैनिक भोजन";
-    if (amount <= 1500) return "📚 १ बच्चे की ३ माह की शिक्षा सामग्री व पुस्तकें";
-    if (amount <= 3000) return "💊 १ बुजुर्ग की १ माह की स्वास्थ्य सेवा एवं औषधि";
-    if (amount <= 6000) return "🧵 १ बहन के लिए सिलाई मशीन व प्रशिक्षण";
-    if (amount <= 15000) return "🏠 १ आपदा पीड़ित परिवार का पुनर्वास एवं संबल";
-    if (amount <= 30000) return "🏥 १ गाँव में निःशुल्क स्वास्थ्य शिविर का आयोजन";
+    if (amount <= 300) return "🍚 1 परिवार को 3 दिन का पौष्टिक राशन";
+    if (amount <= 700) return "🍚 1 परिवार को 1 सप्ताह का राशन एवं दैनिक भोजन";
+    if (amount <= 1500) return "📚 1 बच्चे की 3 माह की शिक्षा सामग्री व पुस्तकें";
+    if (amount <= 3000) return "💊 1 बुजुर्ग की 1 माह की स्वास्थ्य सेवा एवं औषधि";
+    if (amount <= 6000) return "🧵 1 बहन के लिए सिलाई मशीन व प्रशिक्षण";
+    if (amount <= 15000) return "🏠 1 आपदा पीड़ित परिवार का पुनर्वास एवं संबल";
+    if (amount <= 30000) return "🏥 1 गाँव में निःशुल्क स्वास्थ्य शिविर का आयोजन";
     return "🌟 सम्पूर्ण गाँव के लिए बहुआयामी सेवा अभियान";
   };
 
@@ -203,12 +203,12 @@ export default function DonationSection({
                 aria-valuetext={`₹ ${(effectiveAmount || 500).toLocaleString("en-IN")}`}
               />
               <div className="flex justify-between text-[10px] text-brand-charcoal-400 mt-1 px-0.5">
-                <span>₹ १००</span>
-                <span>₹ ५१,०००</span>
+                <span>₹ 100</span>
+                <span>₹ 51,000</span>
               </div>
               {/* Impact Preview */}
               <div className="mt-4 p-4 bg-gradient-to-r from-brand-saffron-50 to-brand-cream-100 rounded-2xl border border-brand-saffron-200/60 text-center">
-                <div className="text-2xl sm:text-3xl font-heading text-brand-maroon-900 font-extrabold tracking-tight">
+                <div className="text-2xl sm:text-3xl font-sans text-brand-maroon-900 font-extrabold tracking-tight tabular-nums">
                   ₹ {(effectiveAmount || 0).toLocaleString("en-IN")}
                 </div>
                 <p className="text-sm sm:text-base text-brand-maroon-700 mt-1.5 font-medium leading-relaxed">

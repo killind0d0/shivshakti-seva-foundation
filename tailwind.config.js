@@ -69,8 +69,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-devanagari)"],
-        heading: ["var(--font-heading)"],
+        sans: ["'Noto Sans Devanagari'", "system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "sans-serif"],
+        heading: ["'Rozha One'", "'Noto Sans Devanagari'", "serif"],
       },
       keyframes: {
         fadeIn: {
