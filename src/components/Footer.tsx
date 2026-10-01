@@ -284,151 +284,71 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
         </div>
       </div>
 
-      {/* 5. SJ Digitals Signature & Hindi Promotional Banner */}
+      {/* 5. SJ Digitals Signature & Hindi Promotional Banner (Compact & Elegant) */}
       <aside
         aria-label="एस.जे. डिजिटल्स सिग्नेचर एवं विकास सूचना"
-        className="relative bg-gradient-to-r from-[#140204] via-[#240508] to-[#140204] text-white border-t-2 border-brand-gold-500/50 py-6 sm:py-7 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-2xl"
+        className="relative bg-gradient-to-r from-[#140204] via-[#220407] to-[#140204] text-white border-t border-brand-gold-500/40 py-3.5 sm:py-4 px-4 sm:px-6 lg:px-8 shadow-inner"
       >
-        {/* Subtle decorative sacred background highlights matching website theme */}
-        <div className="absolute -top-16 -left-16 w-52 h-52 bg-brand-gold-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-brand-saffron-600/15 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-6 bg-brand-maroon-950/70 p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border border-brand-gold-500/30 backdrop-blur-sm shadow-inner">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 text-center md:text-left">
+          
+          {/* Left: Compact Monogram & Hindi Signature */}
+          <div className="flex items-center gap-3 justify-center md:justify-start flex-wrap">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 p-0.5 shrink-0 shadow-sm">
+              <div className="w-full h-full rounded-[6px] bg-[#1e0306] flex items-center justify-center font-heading font-black text-amber-300 text-xs tracking-tight">
+                SJ
+              </div>
+            </div>
             
-            {/* Left: Brand Monogram & Developer Signature */}
-            <div className="flex items-center gap-3.5 sm:gap-4 text-center sm:text-left flex-col sm:flex-row w-full lg:w-auto">
-              {/* Premium SJ Digitals Monogram Emblem */}
-              <div className="relative group shrink-0">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 p-0.5 shadow-lg shadow-amber-950/50 transition-transform duration-300 group-hover:scale-105">
-                  <div className="w-full h-full rounded-[14px] bg-[#200407] flex flex-col items-center justify-center border border-amber-300/40">
-                    <span className="font-heading font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 text-xl tracking-tight leading-none">
-                      SJ
-                    </span>
-                    <span className="text-[7px] uppercase font-bold tracking-widest text-amber-300/90 mt-0.5">
-                      DIGITALS
-                    </span>
-                  </div>
-                </div>
-                {/* Glowing live status dot */}
-                <span className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-[#200407]"></span>
-                </span>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap mb-1">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-amber-400/20 text-brand-gold-300 border border-brand-gold-400/30">
-                    <Sparkles className="w-3 h-3 text-amber-300" />
-                    <span>आधिकारिक तकनीकी सहयोगी</span>
-                  </span>
-                  <span className="text-[11px] text-brand-cream-300/80 font-medium">
-                    Web & Digital Solutions
-                  </span>
-                </div>
-
-                <h3 className="font-heading text-sm sm:text-base md:text-lg font-bold text-white tracking-wide">
-                  This site is developed and maintained by{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 font-extrabold">
-                    SJ Digitals
-                  </span>
-                </h3>
-
-                <p className="text-xs sm:text-[13px] text-brand-cream-200/90 mt-0.5 font-medium">
-                  यह वेबसाइट <strong className="text-brand-gold-300 font-bold">एस.जे. डिजिटल्स (SJ Digitals)</strong> द्वारा अत्याधुनिक तकनीक एवं सुरक्षा के साथ अभिकल्पित व प्रबंधित है।
-                </p>
-              </div>
+            <div className="text-xs sm:text-[13px] leading-snug">
+              <span className="text-brand-cream-300">
+                वेबसाइट निर्माण एवं तकनीकी प्रबंधन:
+              </span>{" "}
+              <strong className="text-brand-gold-300 font-bold">
+                एस.जे. डिजिटल्स (SJ Digitals)
+              </strong>
+              <span className="hidden sm:inline text-brand-gold-500/60 mx-1.5">•</span>
+              <span className="block sm:inline text-[11px] sm:text-xs text-brand-cream-300/80">
+                अपने संस्थान या व्यापार हेतु आधुनिक वेबसाइट बनवाएं
+              </span>
             </div>
-
-            {/* Middle / Center: Compelling Hindi Ad Pitch & Capabilities */}
-            <div className="w-full lg:max-w-md xl:max-w-lg border-y lg:border-y-0 lg:border-x border-brand-gold-500/20 py-3 lg:py-0 lg:px-5 text-center lg:text-left">
-              <div className="text-xs sm:text-sm font-semibold text-amber-200 flex items-center justify-center lg:justify-start gap-1.5 mb-2">
-                <Laptop className="w-4 h-4 text-brand-gold-400 shrink-0" />
-                <span>क्या आपको भी अपने संस्थान, ट्रस्ट या व्यापार हेतु वेबसाइट चाहिए?</span>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 sm:gap-2">
-                <span className="px-2 py-1 rounded-md bg-white/5 border border-brand-gold-400/20 text-[10px] sm:text-xs text-brand-cream-200 font-medium flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                  भव्य व तीव्र वेबसाइट
-                </span>
-                <span className="px-2 py-1 rounded-md bg-white/5 border border-brand-gold-400/20 text-[10px] sm:text-xs text-brand-cream-200 font-medium flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                  मोबाइल-फ्रेंडली डिज़ाइन
-                </span>
-                <span className="px-2 py-1 rounded-md bg-white/5 border border-brand-gold-400/20 text-[10px] sm:text-xs text-brand-cream-200 font-medium flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                  सुरक्षित डोमेन व होस्टिंग
-                </span>
-                <span className="px-2 py-1 rounded-md bg-white/5 border border-brand-gold-400/20 text-[10px] sm:text-xs text-brand-cream-200 font-medium flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                  २४×७ तकनीकी सहयोग
-                </span>
-              </div>
-            </div>
-
-            {/* Right: Direct High-Converting CTA Buttons */}
-            <div className="flex flex-col sm:flex-row lg:flex-row items-stretch sm:items-center gap-2.5 shrink-0 w-full sm:w-auto justify-center">
-              {/* Official Website Link */}
-              <a
-                href="https://www.suryajyoti.digital"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-brand-gold-500/15 hover:bg-brand-gold-500/25 text-brand-gold-300 hover:text-brand-gold-200 font-bold text-xs sm:text-sm border border-brand-gold-400/40 transition-all duration-200 active:scale-95 whitespace-nowrap shadow-sm group"
-                title="SJ Digitals की आधिकारिक वेबसाइट खोलें"
-              >
-                <Globe className="w-3.5 h-3.5 text-brand-gold-400 group-hover:rotate-12 transition-transform" />
-                <span>www.suryajyoti.digital</span>
-                <ExternalLink className="w-3 h-3 text-brand-gold-400/70" />
-              </a>
-
-              {/* WhatsApp Chat Button */}
-              <a
-                href={`https://api.whatsapp.com/send?phone=917004185301&text=${encodeURIComponent(
-                  "नमस्ते SJ Digitals! मैंने शिवशक्ति सेवा फाउंडेशन की वेबसाइट देखी। मुझे भी अपने संस्थान / व्यापार के लिए ऐसी ही शानदार वेबसाइट और डिजिटल सेवाओं की आवश्यकता है। कृपया मार्गदर्शन करें।"
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-emerald-900/40 border border-emerald-400/30 transition-all duration-200 active:scale-95 whitespace-nowrap"
-                title="SJ Digitals से व्हाट्सएप पर संपर्क करें"
-              >
-                <MessageCircle className="w-4 h-4 fill-white/20" />
-                <span>व्हाट्सएप करें</span>
-              </a>
-
-              {/* Direct Call Button */}
-              <a
-                href="tel:+917004185301"
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 hover:text-white font-semibold text-xs sm:text-sm border border-brand-gold-400/30 transition-all duration-200 active:scale-95 whitespace-nowrap"
-                title="SJ Digitals को सीधे कॉल करें"
-              >
-                <Phone className="w-3.5 h-3.5 text-brand-gold-400" />
-                <span className="font-sans font-bold">+91 70041 85301</span>
-              </a>
-            </div>
-
           </div>
 
-          {/* Micro Bottom Attribution Bar */}
-          <div className="mt-3.5 text-center text-[10px] sm:text-[11px] text-brand-gold-300/70 flex items-center justify-center gap-2 flex-wrap">
+          {/* Right: Quick Action Links */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap justify-center text-xs">
             <a
               href="https://www.suryajyoti.digital"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-brand-gold-300 hover:text-brand-gold-200 underline font-semibold flex items-center gap-1"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-brand-gold-300 hover:text-white border border-brand-gold-500/30 transition text-xs font-semibold whitespace-nowrap"
+              title="SJ Digitals वेबसाइट"
             >
-              <span>www.suryajyoti.digital</span>
+              <Globe className="w-3.5 h-3.5 text-brand-gold-400" />
+              <span>suryajyoti.digital</span>
             </a>
-            <span>•</span>
-            <a href="tel:+917004185301" className="hover:text-white font-sans font-medium">
-              फोन: +91 70041 85301
+
+            <a
+              href={`https://api.whatsapp.com/send?phone=917004185301&text=${encodeURIComponent(
+                "नमस्ते SJ Digitals! मुझे वेबसाइट एवं डिजिटल सेवाओं के लिए जानकारी चाहिए।"
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition text-xs whitespace-nowrap shadow-xs"
+              title="व्हाट्सएप पर संपर्क करें"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>व्हाट्सएप</span>
             </a>
-            <span>•</span>
-            <span>Bihar & Pan-India Web Engineering</span>
-            <span>•</span>
-            <span className="text-brand-cream-300/90 font-medium">Made with ❤️ & Devotion for Shiv Shakti Seva Foundation</span>
+
+            <a
+              href="tel:+917004185301"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-brand-cream-200 hover:text-white border border-white/15 transition text-xs font-medium whitespace-nowrap"
+              title="सीधे कॉल करें"
+            >
+              <Phone className="w-3 h-3 text-brand-gold-400" />
+              <span className="font-sans font-bold">+91 70041 85301</span>
+            </a>
           </div>
+
         </div>
       </aside>
 
