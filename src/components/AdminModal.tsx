@@ -855,6 +855,19 @@ export default function AdminModal({
             {/* TAB CONTENTS */}
             <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-6">
 
+              {/* PRODUCTION REPOSITORY ARCHITECTURE NOTICE */}
+              <div className="p-3.5 bg-amber-50/90 border border-amber-300 rounded-2xl text-xs text-amber-950 flex items-start gap-3 shadow-xs">
+                <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-bold text-amber-900">
+                    आधिकारिक उत्पादन वेबसाइट सूचना (Production Architecture Notice)
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-amber-800">
+                    फाउंडेशन की प्रामाणिक सामग्री (हेल्पलाइन +91 91171 35379, UPI 9177135379@mairtel, संस्थापक संदेश, छायाचित्र) मुख्य कोडबेस में स्थायी रूप से संकलित है। यहाँ किए गए परिवर्तन इस डिवाइस पर पूर्वावलोकन हेतु सुरक्षित रहते हैं। सम्पूर्ण देश के सभी उपयोगकर्ताओं हेतु स्थायी बदलाव सीधे गिटहब कोडबेस के माध्यम से लागू किए जाते हैं।
+                  </p>
+                </div>
+              </div>
+
               {/* SUCCESS ALERTS */}
               {savedSuccess && (
                 <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold flex items-center gap-2 animate-scaleIn">

@@ -21,8 +21,10 @@ import {
   MapPin,
   Send,
   CheckCircle2,
+  MessageCircle,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
+import { getWhatsAppUrl } from "@/utils/whatsappHelper";
 import PaymentAppBadges from "./PaymentAppBadges";
 
 interface DonationModalProps {
@@ -52,6 +54,7 @@ export default function DonationModal({
   const [transactionRef, setTransactionRef] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
+  const [receiptWhatsappText, setReceiptWhatsappText] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -113,6 +116,17 @@ export default function DonationModal({
     e.preventDefault();
     if (!donorName || !donorPhone) return;
     setIsSubmitting(true);
+
+    const msg = `🙏 *दान रसीद अनुरोध — शिवशक्ति सेवा फाउंडेशन*
+• दानदाता नाम: ${donorName.trim()}
+• मोबाइल / व्हाट्सएप: ${donorPhone.trim()}
+• सहयोग राशि: ₹${effectiveAmount || "अंशदान"}
+• यूटीआर / लेन-देन संदर्भ: ${transactionRef.trim() || "सत्यापन अपेक्षित"}
+• शहर / जिला: ${donorCity.trim() || "लागू नहीं"}
+• ईमेल: ${donorEmail.trim() || "लागू नहीं"}
+• पैन नंबर: ${donorPan.trim() || "लागू नहीं"}
+• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    setReceiptWhatsappText(msg);
 
     setTimeout(() => {
       setIsSubmitting(false);
@@ -465,18 +479,30 @@ export default function DonationModal({
                   <p className="text-xs text-emerald-800 leading-relaxed max-w-md mx-auto">
                     आदरणीय <strong>{donorName}</strong> जी, शिवशक्ति सेवा कोष में ₹<strong>{effectiveAmount || "अंशदान"}</strong> के पावन सहयोग हेतु आपका कोटि-कोटि धन्यवाद। सत्यापन उपरांत डिजिटल रसीद आपके व्हाट्सएप/फोन पर प्रेषित कर दी जाएगी।
                   </p>
-                  <div className="pt-2">
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                    <a
+                      href={getWhatsAppUrl(receiptWhatsappText)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95"
+                    >
+                      <MessageCircle className="w-4 h-4 text-emerald-200" />
+                      <span>व्हाट्सएप पर रसीद विवरण भेजें (Direct WhatsApp)</span>
+                    </a>
                     <button
                       type="button"
                       onClick={() => {
                         setReceiptSubmitted(false);
                         onClose();
                       }}
-                      className="px-6 py-2 rounded-xl bg-brand-maroon-900 text-white font-bold text-xs hover:bg-brand-maroon-950 transition shadow-sm"
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-brand-maroon-900 text-white font-bold text-xs hover:bg-brand-maroon-950 transition shadow-sm"
                     >
-                      धन्यवाद (विंडो बंद करें)
+                      विंडो बंद करें
                     </button>
                   </div>
+                  <p className="text-[11px] text-emerald-800 font-medium">
+                    टैप करते ही यह विवरण सत्यापन एवं ई-रसीद हेतु सीधे कोषाध्यक्ष (+91 91171 35379) को चला जाएगा।
+                  </p>
                 </div>
               ) : (
                 <form onSubmit={handleReceiptSubmit} className="space-y-3.5">

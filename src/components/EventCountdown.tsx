@@ -11,11 +11,13 @@ import {
   Sparkles,
   Eye,
   HeartPulse,
+  MessageCircle,
 } from "lucide-react";
 import { toHindiNumerals } from "@/hooks/useCountUp";
 import { useInView } from "@/hooks/useInView";
 import TraditionalDivider from "./TraditionalDivider";
 import RangoliCorner from "./RangoliCorner";
+import { getWhatsAppUrl } from "@/utils/whatsappHelper";
 
 interface TimeLeft {
   days: number;
@@ -42,6 +44,7 @@ export default function EventCountdown() {
   const [honeypot, setHoneypot] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [rsvpWhatsappText, setRsvpWhatsappText] = useState("");
 
   useEffect(() => {
     function calculateTime() {
@@ -99,6 +102,15 @@ export default function EventCountdown() {
     if (honeypot) return; // bot detection
 
     setIsSubmitting(true);
+    const msg = `🏥 *शिविर पूर्व-पंजीकरण टोकन — शिवशक्ति सेवा फाउंडेशन*
+• कार्यक्रम: निःशुल्क नेत्र एवं स्वास्थ्य जाँच शिविर (१५ अक्टूबर २०२६)
+• सहभागी नाम: ${name.trim()}
+• मोबाइल: ${phone.trim()}
+• उपस्थित व्यक्ति: ${attendees}
+• स्थान: माँ मंगलागौरी परिसर, गया जी
+• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    setRsvpWhatsappText(msg);
+
     try {
       const existing = JSON.parse(
         localStorage.getItem("ssf_event_rsvps") || "[]"
@@ -252,14 +264,31 @@ export default function EventCountdown() {
                 सादर धन्यवाद, <strong>{name}</strong> जी। आपका शिविर टोकन सुरक्षित कर लिया गया है।
                 कृपया निर्धारित समय पर माँ मंगलागौरी परिसर पधारें।
               </p>
-              <div className="mt-4 pt-4 border-t border-emerald-200 flex justify-center gap-3">
+
+              <div className="mt-4 pt-4 border-t border-emerald-200 flex flex-col sm:flex-row items-center justify-center gap-2">
+                <a
+                  href={getWhatsAppUrl(rsvpWhatsappText)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95"
+                >
+                  <MessageCircle className="w-4 h-4 text-emerald-200" />
+                  <span>व्हाट्सएप पर टोकन पुष्टि भेजें (Direct WhatsApp)</span>
+                </a>
                 <button
-                  onClick={() => setSubmitted(false)}
-                  className="text-xs font-semibold text-emerald-700 hover:underline"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setName("");
+                    setPhone("");
+                  }}
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-white text-emerald-900 border border-emerald-300 text-xs font-semibold hover:bg-emerald-50 transition"
                 >
                   अन्य सदस्य का पंजीकरण करें
                 </button>
               </div>
+              <p className="text-[11px] text-emerald-800 font-medium mt-2">
+                टैप करते ही आपका टोकन विवरण सीधे शिविर समन्वयक दल (+91 91171 35379) को चला जाएगा।
+              </p>
             </div>
           ) : (
             <form onSubmit={handleRsvpSubmit} className="space-y-4">

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { HeartHandshake, CheckCircle2, AlertCircle, Sparkles, Send } from "lucide-react";
+import { HeartHandshake, CheckCircle2, AlertCircle, Sparkles, Send, MessageCircle } from "lucide-react";
+import { getWhatsAppUrl } from "@/utils/whatsappHelper";
 
 export default function VolunteerSection() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ export default function VolunteerSection() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [whatsappText, setWhatsappText] = useState("");
 
   const serviceOptions = [
     "आपदा एवं बाढ़ राहत",
@@ -52,6 +54,16 @@ export default function VolunteerSection() {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    const msg = `🤝 *नया स्वयंसेवक पंजीकरण — शिवशक्ति सेवा फाउंडेशन*
+• नाम: ${formData.name.trim()}
+• मोबाइल: ${formData.mobile.trim()}
+• नगर/जिला: ${formData.city.trim()}
+• सेवा क्षेत्र: ${formData.serviceType}
+• ईमेल: ${formData.email.trim() || "लागू नहीं"}
+• संदेश: ${formData.message.trim() || "मानव सेवा में सहयोग हेतु तत्पर"}
+• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    setWhatsappText(msg);
+
     setTimeout(() => {
       // Save locally for Admin dashboard
       try {
@@ -70,14 +82,6 @@ export default function VolunteerSection() {
 
       setIsSubmitting(false);
       setIsSubmitted(true);
-      setFormData({
-        name: "",
-        mobile: "",
-        email: "",
-        city: "",
-        serviceType: "आपदा एवं बाढ़ राहत",
-        message: "",
-      });
     }, 600);
   };
 
@@ -167,19 +171,34 @@ export default function VolunteerSection() {
 
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
                     <a
-                      href="#whatsapp-community"
-                      className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-md transition-all inline-flex items-center justify-center gap-2"
+                      href={getWhatsAppUrl(whatsappText)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs shadow-md transition-all inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95"
                     >
-                      <Sparkles className="w-4 h-4 text-emerald-200" />
-                      <span>व्हाट्सएप सेवा समूह से तुरंत जुड़ें</span>
+                      <MessageCircle className="w-4 h-4 text-emerald-200" />
+                      <span>व्हाट्सएप पर आवेदन विवरण भेजें (Direct WhatsApp)</span>
                     </a>
                     <button
-                      onClick={() => setIsSubmitted(false)}
+                      onClick={() => {
+                        setIsSubmitted(false);
+                        setFormData({
+                          name: "",
+                          mobile: "",
+                          email: "",
+                          city: "",
+                          serviceType: "आपदा एवं बाढ़ राहत",
+                          message: "",
+                        });
+                      }}
                       className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white text-emerald-900 border border-emerald-300 font-semibold text-xs hover:bg-emerald-50 transition"
                     >
                       नया आवेदन करें
                     </button>
                   </div>
+                  <p className="text-[11px] text-emerald-800 font-medium">
+                    टैप करते ही आपका आवेदन फाउंडेशन हेल्पलाइन (+91 91171 35379) पर प्रेषित हो जाएगा।
+                  </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-4">

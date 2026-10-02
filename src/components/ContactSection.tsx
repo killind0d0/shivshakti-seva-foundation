@@ -12,9 +12,11 @@ import {
   HelpCircle,
   Share2,
   Globe,
+  MessageCircle,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
 import RangoliCorner from "./RangoliCorner";
+import { getWhatsAppUrl } from "@/utils/whatsappHelper";
 
 interface ContactSectionProps {
   data: FoundationData;
@@ -32,6 +34,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [whatsappText, setWhatsappText] = useState("");
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -47,6 +50,15 @@ export default function ContactSection({ data }: ContactSectionProps) {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    const msg = `📩 *नया संपर्क संदेश — शिवशक्ति सेवा फाउंडेशन*
+• नाम: ${formData.name.trim()}
+• मोबाइल: ${formData.phone.trim()}
+• ईमेल: ${formData.email.trim() || "लागू नहीं"}
+• विषय: ${formData.subject}
+• संदेश: ${formData.message.trim()}
+• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    setWhatsappText(msg);
+
     setTimeout(() => {
       // Store in localStorage for Admin view
       try {
@@ -65,13 +77,6 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
       setIsSubmitting(false);
       setIsSubmitted(true);
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        subject: "सामान्य जानकारी",
-        message: "",
-      });
     }, 600);
   };
 
@@ -260,12 +265,36 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   <p className="text-sm text-emerald-800">
                     शिवशक्ति सेवा फाउंडेशन की सहायता टीम आपसे शीघ्र संपर्क करेगी।
                   </p>
-                  <button
-                    onClick={() => setIsSubmitted(false)}
-                    className="mt-2 px-4 py-2 rounded-lg bg-emerald-700 text-white text-xs font-semibold"
-                  >
-                    अन्य संदेश भेजें
-                  </button>
+
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                    <a
+                      href={getWhatsAppUrl(whatsappText)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95"
+                    >
+                      <MessageCircle className="w-4 h-4 text-emerald-200" />
+                      <span>व्हाट्सएप पर संदेश भेजें (Direct WhatsApp)</span>
+                    </a>
+                    <button
+                      onClick={() => {
+                        setIsSubmitted(false);
+                        setFormData({
+                          name: "",
+                          phone: "",
+                          email: "",
+                          subject: "सामान्य जानकारी",
+                          message: "",
+                        });
+                      }}
+                      className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white text-emerald-900 border border-emerald-300 text-xs font-semibold hover:bg-emerald-50 transition"
+                    >
+                      अन्य संदेश भेजें
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-emerald-800 font-medium">
+                    टैप करते ही यह संदेश सीधे फाउंडेशन हेल्पलाइन (+91 91171 35379) पर प्रेषित हो जाएगा।
+                  </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-4">
