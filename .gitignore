@@ -32,3 +32,4 @@ Thumbs.db
 # Vercel
 .vercel
 *.tsbuildinfo
+src/data/portalStore.json

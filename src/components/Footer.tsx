@@ -29,18 +29,18 @@ interface FooterProps {
 
 export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
   const [policyModal, setPolicyModal] = useState<"privacy" | "terms" | null>(null);
-  const [visitorCount, setVisitorCount] = useState<number>(148924);
+  const [visitorCount, setVisitorCount] = useState<number>(1);
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("ssf_total_visitors");
-      let current = stored ? parseInt(stored, 10) : 148924;
-      if (isNaN(current) || current < 148924) current = 148924;
+      const stored = localStorage.getItem("ssf_browser_visits");
+      let current = stored ? parseInt(stored, 10) : 0;
+      if (isNaN(current)) current = 0;
       current += 1;
-      localStorage.setItem("ssf_total_visitors", current.toString());
+      localStorage.setItem("ssf_browser_visits", current.toString());
       setVisitorCount(current);
     } catch {
-      setVisitorCount(148925);
+      setVisitorCount(1);
     }
   }, []);
 
@@ -215,12 +215,12 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
           <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-brand-maroon-900/90 border border-brand-gold-500/50 shadow-inner">
             <div className="flex items-center gap-1.5 text-xs text-brand-gold-300 font-semibold">
               <Eye className="w-3.5 h-3.5 text-brand-gold-400" />
-              <span>कुल आगंतुक (Total Visitors):</span>
+              <span>आपके विज़िट सत्र (Your Visits):</span>
             </div>
             <div className="flex items-center gap-1 font-mono text-sm font-extrabold tracking-widest text-brand-gold-300 bg-brand-maroon-950 px-3 py-0.5 rounded-md border border-brand-gold-600/60 shadow-xs">
               <span>{visitorCount.toLocaleString("en-IN")}</span>
             </div>
-            <span className="relative flex h-2 w-2" title="लाइव प्रामाणिक गणना">
+            <span className="relative flex h-2 w-2" title="सक्रिय ब्राउज़र सत्र">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>

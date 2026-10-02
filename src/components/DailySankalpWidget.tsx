@@ -46,7 +46,7 @@ export default function DailySankalpWidget() {
   };
 
   const shareText = encodeURIComponent(
-    "मैंने आज शिवशक्ति सेवा फाउंडेशन के साथ समाज में निःस्वार्थ सेवा का पावन संकल्प लिया। आप भी जुड़ें: https://shivshaktisevafoundation.in"
+    "मैंने आज शिवशक्ति सेवा फाउंडेशन के साथ समाज में निःस्वार्थ सेवा का पावन संकल्प लिया। आप भी जुड़ें: https://www.shivshaktisevafoundation.in"
   );
   const shareWhatsappUrl = `https://wa.me/?text=${shareText}`;
 
@@ -80,7 +80,7 @@ export default function DailySankalpWidget() {
             {/* Header Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-saffron-100 border border-brand-saffron-300 text-brand-maroon-950 text-xs sm:text-sm font-bold shadow-xs mb-3">
               <Flame className="w-4 h-4 text-brand-saffron-600 animate-pulse" />
-              <span>सामूहिक जन-संकल्प • आज की चेतना</span>
+              <span>आत्मिक संकल्प • आज की चेतना</span>
             </div>
 
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brand-maroon-950 tracking-tight leading-tight">
@@ -93,17 +93,17 @@ export default function DailySankalpWidget() {
 
             <TraditionalDivider />
 
-            {/* Live Count Display */}
+            {/* User Pledge Display */}
             <div className="my-6 inline-flex items-center justify-center gap-3 px-6 py-3 rounded-2xl bg-brand-cream-100 border border-brand-gold-400/40 shadow-inner">
               <div className="p-2 rounded-xl bg-brand-maroon-900 text-brand-gold-300">
                 <Users className="w-5 h-5" />
               </div>
               <div className="text-left">
                 <div className="text-[11px] font-bold text-brand-maroon-800 uppercase tracking-wider">
-                  आज अब तक संकल्पित बंधु
+                  आपके सेवा संकल्प
                 </div>
                 <div className="text-xl sm:text-2xl font-black font-heading text-brand-maroon-950">
-                  {formatHindiNumber(pledgeCount)} + सेवा संकल्प
+                  {formatHindiNumber(pledgeCount)} सेवा संकल्प
                 </div>
               </div>
             </div>

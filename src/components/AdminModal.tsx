@@ -37,7 +37,7 @@ export interface StaffAccount {
   id: string;
   name: string;
   phone: string;
-  password: string;
+  password?: string;
   roleTitle: string;
   status: "active" | "suspended";
   createdDate: string;
@@ -82,7 +82,6 @@ const defaultStaffAccounts: StaffAccount[] = [
     id: "DEV",
     name: "तकनीकी सेवादार (DEV)",
     phone: "9117135379",
-    password: "dev@123",
     roleTitle: "मुख्य तकनीकी सेवादार (Technical Developer)",
     status: "active",
     createdDate: "01/10/2026",
@@ -98,7 +97,6 @@ const defaultStaffAccounts: StaffAccount[] = [
     id: "STAFF-101",
     name: "आकाश जयदेव गिरि / अमित कुमार",
     phone: "9117135379",
-    password: "staff@123",
     roleTitle: "क्षेत्रीय सेवादार",
     status: "active",
     createdDate: "01/10/2026",
@@ -125,6 +123,8 @@ export default function AdminModal({
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [staffApiError, setStaffApiError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   // Active Tab
@@ -201,7 +201,10 @@ export default function AdminModal({
 
         // Fetch authoritative server-persisted staff list for cross-device synchronization (PC -> Mobile)
         fetch("/api/staff")
-          .then((res) => res.json())
+          .then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          })
           .then((apiData) => {
             if (apiData.success && Array.isArray(apiData.staff)) {
               setStaffList(apiData.staff);
@@ -210,7 +213,10 @@ export default function AdminModal({
               } catch {}
             }
           })
-          .catch(() => {});
+          .catch((err) => {
+            console.error("Staff API error:", err);
+            setStaffApiError("डेटा लोड करने में त्रुटि");
+          });
 
         const storedPhotos = localStorage.getItem("ssf_ground_photos");
         if (storedPhotos) {
@@ -224,100 +230,56 @@ export default function AdminModal({
 
   if (!isOpen) return null;
 
-  // Handle Login Authentication with Cross-Device Smart Auto-Detection
-  const handleLogin = (e: React.FormEvent) => {
+  // Handle Login Authentication via Secure Server API (/api/auth)
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
+    setLoginLoading(true);
 
-    const trimmedId = loginId.trim().toUpperCase();
-    const cleanPass = loginPassword.trim();
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: loginId,
+          password: loginPassword,
+        }),
+      });
 
-    // 1. Check if matching Admin credentials (admin / admin@123)
-    const isAdminMatch =
-      (trimmedId === "ADMIN" || trimmedId === "9117135379") &&
-      (cleanPass === "admin@123" || cleanPass === "ssf2026" || cleanPass === "admin");
+      const data = await res.json();
 
-    if (isAdminMatch) {
-      const adminUser: CurrentUser = {
-        id: "admin",
-        name: "आकाश जयदेव गिरि (मुख्य प्रशासक)",
-        role: "admin",
-      };
-      setCurrentUser(adminUser);
-      setLoginRole("admin");
-      setActiveTab("contact");
-      return;
-    }
+      if (data.success && data.user) {
+        setCurrentUser(data.user);
+        setLoginRole(data.role || (data.user.role === "admin" ? "admin" : "staff"));
 
-    // 2. Check if matching Staff account (including DEV and auto-detecting across tabs)
-    const foundStaff = staffList.find(
-      (s) => s.id.trim().toUpperCase() === trimmedId
-    );
-
-    // If ID is DEV, also support developer standard passwords
-    const isDevMatch =
-      trimmedId === "DEV" &&
-      (cleanPass === "dev@123" ||
-        cleanPass === "dev123" ||
-        cleanPass === "admin@123" ||
-        cleanPass === "staff@123" ||
-        cleanPass === "dev" ||
-        cleanPass === "123456" ||
-        cleanPass === "ssf2026" ||
-        (foundStaff && foundStaff.password.trim() === cleanPass));
-
-    if (foundStaff || isDevMatch) {
-      const targetStaff: StaffAccount = foundStaff || {
-        id: "DEV",
-        name: "तकनीकी सेवादार (DEV)",
-        phone: "9117135379",
-        password: cleanPass,
-        roleTitle: "मुख्य तकनीकी सेवादार (Technical Developer)",
-        status: "active",
-        createdDate: "01/10/2026",
-        permissions: {
-          canAddPhotos: true,
-          canViewHelpRequests: true,
-          canViewVolunteers: true,
-          canViewWomenRegs: true,
-          canEditCampaign: true,
-        },
-      };
-
-      if (targetStaff.status === "suspended") {
-        setLoginError("यह सेवादार खाता प्रशासक द्वारा निलंबित कर दिया गया है।");
-        return;
-      }
-
-      if (targetStaff.password.trim() === cleanPass || isDevMatch) {
-        const staffUser: CurrentUser = {
-          id: targetStaff.id,
-          name: targetStaff.name,
-          role: "staff",
-          permissions: targetStaff.permissions,
-        };
-        setCurrentUser(staffUser);
-        setLoginRole("staff");
-
-        // Determine accessible tab for staff
-        if (targetStaff.permissions.canAddPhotos) {
-          setActiveTab("groundPhotos");
-        } else if (targetStaff.permissions.canViewHelpRequests) {
-          setActiveTab("helpRequests");
-        } else if (targetStaff.permissions.canViewVolunteers) {
-          setActiveTab("volunteers");
-        } else if (targetStaff.permissions.canViewWomenRegs) {
-          setActiveTab("womenRegs");
-        } else if (targetStaff.permissions.canEditCampaign) {
-          setActiveTab("campaign");
+        if (data.role === "admin" || data.user.role === "admin") {
+          setActiveTab("contact");
         } else {
-          setActiveTab("groundPhotos");
+          const perms = data.user.permissions;
+          if (perms?.canAddPhotos) {
+            setActiveTab("groundPhotos");
+          } else if (perms?.canViewHelpRequests) {
+            setActiveTab("helpRequests");
+          } else if (perms?.canViewVolunteers) {
+            setActiveTab("volunteers");
+          } else if (perms?.canViewWomenRegs) {
+            setActiveTab("womenRegs");
+          } else if (perms?.canEditCampaign) {
+            setActiveTab("campaign");
+          } else {
+            setActiveTab("groundPhotos");
+          }
         }
         return;
+      } else {
+        setLoginError(data.message || "अमान्य आईडी अथवा पासवर्ड! कृपया सही क्रेडेंशियल दर्ज करें।");
       }
+    } catch (err) {
+      console.error("Auth error:", err);
+      setLoginError("प्रमाणीकरण में त्रुटि! कृपया नेटवर्क जांचें और पुनः प्रयास करें।");
+    } finally {
+      setLoginLoading(false);
     }
-
-    setLoginError("अमान्य आईडी अथवा पासवर्ड! कृपया सही क्रेडेंशियल दर्ज करें।");
   };
 
   const handleLogout = () => {
@@ -355,7 +317,15 @@ export default function AdminModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ staffList: list }),
-      }).catch(() => {});
+      })
+        .then((res) => {
+          if (!res.ok) {
+            console.warn("Staff sync status:", res.status);
+          }
+        })
+        .catch((err) => {
+          console.error("Staff API sync error:", err);
+        });
     } catch (err) {
       console.error(err);
     }
@@ -684,10 +654,11 @@ export default function AdminModal({
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-maroon-900 to-brand-maroon-800 hover:from-brand-maroon-850 hover:to-brand-saffron-600 text-white font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 border-b-2 border-brand-gold-400"
+                  disabled={loginLoading}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-maroon-900 to-brand-maroon-800 hover:from-brand-maroon-850 hover:to-brand-saffron-600 text-white font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 border-b-2 border-brand-gold-400 disabled:opacity-75"
                 >
                   <KeyRound className="w-4 h-4 text-brand-gold-300" />
-                  <span>प्रबंधन कक्ष में प्रवेश करें</span>
+                  <span>{loginLoading ? "प्रमाणीकरण हो रहा है..." : "प्रबंधन कक्ष में प्रवेश करें"}</span>
                 </button>
               </form>
 
@@ -863,7 +834,7 @@ export default function AdminModal({
                     आधिकारिक उत्पादन वेबसाइट सूचना (Production Architecture Notice)
                   </p>
                   <p className="text-[11px] leading-relaxed text-amber-800">
-                    फाउंडेशन की प्रामाणिक सामग्री (हेल्पलाइन +91 91171 35379, UPI 9177135379@mairtel, संस्थापक संदेश, छायाचित्र) मुख्य कोडबेस में स्थायी रूप से संकलित है। यहाँ किए गए परिवर्तन इस डिवाइस पर पूर्वावलोकन हेतु सुरक्षित रहते हैं। सम्पूर्ण देश के सभी उपयोगकर्ताओं हेतु स्थायी बदलाव सीधे गिटहब कोडबेस के माध्यम से लागू किए जाते हैं।
+                    फाउंडेशन की प्रामाणिक सामग्री (हेल्पलाइन +91 91171 35379, UPI 9117135379@mairtel, संस्थापक संदेश, छायाचित्र) मुख्य कोडबेस में स्थायी रूप से संकलित है। यहाँ किए गए परिवर्तन इस डिवाइस पर पूर्वावलोकन हेतु सुरक्षित रहते हैं। सम्पूर्ण देश के सभी उपयोगकर्ताओं हेतु स्थायी बदलाव सीधे गिटहब कोडबेस के माध्यम से लागू किए जाते हैं।
                   </p>
                 </div>
               </div>
@@ -1387,6 +1358,12 @@ export default function AdminModal({
                       पंजीकृत सेवादार सूची ({staffList.length})
                     </h4>
 
+                    {staffApiError && (
+                      <div className="mb-3 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+                        {staffApiError} (स्थानीय डेटा प्रयुक्त किया जा रहा है)
+                      </div>
+                    )}
+
                     <div className="overflow-x-auto border border-brand-maroon-100 rounded-2xl">
                       <table className="w-full text-xs text-left">
                         <thead className="bg-brand-maroon-950 text-white uppercase text-[10px]">
@@ -1412,7 +1389,7 @@ export default function AdminModal({
                                 </div>
                               </td>
                               <td className="p-3 font-mono font-bold text-amber-900 bg-amber-50/50">
-                                {staff.password}
+                                {staff.password || "••••••••"}
                               </td>
                               <td className="p-3">
                                 <div className="flex flex-wrap gap-1">

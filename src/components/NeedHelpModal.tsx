@@ -167,13 +167,13 @@ export default function NeedHelpModal({
                   href={getWhatsAppUrl(whatsappText)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-emerald-400 active:scale-95"
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
                 >
                   <MessageCircle className="w-5 h-5 text-emerald-200" />
-                  <span>व्हाट्सएप पर तुरंत सूचना भेजें (Direct WhatsApp)</span>
+                  <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
                 </a>
                 <p className="text-[11px] text-emerald-800 font-medium">
-                  टैप करते ही यह विवरण सीधे हमारे हेल्पलाइन नंबर (+91 91171 35379) पर प्रेषित हो जाएगा।
+                  WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
                 </p>
               </div>
 

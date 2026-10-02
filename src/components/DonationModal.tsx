@@ -63,7 +63,7 @@ export default function DonationModal({
   const effectiveAmount = customAmount ? parseFloat(customAmount) : (selectedAmount || 0);
 
   const upiLink = useMemo(() => {
-    const cleanUpi = donationConfig?.upiId || "9177135379@mairtel";
+    const cleanUpi = donationConfig?.upiId || "9117135379@mairtel";
     const cleanName = donationConfig?.accountName || "शिवशक्ति सेवा फाउंडेशन";
     const base = `upi://pay?pa=${encodeURIComponent(cleanUpi)}&pn=${encodeURIComponent(cleanName)}&cu=INR&tn=${encodeURIComponent("शिवशक्ति सेवा सहयोग")}`;
     return effectiveAmount > 0 ? `${base}&am=${effectiveAmount}` : base;
@@ -257,17 +257,19 @@ export default function DonationModal({
               <QrCode className="w-4 h-4 text-brand-saffron-600" />
               <span>यूपीआई (UPI / QR)</span>
             </button>
-            <button
-              onClick={() => setActiveTab("bank")}
-              className={`pb-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition ${
-                activeTab === "bank"
-                  ? "border-brand-saffron-600 text-brand-maroon-950 font-extrabold"
-                  : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
-              }`}
-            >
-              <Building2 className="w-4 h-4 text-brand-maroon-800" />
-              <span>बैंक खाता विवरण</span>
-            </button>
+            {Boolean(donationConfig?.accountNumber) && (
+              <button
+                onClick={() => setActiveTab("bank")}
+                className={`pb-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition ${
+                  activeTab === "bank"
+                    ? "border-brand-saffron-600 text-brand-maroon-950 font-extrabold"
+                    : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
+                }`}
+              >
+                <Building2 className="w-4 h-4 text-brand-maroon-800" />
+                <span>बैंक खाता विवरण</span>
+              </button>
+            )}
             <button
               onClick={() => setActiveTab("receipt")}
               className={`pb-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition ${
@@ -314,10 +316,10 @@ export default function DonationModal({
                   </div>
 
                   <div className="font-mono text-xs sm:text-sm font-bold text-brand-maroon-950 break-all p-2.5 rounded-xl bg-white border border-brand-maroon-200 shadow-inner flex items-center justify-between">
-                    <span>{donationConfig?.upiId || "9177135379@mairtel"}</span>
+                    <span>{donationConfig?.upiId || "9117135379@mairtel"}</span>
                     <button
                       type="button"
-                      onClick={() => handleCopy(donationConfig?.upiId || "9177135379@mairtel", "modal-upi")}
+                      onClick={() => handleCopy(donationConfig?.upiId || "9117135379@mairtel", "modal-upi")}
                       className="ml-2 p-1.5 rounded-lg bg-brand-cream-100 hover:bg-brand-cream-200 text-brand-maroon-900 transition flex-shrink-0"
                       title="यूपीआई कॉपी करें"
                     >
@@ -332,7 +334,7 @@ export default function DonationModal({
                   <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
                     <button
                       type="button"
-                      onClick={() => handleCopy(donationConfig?.upiId || "9177135379@mairtel", "modal-upi-btn")}
+                      onClick={() => handleCopy(donationConfig?.upiId || "9117135379@mairtel", "modal-upi-btn")}
                       className="w-full sm:w-auto px-4 py-2 rounded-xl bg-brand-maroon-800 hover:bg-brand-maroon-900 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95"
                     >
                       {copiedField === "modal-upi-btn" ? (
@@ -384,7 +386,7 @@ export default function DonationModal({
           )}
 
           {/* TAB 2: Bank Transfer */}
-          {activeTab === "bank" && (
+          {activeTab === "bank" && Boolean(donationConfig?.accountNumber) && (
             <div className="space-y-4">
               <div className="p-4 sm:p-5 bg-brand-cream-50 rounded-2xl border border-brand-maroon-100 space-y-3 text-xs sm:text-sm">
                 <div className="flex justify-between py-1.5 border-b border-brand-cream-200">
@@ -403,12 +405,12 @@ export default function DonationModal({
                   <span className="text-brand-charcoal-500 font-medium">खाता संख्या:</span>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-brand-maroon-950 text-sm">
-                      {donationConfig?.accountNumber || "43820100009458"}
+                      {donationConfig?.accountNumber || ""}
                     </span>
                     <button
                       type="button"
                       onClick={() =>
-                        handleCopy(donationConfig?.accountNumber || "43820100009458", "modal-acc")
+                        handleCopy(donationConfig?.accountNumber || "", "modal-acc")
                       }
                       className="p-1.5 rounded-md hover:bg-brand-cream-200 text-brand-maroon-700 transition"
                       title="खाता संख्या कॉपी करें"
@@ -425,12 +427,12 @@ export default function DonationModal({
                   <span className="text-brand-charcoal-500 font-medium">आईएफएससी कोड:</span>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-brand-maroon-950 text-sm">
-                      {donationConfig?.ifscCode || "SBIN0003574"}
+                      {donationConfig?.ifscCode || ""}
                     </span>
                     <button
                       type="button"
                       onClick={() =>
-                        handleCopy(donationConfig?.ifscCode || "SBIN0003574", "modal-ifsc")
+                        handleCopy(donationConfig?.ifscCode || "", "modal-ifsc")
                       }
                       className="p-1.5 rounded-md hover:bg-brand-cream-200 text-brand-maroon-700 transition"
                       title="IFSC कॉपी करें"
@@ -446,7 +448,7 @@ export default function DonationModal({
                 <div className="flex justify-between py-1.5">
                   <span className="text-brand-charcoal-500 font-medium">शाखा:</span>
                   <span className="font-medium text-brand-charcoal-800">
-                    {donationConfig?.branch || "गया मुख्य शाखा, बिहार"}
+                    {donationConfig?.branch || "मुख्य शाखा, बिहार"}
                   </span>
                 </div>
               </div>
@@ -484,10 +486,10 @@ export default function DonationModal({
                       href={getWhatsAppUrl(receiptWhatsappText)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95"
+                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs sm:text-sm shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
                     >
                       <MessageCircle className="w-4 h-4 text-emerald-200" />
-                      <span>व्हाट्सएप पर रसीद विवरण भेजें (Direct WhatsApp)</span>
+                      <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
                     </a>
                     <button
                       type="button"
@@ -501,7 +503,7 @@ export default function DonationModal({
                     </button>
                   </div>
                   <p className="text-[11px] text-emerald-800 font-medium">
-                    टैप करते ही यह विवरण सत्यापन एवं ई-रसीद हेतु सीधे कोषाध्यक्ष (+91 91171 35379) को चला जाएगा।
+                    WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
                   </p>
                 </div>
               ) : (

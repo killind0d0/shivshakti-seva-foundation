@@ -50,9 +50,12 @@ export default function Home() {
       const saved = localStorage.getItem("ssf_foundation_data");
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Automatically migrate any legacy UPI ID
-        if (parsed?.donationConfig?.upiId === "9117135379@upi") {
-          parsed.donationConfig.upiId = "9177135379@mairtel";
+        // Automatically migrate any legacy or invalid UPI ID
+        if (
+          parsed?.donationConfig?.upiId &&
+          parsed.donationConfig.upiId !== "9117135379@mairtel"
+        ) {
+          parsed.donationConfig.upiId = "9117135379@mairtel";
           localStorage.setItem("ssf_foundation_data", JSON.stringify(parsed));
         }
         setData(parsed);

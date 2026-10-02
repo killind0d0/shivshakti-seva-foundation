@@ -271,10 +271,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       href={getWhatsAppUrl(whatsappText)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95"
+                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs sm:text-sm shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
                     >
                       <MessageCircle className="w-4 h-4 text-emerald-200" />
-                      <span>व्हाट्सएप पर संदेश भेजें (Direct WhatsApp)</span>
+                      <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
                     </a>
                     <button
                       onClick={() => {
@@ -293,7 +293,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                     </button>
                   </div>
                   <p className="text-[11px] text-emerald-800 font-medium">
-                    टैप करते ही यह संदेश सीधे फाउंडेशन हेल्पलाइन (+91 91171 35379) पर प्रेषित हो जाएगा।
+                    WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
                   </p>
                 </div>
               ) : (

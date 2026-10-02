@@ -486,14 +486,14 @@ export default function Header({
         mobileMenuOpen &&
         createPortal(
           <div
-            className="lg:hidden fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm animate-fadeIn"
+            className="lg:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fadeIn"
             style={{
               position: "fixed",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              zIndex: 99999,
+              zIndex: 50,
             }}
             onClick={(e) => {
               if (e.target === e.currentTarget) {

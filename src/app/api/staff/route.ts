@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 
-const storeFilePath = path.join(process.cwd(), "src/data/portalStore.json");
-
-const defaultStaffAccounts = [
+export const defaultStaffAccounts = [
   {
     id: "DEV",
     name: "तकनीकी सेवादार (DEV)",
@@ -39,34 +35,18 @@ const defaultStaffAccounts = [
   },
 ];
 
-async function getStoreData() {
-  try {
-    const raw = await fs.readFile(storeFilePath, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return { staff: defaultStaffAccounts };
-  }
-}
-
 export async function GET() {
-  const data = await getStoreData();
-  return NextResponse.json({ success: true, staff: data.staff || defaultStaffAccounts });
+  // Strip plaintext passwords from public API response
+  const sanitizedStaff = defaultStaffAccounts.map(({ password: _, ...rest }) => rest);
+  return NextResponse.json({ success: true, staff: sanitizedStaff });
 }
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const data = await getStoreData();
-
-    if (body.staffList && Array.isArray(body.staffList)) {
-      data.staff = body.staffList;
-    } else if (body.newStaff) {
-      data.staff = [body.newStaff, ...(data.staff || [])];
-    }
-
-    await fs.writeFile(storeFilePath, JSON.stringify(data, null, 2), "utf-8");
-    return NextResponse.json({ success: true, staff: data.staff });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
-  }
+export async function POST() {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "Staff management requires database integration. Contact the developer.",
+    },
+    { status: 501 }
+  );
 }

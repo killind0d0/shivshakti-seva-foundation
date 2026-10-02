@@ -39,7 +39,7 @@ export default function DonationSection({
   const effectiveAmount = customAmount ? parseFloat(customAmount) : (selectedAmount || 0);
 
   const upiLink = useMemo(() => {
-    const cleanUpi = donationConfig.upiId || "9177135379@mairtel";
+    const cleanUpi = donationConfig.upiId || "9117135379@mairtel";
     const cleanName = donationConfig.accountName || "शिवशक्ति सेवा फाउंडेशन";
     const base = `upi://pay?pa=${encodeURIComponent(cleanUpi)}&pn=${encodeURIComponent(cleanName)}&cu=INR&tn=${encodeURIComponent("शिवशक्ति सेवा फाउंडेशन जनसहयोग")}`;
     return effectiveAmount > 0 ? `${base}&am=${effectiveAmount}` : base;
@@ -234,17 +234,19 @@ export default function DonationSection({
                 <span>यूपीआई (UPI / क्यूआर कोड)</span>
               </button>
 
-              <button
-                onClick={() => setActiveTab("bank")}
-                className={`pb-3 text-sm sm:text-base font-bold flex items-center gap-2 border-b-2 transition ${
-                  activeTab === "bank"
-                    ? "border-brand-maroon-800 text-brand-maroon-900"
-                    : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
-                }`}
-              >
-                <Building2 className="w-5 h-5 text-brand-maroon-800" />
-                <span>सीधा बैंक खाता हस्तांतरण</span>
-              </button>
+              {Boolean(donationConfig.accountNumber) && (
+                <button
+                  onClick={() => setActiveTab("bank")}
+                  className={`pb-3 text-sm sm:text-base font-bold flex items-center gap-2 border-b-2 transition ${
+                    activeTab === "bank"
+                      ? "border-brand-maroon-800 text-brand-maroon-900"
+                      : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
+                  }`}
+                >
+                  <Building2 className="w-5 h-5 text-brand-maroon-800" />
+                  <span>सीधा बैंक खाता हस्तांतरण</span>
+                </button>
+              )}
             </div>
 
             {/* Method 1: UPI */}
@@ -355,7 +357,7 @@ export default function DonationSection({
             )}
 
             {/* Method 2: Direct Bank Transfer */}
-            {activeTab === "bank" && (
+            {activeTab === "bank" && Boolean(donationConfig.accountNumber) && (
               <div className="space-y-4">
                 <div className="p-4 rounded-xl bg-white border border-brand-maroon-100 divide-y divide-brand-cream-200 text-sm">
                   <div className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
