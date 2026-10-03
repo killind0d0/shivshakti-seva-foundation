@@ -17,8 +17,9 @@ export default function AccessibilityToolbar({
 
   useEffect(() => {
     try {
-      const savedFont = localStorage.getItem("ssf_font_size") as "normal" | "large" | "xlarge";
-      if (savedFont) setFontSize(savedFont);
+      const raw = localStorage.getItem("ssf_font_size");
+      const savedFont = raw === "large" || raw === "xlarge" ? raw : "normal";
+      setFontSize(savedFont);
       
       const savedContrast = localStorage.getItem("ssf_high_contrast") === "true";
       if (savedContrast) {

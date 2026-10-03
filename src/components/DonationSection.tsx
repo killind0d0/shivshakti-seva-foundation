@@ -243,17 +243,19 @@ export default function DonationSection({
                 <span>यूपीआई (UPI / क्यूआर कोड)</span>
               </button>
 
-              <button
-                onClick={() => setActiveTab("bank")}
-                className={`pb-3 text-sm sm:text-base font-bold flex items-center gap-2 border-b-2 transition ${
-                  activeTab === "bank"
-                    ? "border-brand-maroon-800 text-brand-maroon-900"
-                    : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
-                }`}
-              >
-                <Building2 className="w-5 h-5 text-brand-maroon-800" />
-                <span>सीधा बैंक खाता हस्तांतरण</span>
-              </button>
+              {Boolean(donationConfig.accountNumber) && (
+                <button
+                  onClick={() => setActiveTab("bank")}
+                  className={`pb-3 text-sm sm:text-base font-bold flex items-center gap-2 border-b-2 transition ${
+                    activeTab === "bank"
+                      ? "border-brand-maroon-800 text-brand-maroon-900"
+                      : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
+                  }`}
+                >
+                  <Building2 className="w-5 h-5 text-brand-maroon-800" />
+                  <span>सीधा बैंक खाता हस्तांतरण</span>
+                </button>
+              )}
             </div>
 
             {/* Method 1: UPI */}
@@ -446,7 +448,7 @@ export default function DonationSection({
             )}
 
             {/* Method 2: Direct Bank Transfer */}
-            {activeTab === "bank" && (
+            {activeTab === "bank" && Boolean(donationConfig.accountNumber) && (
               <div className="space-y-4">
                 {/* Official Office Contact Notice for NEFT/RTGS */}
                 <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-300 text-amber-950 space-y-3">

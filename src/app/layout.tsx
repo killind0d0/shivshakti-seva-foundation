@@ -72,7 +72,6 @@ export default function RootLayout({
   return (
     <html lang="hi" dir="ltr" className="scroll-smooth">
       <head>
-        <meta charSet="utf-8" />
         {/* Structured Data for NGO */}
         <script
           type="application/ld+json"

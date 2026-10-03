@@ -14,8 +14,10 @@ import {
   HelpCircle,
   Clock,
   HeartHandshake,
+  MessageCircle,
 } from "lucide-react";
 import TraditionalDivider from "./TraditionalDivider";
+import { getWhatsAppUrl } from "@/utils/whatsappHelper";
 
 export default function WomenEmpowermentCompetition() {
   const [formData, setFormData] = useState({
@@ -31,6 +33,7 @@ export default function WomenEmpowermentCompetition() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [whatsappText, setWhatsappText] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -245,24 +248,39 @@ export default function WomenEmpowermentCompetition() {
                   की समीक्षा की जाएगी और प्रतियोगिता की तिथि व स्थान की सूचना आपके
                   मोबाइल नंबर <strong>{formData.phone}</strong> पर दी जाएगी।
                 </p>
-                <button
-                  onClick={() => {
-                    setIsSubmitted(false);
-                    setFormData({
-                      name: "",
-                      phone: "",
-                      age: "",
-                      skillCategory: "सिलाई एवं परिधान निर्माण",
-                      experienceYears: "प्रशिक्षित (०-१ वर्ष)",
-                      hasEquipment: "नहीं, उपकरण की आवश्यकता है",
-                      address: "",
-                      notes: "",
-                    });
-                  }}
-                  className="mt-3 px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition"
-                >
-                  अन्य बहन का पंजीकरण करें
-                </button>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <a
+                    href={getWhatsAppUrl(whatsappText)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs sm:text-sm shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
+                  >
+                    <MessageCircle className="w-4 h-4 text-emerald-200" />
+                    <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
+                  </a>
+                  <button
+                    onClick={() => {
+                      setIsSubmitted(false);
+                      setFormData({
+                        name: "",
+                        phone: "",
+                        age: "",
+                        skillCategory: "सिलाई एवं परिधान निर्माण",
+                        experienceYears: "प्रशिक्षित (०-१ वर्ष)",
+                        hasEquipment: "नहीं, उपकरण की आवश्यकता है",
+                        address: "",
+                        notes: "",
+                      });
+                    }}
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white text-emerald-900 border border-emerald-300 text-xs font-semibold hover:bg-emerald-50 transition"
+                  >
+                    अन्य बहन का पंजीकरण करें
+                  </button>
+                </div>
+                <p className="text-[11px] text-emerald-800 font-medium">
+                  WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
+                </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">

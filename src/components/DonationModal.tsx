@@ -24,6 +24,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
+import { getWhatsAppUrl } from "@/utils/whatsappHelper";
 import PaymentAppBadges from "./PaymentAppBadges";
 
 interface DonationModalProps {
@@ -291,17 +292,19 @@ export default function DonationModal({
               <QrCode className="w-4 h-4 text-brand-saffron-600" />
               <span>यूपीआई (UPI / QR)</span>
             </button>
-            <button
-              onClick={() => setActiveTab("bank")}
-              className={`pb-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition ${
-                activeTab === "bank"
-                  ? "border-brand-saffron-600 text-brand-maroon-950 font-extrabold"
-                  : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
-              }`}
-            >
-              <Building2 className="w-4 h-4 text-brand-maroon-800" />
-              <span>बैंक खाता विवरण</span>
-            </button>
+            {Boolean(donationConfig?.accountNumber) && (
+              <button
+                onClick={() => setActiveTab("bank")}
+                className={`pb-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition ${
+                  activeTab === "bank"
+                    ? "border-brand-saffron-600 text-brand-maroon-950 font-extrabold"
+                    : "border-transparent text-brand-charcoal-500 hover:text-brand-charcoal-800"
+                }`}
+              >
+                <Building2 className="w-4 h-4 text-brand-maroon-800" />
+                <span>बैंक खाता विवरण</span>
+              </button>
+            )}
             <button
               onClick={() => setActiveTab("receipt")}
               className={`pb-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition ${
@@ -487,7 +490,7 @@ export default function DonationModal({
           )}
 
           {/* TAB 2: Bank Transfer */}
-          {activeTab === "bank" && (
+          {activeTab === "bank" && Boolean(donationConfig?.accountNumber) && (
             <div className="space-y-4">
               {/* Notice Banner */}
               <div className="p-4 rounded-xl bg-amber-50 border-2 border-amber-300 text-amber-950 space-y-2.5">
@@ -596,7 +599,7 @@ export default function DonationModal({
                 <div className="flex justify-between py-1.5">
                   <span className="text-brand-charcoal-500 font-medium">शाखा:</span>
                   <span className="font-medium text-brand-charcoal-800">
-                    {donationConfig?.branch || "गया मुख्य शाखा, बिहार"}
+                    {donationConfig?.branch || "मुख्य शाखा, बिहार"}
                   </span>
                 </div>
               </div>
@@ -629,18 +632,30 @@ export default function DonationModal({
                   <p className="text-xs text-emerald-800 leading-relaxed max-w-md mx-auto">
                     आदरणीय <strong>{donorName}</strong> जी, शिवशक्ति सेवा कोष में ₹<strong>{effectiveAmount || "अंशदान"}</strong> के पावन सहयोग हेतु आपका कोटि-कोटि धन्यवाद। सत्यापन उपरांत डिजिटल रसीद आपके व्हाट्सएप/फोन पर प्रेषित कर दी जाएगी।
                   </p>
-                  <div className="pt-2">
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                    <a
+                      href={getWhatsAppUrl(receiptWhatsappText)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs sm:text-sm shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
+                    >
+                      <MessageCircle className="w-4 h-4 text-emerald-200" />
+                      <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
+                    </a>
                     <button
                       type="button"
                       onClick={() => {
                         setReceiptSubmitted(false);
                         onClose();
                       }}
-                      className="px-6 py-2 rounded-xl bg-brand-maroon-900 text-white font-bold text-xs hover:bg-brand-maroon-950 transition shadow-sm"
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-brand-maroon-900 text-white font-bold text-xs hover:bg-brand-maroon-950 transition shadow-sm"
                     >
-                      धन्यवाद (विंडो बंद करें)
+                      विंडो बंद करें
                     </button>
                   </div>
+                  <p className="text-[11px] text-emerald-800 font-medium">
+                    WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
+                  </p>
                 </div>
               ) : (
                 <form onSubmit={handleReceiptSubmit} className="space-y-3.5">

@@ -29,18 +29,18 @@ interface FooterProps {
 
 export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
   const [policyModal, setPolicyModal] = useState<"privacy" | "terms" | null>(null);
-  const [visitorCount, setVisitorCount] = useState<number>(148924);
+  const [visitorCount, setVisitorCount] = useState<number>(1);
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("ssf_total_visitors");
-      let current = stored ? parseInt(stored, 10) : 148924;
-      if (isNaN(current) || current < 148924) current = 148924;
+      const stored = localStorage.getItem("ssf_browser_visits");
+      let current = stored ? parseInt(stored, 10) : 0;
+      if (isNaN(current)) current = 0;
       current += 1;
-      localStorage.setItem("ssf_total_visitors", current.toString());
+      localStorage.setItem("ssf_browser_visits", current.toString());
       setVisitorCount(current);
     } catch {
-      setVisitorCount(148925);
+      setVisitorCount(1);
     }
   }, []);
 

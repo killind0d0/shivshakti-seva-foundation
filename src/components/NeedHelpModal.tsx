@@ -12,6 +12,7 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import ModalPortal from "./ModalPortal";
+import { getWhatsAppUrl, FOUNDATION_WHATSAPP_NUMBER } from "@/utils/whatsappHelper";
 
 interface NeedHelpModalProps {
   isOpen: boolean;
@@ -36,6 +37,7 @@ export default function NeedHelpModal({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdTrackingId, setCreatedTrackingId] = useState<string>("");
+  const [whatsappText, setWhatsappText] = useState<string>("");
 
   if (!isOpen) return null;
 
@@ -167,11 +169,28 @@ export default function NeedHelpModal({
                 शिवशक्ति सेवा फाउंडेशन का सेवा दल आपके द्वारा दिए गए फोन नंबर पर
                 शीघ्र ही संपर्क करेगा। ईश्वर आपको संबल प्रदान करें।
               </p>
+
+              {/* Instant WhatsApp Dispatch Action */}
+              <div className="pt-2 space-y-2">
+                <a
+                  href={getWhatsAppUrl(whatsappText)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
+                >
+                  <MessageCircle className="w-5 h-5 text-emerald-200" />
+                  <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
+                </a>
+                <p className="text-[11px] text-emerald-800 font-medium">
+                  WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
+                </p>
+              </div>
+
               <button
                 onClick={onClose}
                 className="mt-3 px-6 py-2 rounded-lg bg-brand-maroon-800 text-white font-bold text-sm hover:bg-brand-maroon-900 transition"
               >
-                बंद करें
+                विंडो बंद करें
               </button>
             </div>
           ) : (

@@ -123,6 +123,8 @@ export default function AdminModal({
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [staffApiError, setStaffApiError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [authToken, setAuthToken] = useState<string>("");
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
@@ -216,7 +218,10 @@ export default function AdminModal({
 
         // Fetch authoritative server-persisted staff list (omits passwords)
         fetch("/api/staff")
-          .then((res) => res.json())
+          .then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          })
           .then((apiData) => {
             if (apiData.success && Array.isArray(apiData.staff)) {
               setStaffList(apiData.staff);
@@ -225,7 +230,10 @@ export default function AdminModal({
               } catch {}
             }
           })
-          .catch(() => {});
+          .catch((err) => {
+            console.error("Staff API error:", err);
+            setStaffApiError("डेटा लोड करने में त्रुटि");
+          });
 
         const storedPhotos = localStorage.getItem("ssf_ground_photos");
         if (storedPhotos) {
@@ -859,6 +867,19 @@ export default function AdminModal({
             {/* TAB CONTENTS */}
             <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-6">
 
+              {/* PRODUCTION REPOSITORY ARCHITECTURE NOTICE */}
+              <div className="p-3.5 bg-amber-50/90 border border-amber-300 rounded-2xl text-xs text-amber-950 flex items-start gap-3 shadow-xs">
+                <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-bold text-amber-900">
+                    आधिकारिक उत्पादन वेबसाइट सूचना (Production Architecture Notice)
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-amber-800">
+                    फाउंडेशन की प्रामाणिक सामग्री (हेल्पलाइन +91 91171 35379, UPI 9117135379@mairtel, संस्थापक संदेश, छायाचित्र) मुख्य कोडबेस में स्थायी रूप से संकलित है। यहाँ किए गए परिवर्तन इस डिवाइस पर पूर्वावलोकन हेतु सुरक्षित रहते हैं। सम्पूर्ण देश के सभी उपयोगकर्ताओं हेतु स्थायी बदलाव सीधे गिटहब कोडबेस के माध्यम से लागू किए जाते हैं।
+                  </p>
+                </div>
+              </div>
+
               {/* SUCCESS ALERTS */}
               {savedSuccess && (
                 <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold flex items-center gap-2 animate-scaleIn">
@@ -1377,6 +1398,12 @@ export default function AdminModal({
                     <h4 className="font-heading text-sm font-bold text-brand-maroon-950 mb-2">
                       पंजीकृत सेवादार सूची ({staffList.length})
                     </h4>
+
+                    {staffApiError && (
+                      <div className="mb-3 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+                        {staffApiError} (स्थानीय डेटा प्रयुक्त किया जा रहा है)
+                      </div>
+                    )}
 
                     <div className="overflow-x-auto border border-brand-maroon-100 rounded-2xl">
                       <table className="w-full text-xs text-left">

@@ -55,7 +55,7 @@ export default function FloatingQuickAction({
     <aside
       id="floating-quick-action"
       aria-label="त्वरित सेवा सारथी एवं सहायता विकल्प"
-      className="fixed bottom-20 right-3.5 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2"
+      className="fixed bottom-20 right-3.5 sm:bottom-6 sm:right-6 z-30 flex flex-col items-end gap-2"
     >
       {/* Scroll to Top Floating Button */}
       {showScrollTop && (
