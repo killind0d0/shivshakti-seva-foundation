@@ -203,12 +203,12 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       आधिकारिक वेबसाइट:
                     </span>
                     <a
-                      href={data.website || "https://shivshaktifoundation.in"}
+                      href={data.website || "https://shivshaktisevafoundation.in"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm font-sans font-bold text-brand-maroon-950 mt-0.5 hover:text-brand-saffron-600 transition block tracking-wide"
                     >
-                      www.shivshaktifoundation.in
+                      www.shivshaktisevafoundation.in
                     </a>
                   </div>
                 </div>

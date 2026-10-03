@@ -45,7 +45,7 @@ export default function DailySankalpWidget() {
     }, 4000);
   };
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktifoundation.in";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktisevafoundation.in";
   const shareText = encodeURIComponent(
     `मैंने आज शिवशक्ति सेवा फाउंडेशन के साथ समाज में निःस्वार्थ सेवा का पावन संकल्प लिया। आप भी जुड़ें: ${siteUrl}`
   );

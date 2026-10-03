@@ -8,7 +8,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktifoundation.in";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktisevafoundation.in";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
