@@ -12,7 +12,7 @@ interface ImpactStoriesProps {
   onOpenDonation?: () => void;
 }
 
-export default function ImpactStories({ stories, onOpenDonation }: ImpactStoriesProps) {
+export default function ImpactStories({ stories = [], onOpenDonation }: ImpactStoriesProps) {
   const [selectedStory, setSelectedStory] = useState<ImpactStory | null>(null);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function ImpactStories({ stories, onOpenDonation }: ImpactStories
 
         {/* Stories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {stories.map((story) => (
+          {(stories || []).map((story) => (
             <div
               key={story.id}
               className="group bg-brand-cream-50/70 rounded-2xl overflow-hidden border border-brand-maroon-100/90 hover:border-brand-gold-400 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between"

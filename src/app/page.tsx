@@ -50,34 +50,49 @@ export default function Home() {
       const saved = localStorage.getItem("ssf_foundation_data");
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Automatically migrate or populate UPI IDs and notices
-        if (parsed?.donationConfig) {
-          if (!parsed.donationConfig.secondaryUpiId) {
-            parsed.donationConfig.secondaryUpiId = "9117135379@upi";
+        if (parsed && Array.isArray(parsed.services) && parsed.services.length > 0 && parsed.heroHeadline) {
+          if (parsed?.donationConfig) {
+            if (!parsed.donationConfig.secondaryUpiId) {
+              parsed.donationConfig.secondaryUpiId = "9117135379@upi";
+            }
+            if (!parsed.donationConfig.contactNotice) {
+              parsed.donationConfig.contactNotice = "बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद हेतु कृपया सीधे हमारे कार्यालय फोन +91 91171 35379 पर संपर्क करें।";
+            }
           }
-          if (!parsed.donationConfig.contactNotice) {
-            parsed.donationConfig.contactNotice = "बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद हेतु कृपया सीधे हमारे कार्यालय फोन +91 91171 35379 पर संपर्क करें।";
-          }
-          localStorage.setItem("ssf_foundation_data", JSON.stringify(parsed));
+          setData({ ...initialFoundationData, ...parsed });
+        } else {
+          // Clear corrupted or incomplete local cache
+          localStorage.removeItem("ssf_foundation_data");
         }
-        setData(parsed);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Local storage parse error:", e);
+      try {
+        localStorage.removeItem("ssf_foundation_data");
+      } catch {}
     }
 
     // Fetch authoritative server-persisted CMS data for global synchronization across all devices
     fetch("/api/foundation-data")
       .then((res) => res.json())
       .then((resData) => {
-        if (resData.success && resData.data) {
-          setData(resData.data);
+        if (
+          resData.success &&
+          resData.data &&
+          Array.isArray(resData.data.services) &&
+          resData.data.services.length > 0 &&
+          resData.data.heroHeadline
+        ) {
+          const merged = { ...initialFoundationData, ...resData.data };
+          setData(merged);
           try {
-            localStorage.setItem("ssf_foundation_data", JSON.stringify(resData.data));
+            localStorage.setItem("ssf_foundation_data", JSON.stringify(merged));
           } catch {}
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.warn("Could not fetch server CMS data:", err);
+      });
   }, []);
 
   // Lock body scroll when any modal is open

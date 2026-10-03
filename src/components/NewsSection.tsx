@@ -29,7 +29,7 @@ function getNewsImage(item: NewsItem): string {
   return "/images/gallery/ration_kits.jpg";
 }
 
-export default function NewsSection({ news }: NewsSectionProps) {
+export default function NewsSection({ news = [] }: NewsSectionProps) {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("all");
 
@@ -40,10 +40,11 @@ export default function NewsSection({ news }: NewsSectionProps) {
     { id: "संस्था गतिविधियाँ", name: "संस्था गतिविधियाँ" },
   ];
 
+  const safeNews = news || [];
   const filteredNews =
     activeFilter === "all"
-      ? news
-      : news.filter((item) =>
+      ? safeNews
+      : safeNews.filter((item) =>
           item.category.includes(activeFilter) || item.title.includes(activeFilter)
         );
 

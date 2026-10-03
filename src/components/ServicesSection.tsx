@@ -32,7 +32,7 @@ interface ServicesSectionProps {
 }
 
 export default function ServicesSection({
-  services,
+  services = [],
   onOpenHelpWithService,
 }: ServicesSectionProps) {
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
@@ -102,7 +102,7 @@ export default function ServicesSection({
 
         {/* 10 Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-          {services.map((service) => (
+          {(services || []).map((service) => (
             <div
               key={service.id}
               className="group relative bg-brand-cream-50/90 hover:bg-white rounded-2xl p-5 border border-brand-maroon-100/90 hover:border-brand-gold-400 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between overflow-hidden"

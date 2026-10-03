@@ -5,9 +5,17 @@ import { isAdminRequest } from "@/lib/auth";
 export async function GET() {
   try {
     const data = await getStoreData();
+    const rawFoundation = data.foundationData;
+    const isValid =
+      rawFoundation &&
+      typeof rawFoundation === "object" &&
+      Array.isArray(rawFoundation.services) &&
+      rawFoundation.services.length > 0 &&
+      Boolean(rawFoundation.heroHeadline);
+
     return NextResponse.json({
       success: true,
-      data: data.foundationData || null,
+      data: isValid ? rawFoundation : null,
     });
   } catch (err: any) {
     return NextResponse.json(
@@ -31,9 +39,16 @@ export async function POST(request: Request) {
     }
 
     const updatedData = await request.json().catch(() => null);
-    if (!updatedData || typeof updatedData !== "object") {
+    const isValid =
+      updatedData &&
+      typeof updatedData === "object" &&
+      Array.isArray(updatedData.services) &&
+      updatedData.services.length > 0 &&
+      Boolean(updatedData.heroHeadline);
+
+    if (!isValid) {
       return NextResponse.json(
-        { success: false, error: "Invalid CMS data payload" },
+        { success: false, error: "Invalid CMS data payload: must include valid services and heroHeadline" },
         { status: 400 }
       );
     }

@@ -12,7 +12,7 @@ interface PhotoGalleryProps {
   photos: GalleryPhoto[];
 }
 
-export default function PhotoGallery({ photos }: PhotoGalleryProps) {
+export default function PhotoGallery({ photos = [] }: PhotoGalleryProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -28,10 +28,11 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
     { id: "volunteers", name: "स्वयंसेवक एवं समुदाय" },
   ];
 
+  const safePhotos = photos || [];
   const filteredPhotos =
     activeCategory === "all"
-      ? photos
-      : photos.filter((p) => p.category === activeCategory);
+      ? safePhotos
+      : safePhotos.filter((p) => p.category === activeCategory);
 
   const openLightbox = (index: number) => {
     setActivePhotoIndex(index);
