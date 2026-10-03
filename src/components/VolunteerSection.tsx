@@ -18,6 +18,7 @@ export default function VolunteerSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [whatsappText, setWhatsappText] = useState<string>("");
 
   const serviceOptions = [
     "आपदा एवं बाढ़ राहत",
@@ -54,6 +55,9 @@ export default function VolunteerSection() {
     if (!validate()) return;
     setSubmitError(null);
     setIsSubmitting(true);
+
+    const msg = `🚩 *स्वयंसेवक पंजीकरण — शिवशक्ति सेवा फाउंडेशन*\n• नाम: ${formData.name.trim()}\n• मोबाइल: ${formData.mobile.trim()}\n• ईमेल: ${formData.email.trim() || "लागू नहीं"}\n• शहर: ${formData.city.trim()}\n• सेवा क्षेत्र: ${formData.serviceType}\n• संदेश/अनुभव: ${formData.message?.trim() || "लागू नहीं"}\n• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    setWhatsappText(msg);
 
     try {
       await fetch('/api/submissions', {

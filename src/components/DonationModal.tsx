@@ -22,6 +22,7 @@ import {
   Send,
   CheckCircle2,
   AlertCircle,
+  MessageCircle,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
 import { getWhatsAppUrl } from "@/utils/whatsappHelper";
@@ -55,6 +56,7 @@ export default function DonationModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [receiptError, setReceiptError] = useState<string | null>(null);
+  const [receiptWhatsappText, setReceiptWhatsappText] = useState<string>("");
 
   useEffect(() => {
     setMounted(true);
@@ -128,6 +130,9 @@ export default function DonationModal({
     }
     setReceiptError(null);
     setIsSubmitting(true);
+
+    const msg = `🙏 *80G दान रसीद अनुरोध — शिवशक्ति सेवा फाउंडेशन*\n• दाता: ${donorName.trim()}\n• मोबाइल: ${donorPhone.trim()}\n• ईमेल: ${donorEmail.trim() || "लागू नहीं"}\n• शहर: ${donorCity.trim() || "लागू नहीं"}\n• पैन नंबर: ${donorPan.trim() || "लागू नहीं"}\n• यूटीआर/लेनदेन आईडी: ${transactionRef.trim() || "लागू नहीं"}\n• सहयोग राशि: ₹${effectiveAmount}\n• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    setReceiptWhatsappText(msg);
 
     const submissionData = {
       type: "donation_receipt",

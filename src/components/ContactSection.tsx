@@ -35,6 +35,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [whatsappText, setWhatsappText] = useState<string>("");
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -50,6 +51,9 @@ export default function ContactSection({ data }: ContactSectionProps) {
     if (!validate()) return;
     setSubmitError(null);
     setIsSubmitting(true);
+
+    const msg = `📩 *नया संपर्क संदेश — शिवशक्ति सेवा फाउंडेशन*\n• प्रेषक: ${formData.name.trim()}\n• मोबाइल: ${formData.phone.trim()}\n• ईमेल: ${formData.email.trim() || "लागू नहीं"}\n• विषय: ${formData.subject}\n• संदेश: ${formData.message.trim()}\n• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    setWhatsappText(msg);
 
     try {
       await fetch('/api/submissions', {
