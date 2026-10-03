@@ -5,6 +5,7 @@ node_modules/
 # Next.js build output
 .next/
 out/
+*.tsbuildinfo
 
 # Production build
 /build
@@ -31,3 +32,6 @@ Thumbs.db
 
 # Vercel
 .vercel
+
+# Master original heavy image archives
+public/images/_original/

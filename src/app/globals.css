@@ -280,12 +280,14 @@ body.modal-open button[aria-label*="शीर्ष पर जाएँ"] {
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
+  height: calc(100vh - var(--ssf-header-bottom, 68px));
   height: calc(100dvh - var(--ssf-header-bottom, 68px)) !important;
   z-index: 50 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   overflow-y: auto !important;
+  overscroll-behavior: contain !important;
   -webkit-overflow-scrolling: touch !important;
 }
 
@@ -293,5 +295,18 @@ body.modal-open button[aria-label*="शीर्ष पर जाएँ"] {
   max-height: calc(100dvh - var(--ssf-header-bottom, 68px) - 20px) !important;
   margin-top: auto !important;
   margin-bottom: auto !important;
+  width: 100% !important;
+}
+
+@media (max-width: 639px) {
+  .modal-after-topbar {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+  .modal-card-after-topbar {
+    max-height: calc(100dvh - var(--ssf-header-bottom, 68px) - 14px) !important;
+  }
 }
 

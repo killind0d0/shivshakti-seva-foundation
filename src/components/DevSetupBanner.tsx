@@ -102,8 +102,8 @@ export default function DevSetupBanner() {
     );
   };
 
-  // If maintenance mode is off, or developer unlocked it
-  if (!isMaintenanceActive) {
+  // If master toggle disabled, maintenance mode is off, or developer unlocked it
+  if (devBannerConfig.enabled === false || !devBannerConfig.maintenanceMode || !isMaintenanceActive) {
     return null;
   }
 

@@ -16,6 +16,7 @@ export default function VolunteerSection() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const serviceOptions = [
     "आपदा एवं बाढ़ राहत",
@@ -47,38 +48,50 @@ export default function VolunteerSection() {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
+    setSubmitError(null);
     setIsSubmitting(true);
-    setTimeout(() => {
-      // Save locally for Admin dashboard
-      try {
-        const stored = JSON.parse(
-          localStorage.getItem("ssf_volunteers") || "[]"
-        );
-        stored.push({
-          ...formData,
-          date: new Date().toLocaleDateString("hi-IN"),
-          id: Date.now(),
-        });
-        localStorage.setItem("ssf_volunteers", JSON.stringify(stored));
-      } catch (err) {
-        console.error(err);
-      }
 
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({
-        name: "",
-        mobile: "",
-        email: "",
-        city: "",
-        serviceType: "आपदा एवं बाढ़ राहत",
-        message: "",
+    try {
+      await fetch('/api/submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'volunteer',
+          ...formData,
+        }),
       });
-    }, 600);
+    } catch (err) {
+      console.warn("Submissions API unreachable, saving volunteer locally:", err);
+    }
+
+    // Save locally for Admin dashboard / offline backup
+    try {
+      const stored = JSON.parse(
+        localStorage.getItem("ssf_volunteers") || "[]"
+      );
+      stored.push({
+        ...formData,
+        date: new Date().toLocaleDateString("hi-IN"),
+        id: Date.now(),
+      });
+      localStorage.setItem("ssf_volunteers", JSON.stringify(stored));
+    } catch (err) {
+      console.error("Local storage error:", err);
+    }
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    setFormData({
+      name: "",
+      mobile: "",
+      email: "",
+      city: "",
+      serviceType: "आपदा एवं बाढ़ राहत",
+      message: "",
+    });
   };
 
   return (
@@ -183,6 +196,13 @@ export default function VolunteerSection() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                  {submitError && (
+                    <div className="p-3 rounded-lg bg-red-50 border border-red-300 text-red-700 text-xs font-semibold flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
+
                   {/* Name field */}
                   <div>
                     <label

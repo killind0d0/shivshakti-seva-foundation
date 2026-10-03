@@ -44,15 +44,20 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState<string | undefined>(undefined);
 
-  // Load custom CMS updates from localStorage on mount
+  // Load custom CMS updates from localStorage on mount and fetch globally persisted server data
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ssf_foundation_data");
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Automatically migrate any legacy UPI ID
-        if (parsed?.donationConfig?.upiId === "9117135379@upi") {
-          parsed.donationConfig.upiId = "9177135379@mairtel";
+        // Automatically migrate or populate UPI IDs and notices
+        if (parsed?.donationConfig) {
+          if (!parsed.donationConfig.secondaryUpiId) {
+            parsed.donationConfig.secondaryUpiId = "9117135379@upi";
+          }
+          if (!parsed.donationConfig.contactNotice) {
+            parsed.donationConfig.contactNotice = "बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद हेतु कृपया सीधे हमारे कार्यालय फोन +91 91171 35379 पर संपर्क करें।";
+          }
           localStorage.setItem("ssf_foundation_data", JSON.stringify(parsed));
         }
         setData(parsed);
@@ -60,6 +65,19 @@ export default function Home() {
     } catch (e) {
       console.error(e);
     }
+
+    // Fetch authoritative server-persisted CMS data for global synchronization across all devices
+    fetch("/api/foundation-data")
+      .then((res) => res.json())
+      .then((resData) => {
+        if (resData.success && resData.data) {
+          setData(resData.data);
+          try {
+            localStorage.setItem("ssf_foundation_data", JSON.stringify(resData.data));
+          } catch {}
+        }
+      })
+      .catch(() => {});
   }, []);
 
   // Lock body scroll when any modal is open
@@ -212,7 +230,7 @@ export default function Home() {
         </div>
 
         {/* SECTION 8: Ground Field Work Spotlight & Stories */}
-        <div id="feild-work-spotlight">
+        <div id="field-work-spotlight">
           <FieldWorkSpotlight />
         </div>
 

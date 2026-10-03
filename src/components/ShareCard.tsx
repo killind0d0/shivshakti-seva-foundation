@@ -30,7 +30,8 @@ export default function ShareCard({
 
   if (!isOpen) return null;
 
-  const shareText = `मैंने शिवशक्ति सेवा फाउंडेशन के माध्यम से दीन-दुखियों एवं बाढ़ पीड़ितों की सहायता में सहयोग किया है।\n\n"नर सेवा ही नारायण सेवा है"\n\nआप भी इस सेवा यज्ञ से जुड़ें: https://shivshaktisevafoundation.in/`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktifoundation.in";
+  const shareText = `मैंने शिवशक्ति सेवा फाउंडेशन के माध्यम से दीन-दुखियों एवं बाढ़ पीड़ितों की सहायता में सहयोग किया है।\n\n"नर सेवा ही नारायण सेवा है"\n\nआप भी इस सेवा यज्ञ से जुड़ें: ${siteUrl}/`;
 
   const handleCopy = async () => {
     try {
@@ -48,7 +49,7 @@ export default function ShareCard({
         await navigator.share({
           title: "शिवशक्ति सेवा फाउंडेशन — मेरा सहयोग",
           text: shareText,
-          url: "https://shivshaktisevafoundation.in/",
+          url: `${siteUrl}/`,
         });
       } catch {
         // ignore cancel

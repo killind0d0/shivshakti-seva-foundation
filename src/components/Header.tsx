@@ -97,7 +97,7 @@ export default function Header({
         "sansthapak-sandesh",
         "hamari-sevayein",
         "seva-sankalp",
-        "feild-work-spotlight",
+        "field-work-spotlight",
         "mahila-pratiyogita",
         "whatsapp-community",
         "hamare-abhiyan",
@@ -185,7 +185,7 @@ export default function Header({
     {
       label: "धरातल स्पॉटलाइट",
       sublabel: "वास्तविक कहानियाँ एवं छायाचित्र",
-      href: "#feild-work-spotlight",
+      href: "#field-work-spotlight",
       icon: Camera,
       badge: "सजीव दृश्य",
     },
@@ -234,7 +234,7 @@ export default function Header({
     },
     {
       label: "धरातल स्पॉटलाइट (फ़ोटो व कहानियाँ)",
-      href: "#feild-work-spotlight",
+      href: "#field-work-spotlight",
       highlight: true,
     },
     {

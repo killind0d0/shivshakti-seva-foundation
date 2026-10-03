@@ -51,31 +51,92 @@ export default function HelpTracker({ onOpenHelpModal }: { onOpenHelpModal?: () 
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<HelpRequestRecord | null>(null);
   const [searched, setSearched] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleanQuery = query.trim().toLowerCase();
-    if (!cleanQuery) return;
+  const normalizeRecord = (item: any): HelpRequestRecord => {
+    return {
+      requestId:
+        item.requestId ||
+        item.trackingId ||
+        (typeof item.id === "string" && item.id.startsWith("SSF-") ? item.id : undefined),
+      name: item.name || item.donorName || "अनुरोधकर्ता",
+      phone: item.phone || item.mobile || "",
+      location: item.location || item.city || item.address || "लागू नहीं",
+      needType: item.needType || item.serviceType || item.category || "सहायता अनुरोध",
+      date:
+        item.date ||
+        (item.createdAt
+          ? new Date(item.createdAt).toLocaleDateString("hi-IN")
+          : new Date().toLocaleDateString("hi-IN")),
+      status: item.status || "प्राप्त हुआ (जाँच जारी)",
+      details: item.details || item.message || item.notes || "",
+    };
+  };
 
-    setSearched(true);
-
-    // Look in localStorage
+  const searchLocalStorage = (cleanQuery: string): HelpRequestRecord | null => {
     try {
-      const stored: HelpRequestRecord[] = JSON.parse(
+      const stored: any[] = JSON.parse(
         localStorage.getItem("ssf_help_requests") || "[]"
       );
       const allRecords = [...stored, ...sampleRequests];
+      const qLower = cleanQuery.toLowerCase();
+      const cleanPhone = cleanQuery.replace(/\D/g, "");
 
       const found = allRecords.find((rec) => {
-        const idMatch = rec.requestId?.toLowerCase() === cleanQuery;
-        const phoneMatch = rec.phone?.replace(/\D/g, "") === cleanQuery.replace(/\D/g, "");
+        const recId = (
+          rec.requestId ||
+          rec.trackingId ||
+          (typeof rec.id === "string" ? rec.id : "")
+        ).toLowerCase();
+        const idMatch = recId === qLower;
+        const recPhone = (rec.phone || rec.mobile || "").replace(/\D/g, "");
+        const phoneMatch = cleanPhone.length >= 10 && recPhone === cleanPhone;
         return idMatch || phoneMatch;
       });
 
-      setResult(found || null);
+      return found ? normalizeRecord(found) : null;
     } catch {
-      setResult(null);
+      return null;
     }
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanQuery = query.trim();
+    if (!cleanQuery) return;
+
+    setIsSearching(true);
+    setSearched(true);
+
+    let match: HelpRequestRecord | null = null;
+
+    try {
+      const res = await fetch(
+        `/api/track?id=${encodeURIComponent(cleanQuery)}&phone=${encodeURIComponent(cleanQuery)}`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        const serverRecord =
+          data.request ||
+          data.data ||
+          data.submission ||
+          data.record ||
+          (data.requestId || data.trackingId ? data : null);
+        if (serverRecord) {
+          match = normalizeRecord(serverRecord);
+        }
+      }
+    } catch (err) {
+      console.warn("Track API unreachable, searching local storage:", err);
+    }
+
+    if (!match) {
+      // Fallback to local storage and sample records
+      match = searchLocalStorage(cleanQuery);
+    }
+
+    setResult(match);
+    setIsSearching(false);
   };
 
   const getStepStatus = (status?: string) => {
@@ -121,9 +182,14 @@ export default function HelpTracker({ onOpenHelpModal }: { onOpenHelpModal?: () 
             </div>
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl bg-brand-saffron-600 hover:bg-brand-saffron-700 text-white font-heading font-bold text-sm shadow-md active:scale-95 transition flex items-center gap-2 cursor-pointer"
+              disabled={isSearching}
+              className="px-6 py-3 rounded-xl bg-brand-saffron-600 hover:bg-brand-saffron-700 text-white font-heading font-bold text-sm shadow-md active:scale-95 transition flex items-center gap-2 cursor-pointer disabled:opacity-70"
             >
-              <span>स्थिति देखें</span>
+              {isSearching ? (
+                <span>खोज रहे हैं...</span>
+              ) : (
+                <span>स्थिति देखें</span>
+              )}
             </button>
           </div>
           <div className="mt-2 text-center">

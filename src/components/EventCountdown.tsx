@@ -73,7 +73,7 @@ export default function EventCountdown() {
       "CALSCALE:GREGORIAN",
       "METHOD:PUBLISH",
       "BEGIN:VEVENT",
-      "UID:ssf-eye-camp-20261015@shivshaktisevafoundation.in",
+      "UID:ssf-eye-camp-20261015@shivshaktifoundation.in",
       "DTSTAMP:20261001T000000Z",
       "DTSTART:20261015T033000Z",
       "DTEND:20261015T113000Z",

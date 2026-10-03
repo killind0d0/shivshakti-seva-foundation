@@ -210,7 +210,7 @@ export default function FieldWorkSpotlight() {
 
   return (
     <section
-      id="feild-work-spotlight"
+      id="field-work-spotlight"
       className="py-16 sm:py-24 bg-gradient-to-b from-brand-cream-100/60 via-white to-brand-cream-50 border-b border-brand-maroon-100"
       aria-label="धरातल सेवा स्पॉटलाइट एवं वास्तविक कहानियाँ"
     >

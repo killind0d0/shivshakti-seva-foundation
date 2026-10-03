@@ -8,8 +8,10 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktifoundation.in";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shivshaktisevafoundation.in"),
+  metadataBase: new URL(siteUrl),
   title: "शिवशक्ति सेवा फाउंडेशन | मानव सेवा • राहत कार्य • पुनर्वास",
   description:
     "शिवशक्ति सेवा फाउंडेशन गरीब, जरूरतमंद, असहाय और प्राकृतिक आपदा से प्रभावित लोगों की सेवा, राहत, भोजन वितरण, शिक्षा एवं स्वास्थ्य सहायता के लिए समर्पित संस्था है।",
@@ -28,11 +30,14 @@ export const metadata: Metadata = {
     "सहयोग",
   ],
   authors: [{ name: "शिवशक्ति सेवा फाउंडेशन" }],
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
     title: "शिवशक्ति सेवा फाउंडेशन | सेवा केवल सहायता नहीं, मानवता के प्रति हमारा दायित्व है",
     description:
       "गरीब, असहाय और आपदा प्रभावित परिवारों के साथ मिलकर राहत, पुनर्वास और सम्मानपूर्ण जीवन निर्माण के लिए समर्पित संस्था।",
-    url: "https://shivshaktisevafoundation.in",
+    url: siteUrl,
     siteName: "शिवशक्ति सेवा फाउंडेशन",
     images: [
       {
@@ -77,8 +82,8 @@ export default function RootLayout({
               "@type": "NGO",
               name: "शिवशक्ति सेवा फाउंडेशन",
               alternateName: "Shivshakti Seva Foundation",
-              url: "https://shivshaktisevafoundation.in",
-              logo: "https://shivshaktisevafoundation.in/images/logo/official_logo.png",
+              url: siteUrl,
+              logo: `${siteUrl}/images/logo/official_logo.png`,
               description:
                 "गरीब और जरूरतमंद लोगों की सहायता, बाढ़ एवं प्राकृतिक आपदा राहत, भोजन वितरण और पुनर्वास कार्यों के लिए समर्पित संस्था।",
               areaServed: "भारत",

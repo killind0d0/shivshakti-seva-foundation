@@ -16,9 +16,9 @@
  */
 
 export const devBannerConfig = {
-  // Master switch: Set to true to hide the website behind the Under Development screen.
-  // Set to false when work is finished to make the site fully live.
-  maintenanceMode: true,
+  // Master toggle: set to false to completely disable and remove the API setup banner
+  enabled: false,
+  maintenanceMode: false,
 
   // Simple passkey for developer / admin to unlock the preview on any device
   developerPasscode: "sj2026",

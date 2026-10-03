@@ -22,18 +22,29 @@ interface WhatsAppCommunityProps {
 }
 
 export default function WhatsAppCommunity({
-  whatsappLink = "https://chat.whatsapp.com/invite/shivshaktiseva",
+  whatsappLink,
   phoneNumber = "+919117135379",
 }: WhatsAppCommunityProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [copied, setCopied] = useState(false);
 
-  // Fallback direct chat link
-  const directChatLink = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    "नमस्ते शिवशक्ति सेवा फाउंडेशन, मैं आपके सेवा कार्यों से जुड़ना चाहता/चाहती हूँ।"
+  const cleanPhone = phoneNumber.replace(/[^0-9]/g, "") || "919117135379";
+
+  // Official direct WhatsApp community join link with pre-filled volunteer community message
+  const officialCommunityLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
+    "नमस्ते शिवशक्ति सेवा फाउंडेशन, मैं आपके सेवादार एवं स्वयंसेवक कम्युनिटी ग्रुप से जुड़ना चाहता/चाहती हूँ।"
   )}`;
 
-  const activeInviteLink = whatsappLink || directChatLink;
+  // Direct chat link for general enquiries
+  const directChatLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
+    "नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे संस्था के सेवा कार्यों एवं सहायता के संबंध में सीधी जानकारी चाहिए।"
+  )}`;
+
+  // Use explicit custom link if provided and not the legacy dummy link
+  const activeInviteLink =
+    whatsappLink && !whatsappLink.includes("chat.whatsapp.com/invite/shivshaktiseva")
+      ? whatsappLink
+      : officialCommunityLink;
 
   useEffect(() => {
     QRCode.toDataURL(activeInviteLink, {

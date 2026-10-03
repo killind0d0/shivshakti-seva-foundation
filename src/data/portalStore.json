@@ -32,5 +32,10 @@
         "canEditCampaign": true
       }
     }
-  ]
+  ],
+  "foundationData": {
+    "testKey": "testValue",
+    "lastTest": 1791038834950
+  },
+  "updatedAt": "2026-10-03T14:47:14.951Z"
 }

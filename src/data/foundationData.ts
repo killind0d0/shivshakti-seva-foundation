@@ -80,12 +80,14 @@ export interface FoundationData {
   news: NewsItem[];
   donationConfig: {
     upiId: string;
+    secondaryUpiId?: string;
     accountName: string;
     bankName: string;
     accountNumber: string;
     ifscCode: string;
     branch: string;
     taxExemptionNote: string;
+    contactNotice?: string;
   };
   festivalGreeting?: {
     enabled: boolean;
@@ -106,7 +108,7 @@ export const initialFoundationData: FoundationData = {
   phone: "+91 91171 35379",
   emergencyPhone: "+91 91171 35379 (24×7 हेल्पलाइन)",
   email: "akashgiri91171@gmail.com",
-  website: "https://shivshaktisevafoundation.in",
+  website: process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktifoundation.in",
   address: "माँ मंगलागौरी, गया जी (बिहार) - 823001",
   mapsUrl: "https://maps.app.goo.gl/T3QqWjCGMkx9KVJr9?g_st=ac",
   officeHours: "24×7 सदैव उपलब्ध (दिन-रात सेवा में तत्पर)",
@@ -472,11 +474,13 @@ export const initialFoundationData: FoundationData = {
   ],
   donationConfig: {
     upiId: "9177135379@mairtel",
+    secondaryUpiId: "9117135379@upi",
     accountName: "शिवशक्ति सेवा फाउंडेशन",
-    bankName: "भारतीय स्टेट बैंक (State Bank of India)",
+    bankName: "भारतीय स्टेट बैंक (State Bank of India) / एयरटेल पेमेंट्स बैंक",
     accountNumber: "XXXXXXXXXXXX",
     ifscCode: "SBIN000XXXX",
-    branch: "मुख्य शाखा, बिहार",
-    taxExemptionNote: "80G (80G) आयकर छूट प्रमाण पत्र विधिक प्रक्रियाधीन",
+    branch: "मुख्य शाखा, गया (बिहार)",
+    taxExemptionNote: "80G आयकर छूट प्रमाण पत्र विधिक प्रक्रियाधीन",
+    contactNotice: "बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद हेतु कृपया सीधे हमारे कार्यालय फोन +91 91171 35379 पर संपर्क करें।",
   },
 };

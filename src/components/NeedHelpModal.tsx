@@ -39,7 +39,7 @@ export default function NeedHelpModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.phone.trim() || !formData.location.trim()) {
       setError("कृपया अपना नाम, फोन नंबर और स्थान अवश्य लिखें।");
@@ -48,31 +48,50 @@ export default function NeedHelpModal({
     setError(null);
     setSubmitting(true);
 
-    const reqId = `SSF-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
-    setCreatedTrackingId(reqId);
+    const fallbackReqId = `SSF-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
+    let finalTrackingId = fallbackReqId;
 
-    setTimeout(() => {
-      // Store locally for Admin
-      try {
-        const stored = JSON.parse(localStorage.getItem("ssf_help_requests") || "[]");
-        stored.push({
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "help_request",
           ...formData,
-          requestId: reqId,
-          date: new Date().toLocaleDateString("hi-IN"),
-          id: Date.now(),
-          status: "प्राप्त हुआ (जाँच जारी)",
-        });
-        localStorage.setItem("ssf_help_requests", JSON.stringify(stored));
-      } catch (err) {
-        console.error(err);
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.trackingId) {
+          finalTrackingId = data.trackingId;
+        } else if (data.data?.trackingId) {
+          finalTrackingId = data.data.trackingId;
+        }
       }
+    } catch (fetchErr) {
+      console.warn("Submissions API unreachable, saving to local backup:", fetchErr);
+    }
 
-      setSubmitting(false);
-      setSubmitted(true);
-    }, 600);
+    // Store locally for Admin / offline backup
+    try {
+      const stored = JSON.parse(localStorage.getItem("ssf_help_requests") || "[]");
+      stored.push({
+        ...formData,
+        requestId: finalTrackingId,
+        date: new Date().toLocaleDateString("hi-IN"),
+        id: Date.now(),
+        status: "प्राप्त हुआ (जाँच जारी)",
+      });
+      localStorage.setItem("ssf_help_requests", JSON.stringify(stored));
+    } catch (err) {
+      console.error("Local storage error:", err);
+    }
+
+    setCreatedTrackingId(finalTrackingId);
+    setSubmitting(false);
+    setSubmitted(true);
   };
-
-  if (!isOpen) return null;
 
   return (
     <ModalPortal>
@@ -91,7 +110,7 @@ export default function NeedHelpModal({
             <div className="flex items-center gap-2">
               <HeartHandshake className="w-5 h-5 sm:w-6 sm:h-6 text-brand-gold-200" />
               <h2 id="help-modal-heading" className="font-heading text-base sm:text-xl font-bold">
-                सहायता सहायता केंद्र — "हम साथ हैं"
+                सहायता सहायता केंद्र — &ldquo;हम साथ हैं&rdquo;
               </h2>
             </div>
             <button
@@ -141,7 +160,7 @@ export default function NeedHelpModal({
                 <div className="bg-white p-3 rounded-xl border border-emerald-200 inline-block text-center shadow-xs">
                   <p className="text-xs text-brand-charcoal-600 font-medium">आपका अनुरोध ट्रैकिंग क्रमांक (Tracking ID):</p>
                   <p className="text-xl font-heading font-bold text-brand-maroon-900 tracking-wider mt-0.5">{createdTrackingId}</p>
-                  <p className="text-[11px] text-emerald-700 mt-0.5">वेबसाइट पर 'अनुरोध स्थिति' से प्रगति देख सकते हैं</p>
+                  <p className="text-[11px] text-emerald-700 mt-0.5">वेबसाइट पर &apos;अनुरोध स्थिति&apos; से प्रगति देख सकते हैं</p>
                 </div>
               )}
               <p className="text-sm text-emerald-900 leading-relaxed">

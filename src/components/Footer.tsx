@@ -165,12 +165,12 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
               <div className="flex items-start gap-2">
                 <Globe className="w-4 h-4 text-brand-gold-400 flex-shrink-0 mt-0.5" />
                 <a
-                  href="https://shivshaktisevafoundation.in"
+                  href={process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktifoundation.in"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-brand-gold-300 transition font-sans text-xs tracking-wide"
                 >
-                  www.shivshaktisevafoundation.in
+                  www.shivshaktifoundation.in
                 </a>
               </div>
               <div className="flex items-start gap-2">
@@ -212,18 +212,14 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
             </span>
           </div>
 
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-brand-maroon-900/90 border border-brand-gold-500/50 shadow-inner">
-            <div className="flex items-center gap-1.5 text-xs text-brand-gold-300 font-semibold">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-brand-maroon-900/80 border border-brand-gold-500/40 shadow-inner">
+            <div className="flex items-center gap-1.5 text-xs text-brand-gold-300 font-medium">
               <Eye className="w-3.5 h-3.5 text-brand-gold-400" />
-              <span>कुल आगंतुक (Total Visitors):</span>
+              <span>वेबसाइट अवलोकन (संकेतक):</span>
             </div>
-            <div className="flex items-center gap-1 font-mono text-sm font-extrabold tracking-widest text-brand-gold-300 bg-brand-maroon-950 px-3 py-0.5 rounded-md border border-brand-gold-600/60 shadow-xs">
-              <span>{visitorCount.toLocaleString("en-IN")}</span>
+            <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-bold tracking-wider text-brand-gold-300 bg-brand-maroon-950 px-2.5 py-0.5 rounded border border-brand-gold-600/40 shadow-xs">
+              <span>{visitorCount.toLocaleString("en-IN")}+</span>
             </div>
-            <span className="relative flex h-2 w-2" title="लाइव प्रामाणिक गणना">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
           </div>
         </div>
       </div>
@@ -232,7 +228,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
       <div className="bg-brand-maroon-950/95 border-t border-brand-maroon-900 py-6 text-xs text-brand-cream-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            © २०२६ शिवशक्ति सेवा फाउंडेशन (shivshaktisevafoundation.in)। सर्वाधिकार सुरक्षित।
+            © २०२६ शिवशक्ति सेवा फाउंडेशन (shivshaktifoundation.in)। सर्वाधिकार सुरक्षित।
           </div>
 
           <div className="flex items-center gap-4 flex-wrap justify-center">

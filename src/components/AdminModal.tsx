@@ -37,7 +37,7 @@ export interface StaffAccount {
   id: string;
   name: string;
   phone: string;
-  password: string;
+  password?: string;
   roleTitle: string;
   status: "active" | "suspended";
   createdDate: string;
@@ -82,7 +82,6 @@ const defaultStaffAccounts: StaffAccount[] = [
     id: "DEV",
     name: "तकनीकी सेवादार (DEV)",
     phone: "9117135379",
-    password: "dev@123",
     roleTitle: "मुख्य तकनीकी सेवादार (Technical Developer)",
     status: "active",
     createdDate: "01/10/2026",
@@ -98,7 +97,6 @@ const defaultStaffAccounts: StaffAccount[] = [
     id: "STAFF-101",
     name: "आकाश जयदेव गिरि / अमित कुमार",
     phone: "9117135379",
-    password: "staff@123",
     roleTitle: "क्षेत्रीय सेवादार",
     status: "active",
     createdDate: "01/10/2026",
@@ -126,6 +124,8 @@ export default function AdminModal({
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [authToken, setAuthToken] = useState<string>("");
+  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
   // Active Tab
   const [activeTab, setActiveTab] = useState<string>("contact");
@@ -173,10 +173,26 @@ export default function AdminModal({
     setFormData(data);
   }, [data]);
 
-  // Load submissions, staff, and photos on mount/open
+  // Load submissions, staff, photos and verify existing session on mount/open
   useEffect(() => {
     if (isOpen) {
       try {
+        const savedToken = localStorage.getItem("ssf_auth_token") || "";
+        if (savedToken) setAuthToken(savedToken);
+
+        // Verify active server session
+        fetch("/api/auth/me", {
+          headers: savedToken ? { "x-admin-auth": savedToken } : {},
+        })
+          .then((res) => res.json())
+          .then((apiAuth) => {
+            if (apiAuth.authenticated && apiAuth.user) {
+              setCurrentUser(apiAuth.user);
+              setLoginRole(apiAuth.user.role);
+            }
+          })
+          .catch(() => {});
+
         const v = JSON.parse(localStorage.getItem("ssf_volunteers") || "[]");
         setVolunteers(v);
         const h = JSON.parse(localStorage.getItem("ssf_help_requests") || "[]");
@@ -189,7 +205,6 @@ export default function AdminModal({
         const storedStaff = localStorage.getItem("ssf_staff_accounts");
         if (storedStaff) {
           const parsed = JSON.parse(storedStaff);
-          // Ensure DEV is always included in the list
           if (!parsed.some((s: StaffAccount) => s.id.trim().toUpperCase() === "DEV")) {
             parsed.unshift(defaultStaffAccounts[0]);
           }
@@ -199,7 +214,7 @@ export default function AdminModal({
           localStorage.setItem("ssf_staff_accounts", JSON.stringify(defaultStaffAccounts));
         }
 
-        // Fetch authoritative server-persisted staff list for cross-device synchronization (PC -> Mobile)
+        // Fetch authoritative server-persisted staff list (omits passwords)
         fetch("/api/staff")
           .then((res) => res.json())
           .then((apiData) => {
@@ -224,113 +239,87 @@ export default function AdminModal({
 
   if (!isOpen) return null;
 
-  // Handle Login Authentication with Cross-Device Smart Auto-Detection
-  const handleLogin = (e: React.FormEvent) => {
+  // Handle Login Authentication via Server-Side API (/api/auth/login)
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
+    setIsLoggingIn(true);
 
-    const trimmedId = loginId.trim().toUpperCase();
+    const trimmedId = loginId.trim();
     const cleanPass = loginPassword.trim();
 
-    // 1. Check if matching Admin credentials (admin / admin@123)
-    const isAdminMatch =
-      (trimmedId === "ADMIN" || trimmedId === "9117135379") &&
-      (cleanPass === "admin@123" || cleanPass === "ssf2026" || cleanPass === "admin");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: trimmedId, password: cleanPass }),
+      });
+      const result = await res.json();
 
-    if (isAdminMatch) {
-      const adminUser: CurrentUser = {
-        id: "admin",
-        name: "आकाश जयदेव गिरि (मुख्य प्रशासक)",
-        role: "admin",
-      };
-      setCurrentUser(adminUser);
-      setLoginRole("admin");
-      setActiveTab("contact");
-      return;
-    }
-
-    // 2. Check if matching Staff account (including DEV and auto-detecting across tabs)
-    const foundStaff = staffList.find(
-      (s) => s.id.trim().toUpperCase() === trimmedId
-    );
-
-    // If ID is DEV, also support developer standard passwords
-    const isDevMatch =
-      trimmedId === "DEV" &&
-      (cleanPass === "dev@123" ||
-        cleanPass === "dev123" ||
-        cleanPass === "admin@123" ||
-        cleanPass === "staff@123" ||
-        cleanPass === "dev" ||
-        cleanPass === "123456" ||
-        cleanPass === "ssf2026" ||
-        (foundStaff && foundStaff.password.trim() === cleanPass));
-
-    if (foundStaff || isDevMatch) {
-      const targetStaff: StaffAccount = foundStaff || {
-        id: "DEV",
-        name: "तकनीकी सेवादार (DEV)",
-        phone: "9117135379",
-        password: cleanPass,
-        roleTitle: "मुख्य तकनीकी सेवादार (Technical Developer)",
-        status: "active",
-        createdDate: "01/10/2026",
-        permissions: {
-          canAddPhotos: true,
-          canViewHelpRequests: true,
-          canViewVolunteers: true,
-          canViewWomenRegs: true,
-          canEditCampaign: true,
-        },
-      };
-
-      if (targetStaff.status === "suspended") {
-        setLoginError("यह सेवादार खाता प्रशासक द्वारा निलंबित कर दिया गया है।");
+      if (!res.ok || !result.success) {
+        setLoginError(result.error || "अमान्य आईडी अथवा पासवर्ड! कृपया सही क्रेडेंशियल दर्ज करें।");
         return;
       }
 
-      if (targetStaff.password.trim() === cleanPass || isDevMatch) {
-        const staffUser: CurrentUser = {
-          id: targetStaff.id,
-          name: targetStaff.name,
-          role: "staff",
-          permissions: targetStaff.permissions,
-        };
-        setCurrentUser(staffUser);
-        setLoginRole("staff");
+      const user = result.user;
+      setCurrentUser(user);
+      setAuthToken(result.token || "");
+      try {
+        if (result.token) localStorage.setItem("ssf_auth_token", result.token);
+      } catch {}
+      setLoginRole(user.role);
 
-        // Determine accessible tab for staff
-        if (targetStaff.permissions.canAddPhotos) {
-          setActiveTab("groundPhotos");
-        } else if (targetStaff.permissions.canViewHelpRequests) {
-          setActiveTab("helpRequests");
-        } else if (targetStaff.permissions.canViewVolunteers) {
-          setActiveTab("volunteers");
-        } else if (targetStaff.permissions.canViewWomenRegs) {
-          setActiveTab("womenRegs");
-        } else if (targetStaff.permissions.canEditCampaign) {
-          setActiveTab("campaign");
-        } else {
-          setActiveTab("groundPhotos");
-        }
-        return;
+      if (user.role === "admin") {
+        setActiveTab("contact");
+      } else {
+        const p = user.permissions;
+        if (p?.canAddPhotos) setActiveTab("groundPhotos");
+        else if (p?.canViewHelpRequests) setActiveTab("helpRequests");
+        else if (p?.canViewVolunteers) setActiveTab("volunteers");
+        else if (p?.canViewWomenRegs) setActiveTab("womenRegs");
+        else if (p?.canEditCampaign) setActiveTab("campaign");
+        else setActiveTab("groundPhotos");
       }
+    } catch (err) {
+      setLoginError("सर्वर से संपर्क करने में असमर्थ। कृपया पुनः प्रयास करें।");
+    } finally {
+      setIsLoggingIn(false);
     }
-
-    setLoginError("अमान्य आईडी अथवा पासवर्ड! कृपया सही क्रेडेंशियल दर्ज करें।");
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {}
+    try {
+      localStorage.removeItem("ssf_auth_token");
+    } catch {}
+    setAuthToken("");
     setCurrentUser(null);
     setLoginId("");
     setLoginPassword("");
     setLoginError("");
   };
 
-  // Save General Website Data (Admin only)
-  const handleSaveData = () => {
+  // Save General Website Data (Admin only, persisted globally to server and local state)
+  const handleSaveData = async () => {
     onSaveData(formData);
     setSavedSuccess(true);
+
+    try {
+      const token = authToken || localStorage.getItem("ssf_auth_token") || "";
+      await fetch("/api/foundation-data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-auth": token,
+        },
+        body: JSON.stringify(formData),
+      });
+    } catch (err) {
+      console.error("Failed to save foundation data to server:", err);
+    }
+
     setTimeout(() => {
       setSavedSuccess(false);
     }, 3000);
@@ -351,11 +340,25 @@ export default function AdminModal({
   const syncStaffToServer = (list: StaffAccount[]) => {
     try {
       localStorage.setItem("ssf_staff_accounts", JSON.stringify(list));
+      const token = authToken || localStorage.getItem("ssf_auth_token") || "";
       fetch("/api/staff", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-auth": token,
+        },
         body: JSON.stringify({ staffList: list }),
-      }).catch(() => {});
+      })
+        .then((res) => res.json())
+        .then((apiData) => {
+          if (apiData.success && Array.isArray(apiData.staff)) {
+            setStaffList(apiData.staff);
+            try {
+              localStorage.setItem("ssf_staff_accounts", JSON.stringify(apiData.staff));
+            } catch {}
+          }
+        })
+        .catch(() => {});
     } catch (err) {
       console.error(err);
     }
@@ -684,10 +687,11 @@ export default function AdminModal({
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-maroon-900 to-brand-maroon-800 hover:from-brand-maroon-850 hover:to-brand-saffron-600 text-white font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 border-b-2 border-brand-gold-400"
+                  disabled={isLoggingIn}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-maroon-900 to-brand-maroon-800 hover:from-brand-maroon-850 hover:to-brand-saffron-600 text-white font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 border-b-2 border-brand-gold-400 disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                  <KeyRound className="w-4 h-4 text-brand-gold-300" />
-                  <span>प्रबंधन कक्ष में प्रवेश करें</span>
+                  <KeyRound className={`w-4 h-4 text-brand-gold-300 ${isLoggingIn ? "animate-spin" : ""}`} />
+                  <span>{isLoggingIn ? "सत्यापित किया जा रहा है..." : "प्रबंधन कक्ष में प्रवेश करें"}</span>
                 </button>
               </form>
 
@@ -1399,7 +1403,14 @@ export default function AdminModal({
                                 </div>
                               </td>
                               <td className="p-3 font-mono font-bold text-amber-900 bg-amber-50/50">
-                                {staff.password}
+                                {staff.password ? (
+                                  staff.password
+                                ) : (
+                                  <span className="text-emerald-700 font-sans font-medium text-xs flex items-center gap-1">
+                                    <Lock className="w-3.5 h-3.5 text-emerald-600 inline shrink-0" />
+                                    <span>सुरक्षित (एन्क्रिप्टेड)</span>
+                                  </span>
+                                )}
                               </td>
                               <td className="p-3">
                                 <div className="flex flex-wrap gap-1">

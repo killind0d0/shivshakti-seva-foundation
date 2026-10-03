@@ -32,6 +32,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -42,37 +43,49 @@ export default function ContactSection({ data }: ContactSectionProps) {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
+    setSubmitError(null);
     setIsSubmitting(true);
-    setTimeout(() => {
-      // Store in localStorage for Admin view
-      try {
-        const stored = JSON.parse(
-          localStorage.getItem("ssf_contact_messages") || "[]"
-        );
-        stored.push({
-          ...formData,
-          date: new Date().toLocaleDateString("hi-IN"),
-          id: Date.now(),
-        });
-        localStorage.setItem("ssf_contact_messages", JSON.stringify(stored));
-      } catch (err) {
-        console.error(err);
-      }
 
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        subject: "सामान्य जानकारी",
-        message: "",
+    try {
+      await fetch('/api/submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'contact',
+          ...formData,
+        }),
       });
-    }, 600);
+    } catch (err) {
+      console.warn("Submissions API unreachable, saving contact message locally:", err);
+    }
+
+    // Store in localStorage for Admin view / offline backup
+    try {
+      const stored = JSON.parse(
+        localStorage.getItem("ssf_contact_messages") || "[]"
+      );
+      stored.push({
+        ...formData,
+        date: new Date().toLocaleDateString("hi-IN"),
+        id: Date.now(),
+      });
+      localStorage.setItem("ssf_contact_messages", JSON.stringify(stored));
+    } catch (err) {
+      console.error("Local storage error:", err);
+    }
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      subject: "सामान्य जानकारी",
+      message: "",
+    });
   };
 
   return (
@@ -184,12 +197,12 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       आधिकारिक वेबसाइट:
                     </span>
                     <a
-                      href="https://shivshaktisevafoundation.in"
+                      href={data.website || "https://shivshaktifoundation.in"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm font-sans font-bold text-brand-maroon-950 mt-0.5 hover:text-brand-saffron-600 transition block tracking-wide"
                     >
-                      www.shivshaktisevafoundation.in
+                      www.shivshaktifoundation.in
                     </a>
                   </div>
                 </div>
@@ -269,6 +282,12 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                  {submitError && (
+                    <div className="p-3 rounded-lg bg-red-50 border border-red-300 text-red-700 text-xs font-semibold flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">

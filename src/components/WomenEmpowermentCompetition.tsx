@@ -32,6 +32,7 @@ export default function WomenEmpowermentCompetition() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -42,32 +43,45 @@ export default function WomenEmpowermentCompetition() {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
+    setSubmitError(null);
     setIsSubmitting(true);
-    setTimeout(() => {
-      try {
-        const stored = JSON.parse(
-          localStorage.getItem("ssf_women_competition_registrations") || "[]"
-        );
-        stored.push({
-          ...formData,
-          date: new Date().toLocaleDateString("hi-IN"),
-          id: Date.now(),
-        });
-        localStorage.setItem(
-          "ssf_women_competition_registrations",
-          JSON.stringify(stored)
-        );
-      } catch (e) {
-        console.error(e);
-      }
 
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 600);
+    try {
+      await fetch('/api/submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'women_competition',
+          ...formData,
+        }),
+      });
+    } catch (err) {
+      console.warn("Submissions API unreachable, saving competition registration locally:", err);
+    }
+
+    // Save locally for offline backup
+    try {
+      const stored = JSON.parse(
+        localStorage.getItem("ssf_women_competition_registrations") || "[]"
+      );
+      stored.push({
+        ...formData,
+        date: new Date().toLocaleDateString("hi-IN"),
+        id: Date.now(),
+      });
+      localStorage.setItem(
+        "ssf_women_competition_registrations",
+        JSON.stringify(stored)
+      );
+    } catch (e) {
+      console.error("Local storage error:", e);
+    }
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
   };
 
   return (
@@ -252,6 +266,11 @@ export default function WomenEmpowermentCompetition() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {submitError && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-300 text-red-700 text-xs font-semibold">
+                    {submitError}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name */}
                   <div>

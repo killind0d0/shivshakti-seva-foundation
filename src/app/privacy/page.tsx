@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
         
         <div className="space-y-6 text-sm sm:text-base leading-relaxed">
           <p>
-            <strong>अंतिम अद्यतन:</strong> {new Date().toLocaleDateString('hi-IN')}
+            <strong>अंतिम अद्यतन:</strong> ०१ अक्टूबर २०२६
           </p>
 
           <p>
@@ -95,7 +95,7 @@ export default function PrivacyPolicyPage() {
             <p>पता: माँ मंगलागौरी, गया जी (बिहार) - ८२३००१</p>
             <p>ईमेल: <a href="mailto:akashgiri91171@gmail.com" className="text-brand-maroon-700 hover:underline">akashgiri91171@gmail.com</a></p>
             <p>फोन: <a href="tel:+919117135379" className="text-brand-maroon-700 hover:underline">+91 91171 35379</a></p>
-            <p>वेबसाइट: <a href="https://shivshaktisevafoundation.in" className="text-brand-maroon-700 hover:underline">www.shivshaktisevafoundation.in</a></p>
+            <p>वेबसाइट: <a href="https://shivshaktifoundation.in" className="text-brand-maroon-700 hover:underline">www.shivshaktifoundation.in</a></p>
           </div>
         </div>
       </div>

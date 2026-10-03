@@ -15,6 +15,7 @@ import {
   Sparkles,
   Smartphone,
   Share2,
+  Phone,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
 import TraditionalDivider from "./TraditionalDivider";
@@ -36,14 +37,22 @@ export default function DonationSection({
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const [shareModalOpen, setShareModalOpen] = useState(false);
 
+  const primaryUpi = donationConfig.upiId || "9177135379@mairtel";
+  const secondaryUpi = donationConfig.secondaryUpiId || "9117135379@upi";
+  const [selectedUpiId, setSelectedUpiId] = useState<string>(primaryUpi);
+
+  useEffect(() => {
+    setSelectedUpiId(primaryUpi);
+  }, [primaryUpi]);
+
   const effectiveAmount = customAmount ? parseFloat(customAmount) : (selectedAmount || 0);
 
   const upiLink = useMemo(() => {
-    const cleanUpi = donationConfig.upiId || "9177135379@mairtel";
+    const cleanUpi = selectedUpiId || primaryUpi;
     const cleanName = donationConfig.accountName || "शिवशक्ति सेवा फाउंडेशन";
     const base = `upi://pay?pa=${encodeURIComponent(cleanUpi)}&pn=${encodeURIComponent(cleanName)}&cu=INR&tn=${encodeURIComponent("शिवशक्ति सेवा फाउंडेशन जनसहयोग")}`;
     return effectiveAmount > 0 ? `${base}&am=${effectiveAmount}` : base;
-  }, [donationConfig.upiId, donationConfig.accountName, effectiveAmount]);
+  }, [selectedUpiId, primaryUpi, donationConfig.accountName, effectiveAmount]);
 
   useEffect(() => {
     QRCode.toDataURL(upiLink, {
@@ -306,20 +315,51 @@ export default function DonationSection({
 
                   {/* Right: UPI ID & Copy Details */}
                   <div className="md:col-span-7 space-y-4">
-                    <div className="p-4 rounded-xl bg-white border border-brand-maroon-100">
-                      <span className="text-xs font-semibold text-brand-charcoal-500">
-                        आधिकारिक यूपीआई पहचान (UPI ID)
-                      </span>
-                      <div className="flex items-center justify-between gap-2 mt-1">
-                        <span className="font-mono text-sm sm:text-base font-bold text-brand-maroon-950 break-all">
-                          {donationConfig.upiId}
+                    {/* UPI Selector & IDs */}
+                    <div className="p-4 rounded-xl bg-white border border-brand-maroon-100 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-brand-charcoal-500">
+                          आधिकारिक यूपीआई पहचान (UPI ID)
                         </span>
+                        <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          अधिकृत एवं सत्यापित
+                        </span>
+                      </div>
+
+                      {/* Primary UPI: Airtel Payments Bank */}
+                      <div
+                        onClick={() => setSelectedUpiId(primaryUpi)}
+                        className={`p-3 rounded-xl border transition cursor-pointer flex items-center justify-between gap-2 ${
+                          selectedUpiId === primaryUpi
+                            ? "border-brand-saffron-500 bg-brand-cream-50/80 shadow-xs"
+                            : "border-brand-maroon-100 bg-white hover:bg-brand-cream-50/40"
+                        }`}
+                      >
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-brand-saffron-700 bg-brand-saffron-100 px-1.5 py-0.2 rounded">
+                              एयरटेल पेमेंट्स बैंक
+                            </span>
+                            {selectedUpiId === primaryUpi && (
+                              <span className="text-[10px] text-emerald-700 font-bold">
+                                • क्यूआर सक्रिय
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-mono text-sm sm:text-base font-bold text-brand-maroon-950 block">
+                            {primaryUpi}
+                          </span>
+                        </div>
                         <button
-                          onClick={() => handleCopy(donationConfig.upiId, "upi")}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopy(primaryUpi, "upi-primary");
+                          }}
                           className="px-3 py-1.5 rounded-lg bg-brand-maroon-100 hover:bg-brand-maroon-200 text-brand-maroon-900 text-xs font-bold flex items-center gap-1 transition flex-shrink-0"
-                          title="यूपीआई आईडी कॉपी करें"
+                          title="यह यूपीआई आईडी कॉपी करें"
                         >
-                          {copiedField === "upi" ? (
+                          {copiedField === "upi-primary" ? (
                             <>
                               <Check className="w-3.5 h-3.5 text-emerald-600" />
                               <span>कॉपी हो गया!</span>
@@ -332,6 +372,57 @@ export default function DonationSection({
                           )}
                         </button>
                       </div>
+
+                      {/* Secondary UPI: SBI / BHIM */}
+                      <div
+                        onClick={() => setSelectedUpiId(secondaryUpi)}
+                        className={`p-3 rounded-xl border transition cursor-pointer flex items-center justify-between gap-2 ${
+                          selectedUpiId === secondaryUpi
+                            ? "border-brand-saffron-500 bg-brand-cream-50/80 shadow-xs"
+                            : "border-brand-maroon-100 bg-white hover:bg-brand-cream-50/40"
+                        }`}
+                      >
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-brand-maroon-800 bg-brand-cream-200 px-1.5 py-0.2 rounded">
+                              एसबीआई / भीम यूपीआई
+                            </span>
+                            {selectedUpiId === secondaryUpi && (
+                              <span className="text-[10px] text-emerald-700 font-bold">
+                                • क्यूआर सक्रिय
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-mono text-sm sm:text-base font-bold text-brand-maroon-950 block">
+                            {secondaryUpi}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopy(secondaryUpi, "upi-secondary");
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-brand-maroon-100 hover:bg-brand-maroon-200 text-brand-maroon-900 text-xs font-bold flex items-center gap-1 transition flex-shrink-0"
+                          title="यह यूपीआई आईडी कॉपी करें"
+                        >
+                          {copiedField === "upi-secondary" ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>कॉपी हो गया!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5" />
+                              <span>कॉपी करें</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+
+                      <p className="text-[11px] text-brand-charcoal-500 pt-1">
+                        💡 दोनों यूपीआई पते सक्रिय हैं। ऊपर दिए किसी भी विकल्प पर क्लिक करके क्यूआर कोड बदल सकते हैं या आईडी कॉपी कर सकते हैं।
+                      </p>
                     </div>
 
                     <div className="p-4 rounded-xl bg-white border border-brand-maroon-100 space-y-1">
@@ -346,7 +437,7 @@ export default function DonationSection({
                     <div className="p-3 rounded-lg bg-brand-gold-50 border border-brand-gold-200 text-xs text-brand-charcoal-700 flex items-start gap-2">
                       <Info className="w-4 h-4 text-brand-gold-600 flex-shrink-0 mt-0.5" />
                       <span>
-                        सहयोग के उपरांत रसीद प्राप्त करने हेतु कृपया ट्रांजेक्शन का स्क्रीनशॉट हमारे व्हाट्सएप नंबर पर प्रेषित करें।
+                        सहयोग के उपरांत रसीद प्राप्त करने हेतु कृपया ट्रांजेक्शन का स्क्रीनशॉट हमारे व्हाट्सएप नंबर (+91 91171 35379) पर प्रेषित करें।
                       </span>
                     </div>
                   </div>
@@ -357,6 +448,41 @@ export default function DonationSection({
             {/* Method 2: Direct Bank Transfer */}
             {activeTab === "bank" && (
               <div className="space-y-4">
+                {/* Official Office Contact Notice for NEFT/RTGS */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-300 text-amber-950 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <Info className="w-5 h-5 text-amber-700 flex-shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <h4 className="font-bold text-sm sm:text-base text-amber-950 leading-snug">
+                        बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद हेतु कृपया सीधे हमारे कार्यालय फोन +91 91171 35379 पर संपर्क करें।
+                      </h4>
+                      <p className="text-xs text-amber-900 leading-relaxed font-normal">
+                        सुरक्षा, पारदर्शिता एवं आयकर नियमों के अनुपालन हेतु ट्रस्ट के बैंक खाते का संपूर्ण विवरण एवं आधिकारिक दान रसीद कार्यालय द्वारा अधिकृत संपर्क पर तुरंत उपलब्ध कराई जाती है।
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-1 pl-0 sm:pl-8">
+                    <a
+                      href="tel:+919117135379"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-brand-maroon-900 hover:bg-brand-maroon-950 text-white font-bold text-xs shadow transition active:scale-95"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-brand-gold-400" />
+                      <span>कार्यालय हेल्पलाइन: +91 91171 35379</span>
+                    </a>
+                    <a
+                      href={`https://wa.me/919117135379?text=${encodeURIComponent(
+                        "नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद की जानकारी चाहिए।"
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs shadow transition active:scale-95"
+                    >
+                      <span>व्हाट्सएप पर विवरण मांगें</span>
+                    </a>
+                  </div>
+                </div>
+
                 <div className="p-4 rounded-xl bg-white border border-brand-maroon-100 divide-y divide-brand-cream-200 text-sm">
                   <div className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <span className="text-xs font-semibold text-brand-charcoal-500">
@@ -380,48 +506,60 @@ export default function DonationSection({
                     <span className="text-xs font-semibold text-brand-charcoal-500">
                       खाता संख्या:
                     </span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-brand-maroon-950">
-                        {donationConfig.accountNumber}
+                    {donationConfig.accountNumber && !donationConfig.accountNumber.includes("XXXX") ? (
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-bold text-brand-maroon-950">
+                          {donationConfig.accountNumber}
+                        </span>
+                        <button
+                          onClick={() =>
+                            handleCopy(donationConfig.accountNumber, "acc")
+                          }
+                          className="p-1 text-brand-maroon-700 hover:text-brand-maroon-900"
+                          title="खाता संख्या कॉपी करें"
+                        >
+                          {copiedField === "acc" ? (
+                            <Check className="w-4 h-4 text-emerald-600" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-xs font-semibold text-brand-maroon-900 bg-brand-cream-200/80 px-2.5 py-1 rounded">
+                        कार्यालय संपर्क द्वारा सत्यापन पश्चात उपलब्ध (+91 91171 35379)
                       </span>
-                      <button
-                        onClick={() =>
-                          handleCopy(donationConfig.accountNumber, "acc")
-                        }
-                        className="p-1 text-brand-maroon-700 hover:text-brand-maroon-900"
-                        title="खाता संख्या कॉपी करें"
-                      >
-                        {copiedField === "acc" ? (
-                          <Check className="w-4 h-4 text-emerald-600" />
-                        ) : (
-                          <Copy className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
+                    )}
                   </div>
 
                   <div className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <span className="text-xs font-semibold text-brand-charcoal-500">
                       आईएफएससी कोड:
                     </span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-brand-maroon-950">
-                        {donationConfig.ifscCode}
+                    {donationConfig.ifscCode && !donationConfig.ifscCode.includes("XXXX") ? (
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-bold text-brand-maroon-950">
+                          {donationConfig.ifscCode}
+                        </span>
+                        <button
+                          onClick={() =>
+                            handleCopy(donationConfig.ifscCode, "ifsc")
+                          }
+                          className="p-1 text-brand-maroon-700 hover:text-brand-maroon-900"
+                          title="आईएफएससी कोड कॉपी करें"
+                        >
+                          {copiedField === "ifsc" ? (
+                            <Check className="w-4 h-4 text-emerald-600" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-xs font-medium text-brand-charcoal-700">
+                        SBIN / Airtel Payments Bank (सत्यापन पर उपलब्ध)
                       </span>
-                      <button
-                        onClick={() =>
-                          handleCopy(donationConfig.ifscCode, "ifsc")
-                        }
-                        className="p-1 text-brand-maroon-700 hover:text-brand-maroon-900"
-                        title="आईएफएससी कोड कॉपी करें"
-                      >
-                        {copiedField === "ifsc" ? (
-                          <Check className="w-4 h-4 text-emerald-600" />
-                        ) : (
-                          <Copy className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
+                    )}
                   </div>
 
                   <div className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
