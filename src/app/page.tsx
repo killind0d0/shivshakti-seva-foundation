@@ -24,9 +24,11 @@ import DonationSection from "@/components/DonationSection";
 import NewsSection from "@/components/NewsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import DonationModal from "@/components/DonationModal";
-import NeedHelpModal from "@/components/NeedHelpModal";
-import AdminModal from "@/components/AdminModal";
+import dynamic from "next/dynamic";
+
+const DonationModal = dynamic(() => import("@/components/DonationModal"), { ssr: false });
+const NeedHelpModal = dynamic(() => import("@/components/NeedHelpModal"), { ssr: false });
+const AdminModal = dynamic(() => import("@/components/AdminModal"), { ssr: false });
 import FloatingQuickAction from "@/components/FloatingQuickAction";
 import FestivalGreetingBanner from "@/components/FestivalGreetingBanner";
 import StickyDonateBar from "@/components/StickyDonateBar";
@@ -327,26 +329,32 @@ export default function Home() {
         onOpenAdmin={() => setAdminModalOpen(true)}
       />
 
-      {/* Global Modals */}
-      <DonationModal
-        isOpen={donationModalOpen}
-        onClose={() => setDonationModalOpen(false)}
-        donationConfig={data.donationConfig}
-      />
+      {/* Global Modals — Dynamically Loaded On Demand */}
+      {donationModalOpen && (
+        <DonationModal
+          isOpen={donationModalOpen}
+          onClose={() => setDonationModalOpen(false)}
+          donationConfig={data.donationConfig}
+        />
+      )}
 
-      <NeedHelpModal
-        isOpen={helpModalOpen}
-        onClose={() => setHelpModalOpen(false)}
-        preselectedService={preselectedService}
-      />
+      {helpModalOpen && (
+        <NeedHelpModal
+          isOpen={helpModalOpen}
+          onClose={() => setHelpModalOpen(false)}
+          preselectedService={preselectedService}
+        />
+      )}
 
-      <AdminModal
-        isOpen={adminModalOpen}
-        onClose={() => setAdminModalOpen(false)}
-        data={data}
-        onSaveData={handleSaveData}
-        onResetData={handleResetData}
-      />
+      {adminModalOpen && (
+        <AdminModal
+          isOpen={adminModalOpen}
+          onClose={() => setAdminModalOpen(false)}
+          data={data}
+          onSaveData={handleSaveData}
+          onResetData={handleResetData}
+        />
+      )}
 
       {/* Floating Quick Action Bar */}
       <FloatingQuickAction

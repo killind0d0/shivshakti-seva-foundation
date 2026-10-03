@@ -22,7 +22,9 @@ export default function StickyDonateBar({ onOpenDonation }: StickyDonateBarProps
 
   useEffect(() => {
     // Hide when donation section is visible (no need to show CTA when already there)
-    const donationSection = document.getElementById("sahyog-karein");
+    const donationSection =
+      document.getElementById("sahyog-karein") ||
+      document.getElementById("sahyog-dan");
     if (!donationSection) return;
 
     const observer = new IntersectionObserver(
