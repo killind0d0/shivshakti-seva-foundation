@@ -41,8 +41,17 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
   const validate = () => {
     const errs: Record<string, string> = {};
+    const cleanPhone = formData.phone.replace(/[\s\-\+]/g, "");
+
     if (!formData.name.trim()) errs.name = t("कृपया अपना नाम लिखें।", "Please enter your full name.");
-    if (!formData.phone.trim()) errs.phone = t("कृपया अपना मोबाइल नंबर लिखें।", "Please enter your mobile number.");
+    if (!formData.phone.trim()) {
+      errs.phone = t("कृपया अपना मोबाइल नंबर लिखें।", "Please enter your mobile number.");
+    } else if (!/^([0-9]{10}|91[0-9]{10})$/.test(cleanPhone)) {
+      errs.phone = t("कृपया मान्य १० अंकों का मोबाइल नंबर लिखें।", "Please enter a valid 10-digit mobile number.");
+    }
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errs.email = t("कृपया सही ईमेल पता दर्ज करें।", "Please enter a valid email address.");
+    }
     if (!formData.message.trim()) errs.message = t("कृपया अपना संदेश लिखें।", "Please enter your message.");
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -63,7 +72,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
     openWhatsAppDirect(msg);
 
     try {
-      await fetch('/api/submissions', {
+      const res = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -71,8 +80,11 @@ export default function ContactSection({ data }: ContactSectionProps) {
           ...formData,
         }),
       });
+      if (!res.ok) {
+        console.warn(`Submissions API responded with status ${res.status}`);
+      }
     } catch (err) {
-      console.warn("Submissions API unreachable, saving contact message locally:", err);
+      console.warn("Submissions API notice:", err);
     }
 
     // Store in localStorage for Admin view / offline backup

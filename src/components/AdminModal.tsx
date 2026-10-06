@@ -175,6 +175,16 @@ export default function AdminModal({
     setFormData(data);
   }, [data]);
 
+  // Accessibility: close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   // Load submissions, staff, photos and verify existing session on mount/open
   useEffect(() => {
     if (isOpen) {
@@ -193,7 +203,9 @@ export default function AdminModal({
               setLoginRole(apiAuth.user.role);
             }
           })
-          .catch(() => {});
+          .catch((err) => {
+            console.warn("[AdminModal] Session restore notice:", err);
+          });
 
         const v = JSON.parse(localStorage.getItem("ssf_volunteers") || "[]");
         setVolunteers(v);

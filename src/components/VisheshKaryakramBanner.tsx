@@ -13,10 +13,12 @@ import {
   Phone,
   MessageCircle,
 } from "lucide-react";
-import { getWhatsAppUrl, FOUNDATION_WHATSAPP_NUMBER } from "@/utils/whatsappHelper";
+import { getWhatsAppUrl, FOUNDATION_WHATSAPP_NUMBER, openWhatsAppDirect } from "@/utils/whatsappHelper";
+import { useLanguage } from "@/context/LanguageContext";
+import ModalPortal from "./ModalPortal";
 
 export default function VisheshKaryakramBanner() {
-  const [lang, setLang] = useState<"hi" | "en">("hi");
+  const { isEn, language: lang } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -30,26 +32,17 @@ export default function VisheshKaryakramBanner() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [whatsappUrl, setWhatsappUrl] = useState("");
 
+  // Accessibility: Close modal on Escape key press
   useEffect(() => {
-    const detectLang = () => {
-      try {
-        const match = document.cookie.match(/googtrans=\/hi\/([a-z]{2})/i);
-        const saved = localStorage.getItem("ssf_lang");
-        const active = (match ? match[1] : saved || "hi").toLowerCase();
-        setLang(active === "en" ? "en" : "hi");
-      } catch {}
-    };
-
-    detectLang();
-
-    const handleCustomLang = (e: any) => {
-      if (e.detail?.lang) {
-        setLang(e.detail.lang === "en" ? "en" : "hi");
+    if (!isModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsModalOpen(false);
       }
     };
-    window.addEventListener("ssf-language-change", handleCustomLang);
-    return () => window.removeEventListener("ssf-language-change", handleCustomLang);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen]);
 
   const t = {
     badge: lang === "en" ? "Special Program Announcement" : "विशेष कार्यक्रम की जानकारियाँ",
@@ -113,10 +106,11 @@ export default function VisheshKaryakramBanner() {
           ? "Please enter ancestral deity name."
           : "कृपया अपने पितृ देवता / कुलदेवता का नाम दर्ज करें।";
     }
+    const cleanPhone = formData.phone.replace(/[\s\-\+]/g, "");
     if (!formData.phone.trim()) {
       errs.phone =
         lang === "en" ? "Please enter mobile number." : "कृपया अपना मोबाइल नंबर दर्ज करें।";
-    } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/[\s\-\+]/g, "").slice(-10))) {
+    } else if (!/^([0-9]{10}|91[0-9]{10})$/.test(cleanPhone)) {
       errs.phone =
         lang === "en"
           ? "Please enter a valid 10-digit mobile number."
@@ -145,9 +139,12 @@ export default function VisheshKaryakramBanner() {
     const url = getWhatsAppUrl(msg, FOUNDATION_WHATSAPP_NUMBER);
     setWhatsappUrl(url);
 
+    // Immediately open WhatsApp to ensure registration reaches the foundation in real-time
+    openWhatsAppDirect(msg, FOUNDATION_WHATSAPP_NUMBER);
+
     // 1. Submit to server API for permanent record keeping
     try {
-      await fetch("/api/submissions", {
+      const res = await fetch("/api/submissions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -156,6 +153,9 @@ export default function VisheshKaryakramBanner() {
           createdAt: new Date().toISOString(),
         }),
       });
+      if (!res.ok) {
+        console.warn(`Submissions API responded with status ${res.status}`);
+      }
     } catch (err) {
       console.warn("Could not save to /api/submissions:", err);
     }
@@ -253,12 +253,16 @@ export default function VisheshKaryakramBanner() {
       {/* FREE REGISTER FORM MODAL */}
       {/* ========================================================================= */}
       {isModalOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="vishesh-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-brand-maroon-950/80 backdrop-blur-sm overflow-y-auto"
-        >
+        <ModalPortal>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="vishesh-modal-title"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-brand-maroon-950/80 backdrop-blur-sm overflow-y-auto"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setIsModalOpen(false);
+            }}
+          >
           <div
             className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border-2 border-brand-gold-400 overflow-hidden my-6 animate-fadeIn"
             onClick={(e) => e.stopPropagation()}
@@ -347,11 +351,12 @@ export default function VisheshKaryakramBanner() {
                 <form onSubmit={handleSubmit} className="space-y-3.5">
                   {/* 1. Name */}
                   <div>
-                    <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
+                    <label htmlFor="vk-name" className="block text-xs font-bold text-brand-maroon-950 mb-1">
                       {t.nameLabel} <span className="text-red-600">*</span>
                     </label>
                     <div className="relative">
                       <input
+                        id="vk-name"
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -370,10 +375,11 @@ export default function VisheshKaryakramBanner() {
 
                   {/* 2. Father's Name */}
                   <div>
-                    <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
+                    <label htmlFor="vk-father-name" className="block text-xs font-bold text-brand-maroon-950 mb-1">
                       {t.fatherLabel} <span className="text-red-600">*</span>
                     </label>
                     <input
+                      id="vk-father-name"
                       type="text"
                       value={formData.fatherName}
                       onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
@@ -391,10 +397,11 @@ export default function VisheshKaryakramBanner() {
 
                   {/* 3. Pitra Devta ka Naam */}
                   <div>
-                    <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
+                    <label htmlFor="vk-pitra-name" className="block text-xs font-bold text-brand-maroon-950 mb-1">
                       {t.pitraLabel} <span className="text-red-600">*</span>
                     </label>
                     <input
+                      id="vk-pitra-name"
                       type="text"
                       value={formData.pitraDevtaName}
                       onChange={(e) =>
@@ -416,10 +423,11 @@ export default function VisheshKaryakramBanner() {
 
                   {/* 4. Mobile Number */}
                   <div>
-                    <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
+                    <label htmlFor="vk-phone" className="block text-xs font-bold text-brand-maroon-950 mb-1">
                       {t.phoneLabel} <span className="text-red-600">*</span>
                     </label>
                     <input
+                      id="vk-phone"
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -437,10 +445,11 @@ export default function VisheshKaryakramBanner() {
 
                   {/* 5. Address */}
                   <div>
-                    <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
+                    <label htmlFor="vk-address" className="block text-xs font-bold text-brand-maroon-950 mb-1">
                       {t.addressLabel} <span className="text-red-600">*</span>
                     </label>
                     <input
+                      id="vk-address"
                       type="text"
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -480,7 +489,8 @@ export default function VisheshKaryakramBanner() {
               )}
             </div>
           </div>
-        </div>
+          </div>
+        </ModalPortal>
       )}
     </>
   );

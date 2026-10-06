@@ -54,6 +54,7 @@ export default function HelpTracker({ onOpenHelpModal }: { onOpenHelpModal?: () 
   const [result, setResult] = useState<HelpRequestRecord | null>(null);
   const [searched, setSearched] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const normalizeRecord = (item: any): HelpRequestRecord => {
     return {
@@ -107,6 +108,7 @@ export default function HelpTracker({ onOpenHelpModal }: { onOpenHelpModal?: () 
     const cleanQuery = query.trim();
     if (!cleanQuery) return;
 
+    setSearchError(null);
     setIsSearching(true);
     setSearched(true);
 
@@ -127,9 +129,22 @@ export default function HelpTracker({ onOpenHelpModal }: { onOpenHelpModal?: () 
         if (serverRecord) {
           match = normalizeRecord(serverRecord);
         }
+      } else if (res.status >= 500) {
+        setSearchError(
+          t(
+            "सर्वर से संपर्क करने में समस्या आई। कृपया कुछ क्षण बाद पुनः प्रयास करें।",
+            "Server connection issue. Please try again in a few moments."
+          )
+        );
       }
     } catch (err) {
       console.warn("Track API unreachable, searching local storage:", err);
+      setSearchError(
+        t(
+          "नेटवर्क समस्या: सर्वर अनुपलब्ध है।",
+          "Network issue: Server is unreachable."
+        )
+      );
     }
 
     if (!match) {
@@ -314,13 +329,18 @@ export default function HelpTracker({ onOpenHelpModal }: { onOpenHelpModal?: () 
               <div className="bg-white rounded-2xl border border-brand-gold-300 p-8 text-center space-y-4 shadow-md">
                 <AlertCircle className="w-12 h-12 text-amber-600 mx-auto" />
                 <h3 className="text-lg font-heading text-brand-maroon-950 font-bold">
-                  {t("इस क्रमांक पर कोई अनुरोध नहीं मिला", "No Request Found with this ID")}
+                  {searchError || t("इस क्रमांक पर कोई अनुरोध नहीं मिला", "No Request Found with this ID")}
                 </h3>
                 <p className="text-xs sm:text-sm text-brand-maroon-700 max-w-md mx-auto">
-                  {t(
-                    "कृपया सही ट्रैकिंग आईडी (उदा. SSF-2026-849201) अथवा वही मोबाइल नंबर दर्ज करें जिससे आवेदन किया गया था।",
-                    "Please check the Tracking ID (e.g. SSF-2026-849201) or enter the registered phone number."
-                  )}
+                  {searchError
+                    ? t(
+                        "कृपया कुछ क्षण प्रतीक्षा करें अथवा हमारे २४×७ सहायता नंबर +91 91171 35379 पर संपर्क करें।",
+                        "Please wait a moment or call our 24×7 helpline directly at +91 91171 35379."
+                      )
+                    : t(
+                        "कृपया सही ट्रैकिंग आईडी (उदा. SSF-2026-849201) अथवा वही मोबाइल नंबर दर्ज करें जिससे आवेदन किया गया था।",
+                        "Please check the Tracking ID (e.g. SSF-2026-849201) or enter the registered phone number."
+                      )}
                 </p>
                 {onOpenHelpModal && (
                   <button

@@ -125,10 +125,21 @@ export default function DonationModal({
 
   const handleReceiptSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const cleanPhone = donorPhone.replace(/[\s\-\+]/g, "");
+
     if (!donorName.trim() || !donorPhone.trim()) {
       setReceiptError(t("कृपया अपना नाम और मोबाइल नंबर अवश्य दर्ज करें।", "Please enter your name and phone number."));
       return;
     }
+    if (!/^([0-9]{10}|91[0-9]{10})$/.test(cleanPhone)) {
+      setReceiptError(t("कृपया मान्य १० अंकों का मोबाइल नंबर दर्ज करें।", "Please enter a valid 10-digit mobile number."));
+      return;
+    }
+    if (donorEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(donorEmail.trim())) {
+      setReceiptError(t("कृपया सही ईमेल पता दर्ज करें।", "Please enter a valid email address."));
+      return;
+    }
+
     setReceiptError(null);
     setIsSubmitting(true);
 
@@ -152,13 +163,16 @@ export default function DonationModal({
     };
 
     try {
-      await fetch('/api/submissions', {
+      const res = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submissionData),
       });
+      if (!res.ok) {
+        console.warn(`Submissions API responded with status ${res.status}`);
+      }
     } catch (err) {
-      console.warn("Submissions API unreachable, saving donation receipt locally:", err);
+      console.warn("Submissions API notice:", err);
     }
 
     // Save locally for offline backup

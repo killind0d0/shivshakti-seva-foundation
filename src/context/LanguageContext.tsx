@@ -24,14 +24,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("hi");
 
   useEffect(() => {
+    let active: Language = "hi";
     try {
-      const match = document.cookie.match(/googtrans=\/hi\/([a-z]{2})/i);
-      const saved = localStorage.getItem("ssf_lang") as Language | null;
+      const match = typeof document !== "undefined" ? document.cookie.match(/googtrans=\/hi\/([a-z]{2})/i) : null;
+      const saved = typeof window !== "undefined" && window.localStorage ? (localStorage.getItem("ssf_lang") as Language | null) : null;
       const detected = (match ? match[1] : saved || "hi").toLowerCase();
-      const active: Language = detected === "en" ? "en" : "hi";
-      setLanguageState(active);
-      document.documentElement.lang = active;
-      document.documentElement.setAttribute("data-ssf-lang", active);
+      if (detected === "en") active = "en";
+    } catch {}
+
+    setLanguageState(active);
+
+    try {
+      if (typeof document !== "undefined") {
+        document.documentElement.lang = active;
+        document.documentElement.setAttribute("data-ssf-lang", active);
+      }
     } catch {}
 
     const handleCustomLang = (e: any) => {

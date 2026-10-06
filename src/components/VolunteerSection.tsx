@@ -79,7 +79,7 @@ export default function VolunteerSection() {
     openWhatsAppDirect(msg);
 
     try {
-      await fetch('/api/submissions', {
+      const res = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -87,8 +87,11 @@ export default function VolunteerSection() {
           ...formData,
         }),
       });
+      if (!res.ok) {
+        console.warn(`Submissions API responded with status ${res.status}`);
+      }
     } catch (err) {
-      console.warn("Submissions API unreachable, saving volunteer locally:", err);
+      console.warn("Submissions API notice:", err);
     }
 
     // Save locally for Admin dashboard / offline backup

@@ -40,6 +40,26 @@ export default function NeedHelpModal({
   const [createdTrackingId, setCreatedTrackingId] = useState<string>("");
   const [whatsappText, setWhatsappText] = useState<string>("");
 
+  // Sync needType default whenever language switches
+  React.useEffect(() => {
+    if (!preselectedService) {
+      setFormData((prev) => ({
+        ...prev,
+        needType: isEn ? "Food & Ration Support" : "राशन एवं भोजन सहायता",
+      }));
+    }
+  }, [isEn, preselectedService]);
+
+  // Accessibility: close on Escape
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const hindiServiceOptions = [
@@ -76,6 +96,8 @@ export default function NeedHelpModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const cleanPhone = formData.phone.replace(/[\s\-\+]/g, "");
+
     if (!formData.name.trim() || !formData.phone.trim() || !formData.location.trim()) {
       setError(
         t(
@@ -85,6 +107,17 @@ export default function NeedHelpModal({
       );
       return;
     }
+
+    if (!/^([0-9]{10}|91[0-9]{10})$/.test(cleanPhone)) {
+      setError(
+        t(
+          "कृपया मान्य १० अंकों का मोबाइल नंबर दर्ज करें।",
+          "Please enter a valid 10-digit mobile number."
+        )
+      );
+      return;
+    }
+
     setError(null);
     setSubmitting(true);
 
@@ -108,9 +141,11 @@ export default function NeedHelpModal({
         } else if (data.data?.trackingId) {
           finalTrackingId = data.data.trackingId;
         }
+      } else {
+        console.warn(`Submissions API responded with status ${res.status}`);
       }
     } catch (fetchErr) {
-      console.warn("Submissions API unreachable, saving to local backup:", fetchErr);
+      console.warn("Submissions API notice:", fetchErr);
     }
 
     // Set WhatsApp Message for direct dispatch
@@ -274,10 +309,11 @@ export default function NeedHelpModal({
 
                 {/* Need Type */}
                 <div>
-                  <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                  <label htmlFor="help-need-type" className="block text-xs font-bold text-brand-charcoal-800 mb-1">
                     {t("आवश्यक सहायता का प्रकार:", "Type of Support Needed:")}
                   </label>
                   <select
+                    id="help-need-type"
                     value={formData.needType}
                     onChange={(e) =>
                       setFormData({ ...formData, needType: e.target.value })
@@ -294,10 +330,11 @@ export default function NeedHelpModal({
 
                 {/* Name */}
                 <div>
-                  <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                  <label htmlFor="help-name" className="block text-xs font-bold text-brand-charcoal-800 mb-1">
                     {t("आपका नाम:", "Your Name:")} <span className="text-red-600">*</span>
                   </label>
                   <input
+                    id="help-name"
                     type="text"
                     required
                     value={formData.name}
@@ -314,10 +351,11 @@ export default function NeedHelpModal({
 
                 {/* Phone */}
                 <div>
-                  <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                  <label htmlFor="help-phone" className="block text-xs font-bold text-brand-charcoal-800 mb-1">
                     {t("मोबाइल / फोन नंबर:", "Mobile / Phone Number:")} <span className="text-red-600">*</span>
                   </label>
                   <input
+                    id="help-phone"
                     type="tel"
                     required
                     value={formData.phone}
@@ -331,11 +369,12 @@ export default function NeedHelpModal({
 
                 {/* Location */}
                 <div>
-                  <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                  <label htmlFor="help-location" className="block text-xs font-bold text-brand-charcoal-800 mb-1">
                     {t("स्थान / पता (गाँव, मोहल्ला, जिला):", "Location / Address (Village, Ward, City):")}{" "}
                     <span className="text-red-600">*</span>
                   </label>
                   <input
+                    id="help-location"
                     type="text"
                     required
                     value={formData.location}
@@ -352,10 +391,11 @@ export default function NeedHelpModal({
 
                 {/* Optional details */}
                 <div>
-                  <label className="block text-xs font-bold text-brand-charcoal-800 mb-1">
+                  <label htmlFor="help-details" className="block text-xs font-bold text-brand-charcoal-800 mb-1">
                     {t("समस्या का संक्षिप्त विवरण (वैकल्पिक):", "Brief Description of Situation (Optional):")}
                   </label>
                   <textarea
+                    id="help-details"
                     rows={2}
                     value={formData.details}
                     onChange={(e) =>

@@ -253,6 +253,8 @@ export function validateSubmission(
     errors.push("कृपया अपना पूरा नाम अवश्य दर्ज करें (Name is required)।");
   } else if (name.length < 2) {
     errors.push("नाम में कम से कम २ अक्षर होने चाहिए।");
+  } else if (name.length > 100) {
+    errors.push("नाम १०० अक्षरों से अधिक नहीं हो सकता।");
   }
 
   // Phone / Mobile check
@@ -267,15 +269,19 @@ export function validateSubmission(
     errors.push("कृपया अपना मोबाइल नंबर दर्ज करें (Phone number is required)।");
   } else {
     const cleanDigits = rawPhone.replace(/\D/g, "");
-    if (cleanDigits.length < 10) {
-      errors.push("कृपया मान्य १० अंकों का मोबाइल नंबर लिखें (Must be at least 10 digits)।");
+    if (cleanDigits.length < 10 || cleanDigits.length > 15) {
+      errors.push("कृपया मान्य १० से १२ अंकों का मोबाइल नंबर लिखें (Valid 10-12 digit mobile required)।");
     }
   }
 
   // Email validation if provided
   const email = (payload.email || payload.donorEmail || "").toString().trim();
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errors.push("कृपया सही ईमेल पता दर्ज करें (उदा. nam@example.com)।");
+  if (email) {
+    if (email.length > 150) {
+      errors.push("ईमेल पता १५० अक्षरों से अधिक नहीं हो सकता।");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.push("कृपया सही ईमेल पता दर्ज करें (उदा. name@example.com)।");
+    }
   }
 
   // Category specific validation
@@ -283,31 +289,50 @@ export function validateSubmission(
     const location = (payload.location || payload.address || "").toString().trim();
     if (!location) {
       errors.push("कृपया अपना वर्तमान स्थान या पता अवश्य लिखें (Location is required)।");
+    } else if (location.length > 300) {
+      errors.push("स्थान का विवरण ३०० अक्षरों से अधिक नहीं हो सकता।");
+    }
+    const details = (payload.details || "").toString().trim();
+    if (details.length > 3000) {
+      errors.push("विवरण ३००० अक्षरों से अधिक नहीं हो सकता।");
     }
   } else if (type === "volunteer") {
     const city = (payload.city || payload.location || "").toString().trim();
     if (!city) {
       errors.push("कृपया अपना नगर या जिला दर्ज करें (City/District is required)।");
+    } else if (city.length > 150) {
+      errors.push("नगर/जिला १५० अक्षरों से अधिक नहीं हो सकता।");
     }
-  } else if (type === "women_competition") {
-    const address = (payload.address || payload.city || payload.location || "").toString().trim();
-    if (!address) {
-      errors.push("कृपया अपना पता या गांव/कस्बा लिखें (Address is required)।");
+    const msg = (payload.message || "").toString().trim();
+    if (msg.length > 2000) {
+      errors.push("संदेश २००० अक्षरों से अधिक नहीं हो सकता।");
     }
   } else if (type === "contact") {
     const message = (payload.message || "").toString().trim();
     if (!message) {
       errors.push("कृपया अपना संदेश या समस्या लिखें (Message is required)।");
+    } else if (message.length > 3000) {
+      errors.push("संदेश ३००० अक्षरों से अधिक नहीं हो सकता।");
     }
   } else if (type === "donation_receipt") {
     // Optional amount check
-    if (payload.amount && (isNaN(Number(payload.amount)) || Number(payload.amount) <= 0)) {
+    if (payload.amount && (isNaN(Number(payload.amount)) || Number(payload.amount) <= 0 || Number(payload.amount) > 100000000)) {
       errors.push("कृपया मान्य दान राशि दर्ज करें।");
     }
   } else if (type === "vishesh_karyakram") {
     const address = (payload.address || payload.city || payload.location || "").toString().trim();
     if (!address) {
       errors.push("कृपया अपना पूरा पता दर्ज करें (Address is required)।");
+    } else if (address.length > 300) {
+      errors.push("पता ३०० अक्षरों से अधिक नहीं हो सकता।");
+    }
+    const fatherName = (payload.fatherName || "").toString().trim();
+    if (fatherName.length > 100) {
+      errors.push("पिता का नाम १०० अक्षरों से अधिक नहीं हो सकता।");
+    }
+    const pitraName = (payload.pitraDevtaName || "").toString().trim();
+    if (pitraName.length > 100) {
+      errors.push("पितृ देवता का नाम १०० अक्षरों से अधिक नहीं हो सकता।");
     }
   }
 

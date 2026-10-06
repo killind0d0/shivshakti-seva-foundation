@@ -100,12 +100,12 @@ async function isAuthenticatedAdmin(request: NextRequest): Promise<boolean> {
 
   // 2. Standard SSF admin and developer credentials
   const validStandardTokens = [
-    "admin@123",
+    process.env.ADMIN_PASSWORD,
+    process.env.ADMIN_TOKEN,
+    process.env.DEV_PASSCODE,
     "ssf2026",
-    "dev@123",
-    "admin",
     "ssf_admin_secret_token",
-  ];
+  ].filter(Boolean) as string[];
   if (validStandardTokens.includes(token)) {
     return true;
   }

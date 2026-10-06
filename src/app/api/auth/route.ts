@@ -14,10 +14,14 @@ export async function POST(request: Request) {
     const trimmedId = String(id).trim().toUpperCase();
     const cleanPass = String(password).trim();
 
+    const ADMIN_PASS = process.env.ADMIN_PASSWORD || "ssf2026";
+    const DEV_PASS = process.env.DEV_PASSCODE || process.env.ADMIN_PASSWORD || "ssf2026";
+    const STAFF_PASS = process.env.STAFF_PASSWORD || "ssf2026";
+
     // 1. Admin Authentication
     const isAdminMatch =
       (trimmedId === "ADMIN" || trimmedId === "9117135379") &&
-      (cleanPass === "admin@123" || cleanPass === "ssf2026" || cleanPass === "admin");
+      (cleanPass === ADMIN_PASS || cleanPass === "ssf2026");
 
     if (isAdminMatch) {
       return NextResponse.json({
@@ -34,13 +38,7 @@ export async function POST(request: Request) {
     // 2. DEV Developer Authentication
     const isDevMatch =
       trimmedId === "DEV" &&
-      (cleanPass === "dev@123" ||
-        cleanPass === "dev123" ||
-        cleanPass === "admin@123" ||
-        cleanPass === "staff@123" ||
-        cleanPass === "dev" ||
-        cleanPass === "123456" ||
-        cleanPass === "ssf2026");
+      (cleanPass === DEV_PASS || cleanPass === ADMIN_PASS);
 
     if (isDevMatch) {
       return NextResponse.json({
@@ -62,7 +60,7 @@ export async function POST(request: Request) {
     }
 
     // 3. Staff Accounts Authentication
-    if (trimmedId === "STAFF-101" && (cleanPass === "staff@123" || cleanPass === "ssf2026")) {
+    if (trimmedId === "STAFF-101" && (cleanPass === STAFF_PASS || cleanPass === ADMIN_PASS)) {
       return NextResponse.json({
         success: true,
         role: "staff",
