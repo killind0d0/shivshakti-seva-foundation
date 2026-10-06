@@ -35,36 +35,54 @@ function getStepStatus(status?: string): number {
   return 1;
 }
 
+/**
+ * Mask mobile numbers for public privacy (e.g., 98******10)
+ */
+function maskPhoneNumber(phone?: string): string {
+  if (!phone) return "";
+  const clean = phone.replace(/\D/g, "");
+  if (clean.length < 7) return "******";
+  const start = clean.slice(0, 2);
+  const end = clean.slice(-2);
+  return `${start}${"*".repeat(Math.min(clean.length - 4, 6))}${end}`;
+}
+
 // ==========================================
-// GET /api/track?id=... or ?phone=... or ?q=...
+// GET /api/track?id=... or ?phone=...
 // ==========================================
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const id =
+    const id = (
       searchParams.get("id") ||
       searchParams.get("trackingId") ||
-      searchParams.get("requestId");
-    const phone = searchParams.get("phone") || searchParams.get("mobile");
-    const q = searchParams.get("q") || searchParams.get("query");
+      searchParams.get("requestId") ||
+      ""
+    ).trim();
+    const phone = (searchParams.get("phone") || searchParams.get("mobile") || "").trim();
+    const q = (searchParams.get("q") || searchParams.get("query") || "").trim();
 
-    if (!id && !phone && !q) {
+    // Prevent wide-net scraping: Require either a tracking ID or a valid 10-digit phone
+    const cleanPhone = phone.replace(/\D/g, "");
+    const effectiveId = id || (q.toUpperCase().startsWith("SSF-") || q.startsWith("sub_") ? q : undefined);
+    const effectivePhone = cleanPhone.length >= 10 ? cleanPhone : undefined;
+
+    if (!effectiveId && !effectivePhone) {
       return NextResponse.json(
         {
           success: false,
           found: false,
           error:
-            "कृपया ट्रैकिंग आईडी (जैसे SSF-2026-XXXXXX) या अपना १० अंकों का मोबाइल नंबर दर्ज करें।",
+            "कृपया मान्य ट्रैकिंग आईडी (जैसे SSF-2026-XXXXXX) या अपना १० अंकों का मोबाइल नंबर दर्ज करें।",
         },
         { status: 400 }
       );
     }
 
     const { match, matches } = await findHelpRequest({
-      id: id || undefined,
-      phone: phone || undefined,
-      q: q || undefined,
+      id: effectiveId,
+      phone: effectivePhone,
     });
 
     if (!match) {
@@ -83,7 +101,7 @@ export async function GET(request: NextRequest) {
       trackingId: rec.trackingId || rec.requestId || rec.id,
       requestId: rec.trackingId || rec.requestId || rec.id,
       name: rec.name,
-      phone: rec.phone,
+      phone: maskPhoneNumber(rec.phone),
       location: rec.location || rec.city || rec.address || "बिहार",
       needType: rec.needType || "सामान्य सहायता",
       date: rec.date || "हाल ही में",

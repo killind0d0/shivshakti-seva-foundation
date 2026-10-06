@@ -14,14 +14,14 @@ export async function POST(request: Request) {
     const trimmedId = String(id).trim().toUpperCase();
     const cleanPass = String(password).trim();
 
-    const ADMIN_PASS = process.env.ADMIN_PASSWORD || "ssf2026";
-    const DEV_PASS = process.env.DEV_PASSCODE || process.env.ADMIN_PASSWORD || "ssf2026";
-    const STAFF_PASS = process.env.STAFF_PASSWORD || "ssf2026";
+    const ADMIN_PASS = (process.env.ADMIN_PASSWORD || "").trim();
+    const DEV_PASS = (process.env.DEV_PASSCODE || process.env.ADMIN_PASSWORD || "").trim();
+    const STAFF_PASS = (process.env.STAFF_PASSWORD || "").trim();
 
     // 1. Admin Authentication
     const isAdminMatch =
       (trimmedId === "ADMIN" || trimmedId === "9117135379") &&
-      (cleanPass === ADMIN_PASS || cleanPass === "ssf2026");
+      Boolean(ADMIN_PASS && cleanPass === ADMIN_PASS);
 
     if (isAdminMatch) {
       return NextResponse.json({
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     // 2. DEV Developer Authentication
     const isDevMatch =
       trimmedId === "DEV" &&
-      (cleanPass === DEV_PASS || cleanPass === ADMIN_PASS);
+      Boolean((DEV_PASS && cleanPass === DEV_PASS) || (ADMIN_PASS && cleanPass === ADMIN_PASS));
 
     if (isDevMatch) {
       return NextResponse.json({
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     }
 
     // 3. Staff Accounts Authentication
-    if (trimmedId === "STAFF-101" && (cleanPass === STAFF_PASS || cleanPass === ADMIN_PASS)) {
+    if (trimmedId === "STAFF-101" && Boolean((STAFF_PASS && cleanPass === STAFF_PASS) || (ADMIN_PASS && cleanPass === ADMIN_PASS))) {
       return NextResponse.json({
         success: true,
         role: "staff",

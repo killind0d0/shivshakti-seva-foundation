@@ -20,8 +20,8 @@ export const devBannerConfig = {
   enabled: false,
   maintenanceMode: false,
 
-  // Simple passkey for developer / admin to unlock the preview on any device
-  developerPasscode: "sj2026",
+  // Developer bypass passcode (disabled in production)
+  developerPasscode: "",
 
   // Public display texts
   titleHindi: "वेबसाइट निर्माण एवं तकनीकी सेटअप प्रगति पर है",

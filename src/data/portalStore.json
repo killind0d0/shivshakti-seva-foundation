@@ -4,7 +4,6 @@
       "id": "DEV",
       "name": "तकनीकी सेवादार (DEV)",
       "phone": "9117135379",
-      "password": "dev@123",
       "roleTitle": "मुख्य तकनीकी सेवादार (Technical Developer)",
       "status": "active",
       "createdDate": "01/10/2026",
@@ -20,7 +19,6 @@
       "id": "STAFF-101",
       "name": "आकाश गिरि / अमित कुमार",
       "phone": "9117135379",
-      "password": "staff@123",
       "roleTitle": "क्षेत्रीय सेवादार",
       "status": "active",
       "createdDate": "01/10/2026",
@@ -34,5 +32,5 @@
     }
   ],
   "foundationData": null,
-  "updatedAt": "2026-10-03T15:43:00.000Z"
+  "updatedAt": "2026-10-06T12:00:00.000Z"
 }

@@ -28,7 +28,7 @@ export function getSessionSecret(): string {
 export function getAdminCredentials() {
   return {
     adminId: (process.env.ADMIN_ID || "admin").trim(),
-    adminPassword: (process.env.ADMIN_PASSWORD || "admin@123").trim(),
+    adminPassword: (process.env.ADMIN_PASSWORD || "").trim(),
     adminAuthToken: process.env.ADMIN_AUTH_TOKEN?.trim(),
   };
 }

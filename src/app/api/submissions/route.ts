@@ -59,14 +59,7 @@ async function isAuthenticatedAdmin(request: NextRequest): Promise<boolean> {
   const xStaffId = request.headers.get("x-staff-id");
   const xStaffPass = request.headers.get("x-staff-password");
 
-  const url = new URL(request.url);
-  const tokenParam =
-    url.searchParams.get("token") ||
-    url.searchParams.get("secret") ||
-    url.searchParams.get("auth") ||
-    url.searchParams.get("apiKey");
-
-  // Extract token
+  // Extract token from headers only (reject URL query parameters to prevent log leakage)
   let token = "";
   if (authHeader && authHeader.toLowerCase().startsWith("bearer ")) {
     token = authHeader.substring(7).trim();
@@ -74,8 +67,6 @@ async function isAuthenticatedAdmin(request: NextRequest): Promise<boolean> {
     token = authHeader.trim();
   } else if (xAdminKey) {
     token = xAdminKey.trim();
-  } else if (tokenParam) {
-    token = tokenParam.trim();
   }
 
   // 0. Verify signed session token if provided or in cookies
@@ -90,23 +81,22 @@ async function isAuthenticatedAdmin(request: NextRequest): Promise<boolean> {
     return true;
   }
 
-  // 1. Check custom environment secret
-  if (process.env.ADMIN_SECRET && token === process.env.ADMIN_SECRET) {
+  // 1. Check custom environment secrets (only if non-empty string)
+  if (process.env.ADMIN_SECRET && token === process.env.ADMIN_SECRET.trim()) {
     return true;
   }
-  if (process.env.ADMIN_TOKEN && token === process.env.ADMIN_TOKEN) {
+  if (process.env.ADMIN_TOKEN && token === process.env.ADMIN_TOKEN.trim()) {
     return true;
   }
 
-  // 2. Standard SSF admin and developer credentials
+  // 2. Standard SSF admin and developer credentials from environment variables
   const validStandardTokens = [
-    process.env.ADMIN_PASSWORD,
-    process.env.ADMIN_TOKEN,
-    process.env.DEV_PASSCODE,
-    "ssf2026",
-    "ssf_admin_secret_token",
+    process.env.ADMIN_PASSWORD?.trim(),
+    process.env.ADMIN_TOKEN?.trim(),
+    process.env.DEV_PASSCODE?.trim(),
   ].filter(Boolean) as string[];
-  if (validStandardTokens.includes(token)) {
+
+  if (token && validStandardTokens.length > 0 && validStandardTokens.includes(token)) {
     return true;
   }
 

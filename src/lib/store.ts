@@ -34,7 +34,6 @@ export const defaultStaffAccounts: StaffAccount[] = [
     id: "DEV",
     name: "तकनीकी सेवादार (DEV)",
     phone: "9117135379",
-    password: "dev@123",
     roleTitle: "मुख्य तकनीकी सेवादार (Technical Developer)",
     status: "active",
     createdDate: "01/10/2026",
@@ -50,7 +49,6 @@ export const defaultStaffAccounts: StaffAccount[] = [
     id: "STAFF-101",
     name: "आकाश जयदेव गिरि / अमित कुमार",
     phone: "9117135379",
-    password: "staff@123",
     roleTitle: "क्षेत्रीय सेवादार",
     status: "active",
     createdDate: "01/10/2026",
@@ -160,16 +158,15 @@ export async function authenticateUser(
   const upperId = id.toUpperCase();
 
   const { adminId, adminPassword } = getAdminCredentials();
+  const devPasscode = (process.env.DEV_PASSCODE || "").trim();
+  const staffEnvPassword = (process.env.STAFF_PASSWORD || "").trim();
 
-  // 1. Check Admin Account
+  // 1. Check Admin Account (strictly requires configured environment password)
   const isAdminId =
     upperId === adminId.toUpperCase() ||
     upperId === "ADMIN" ||
     id === "9117135379";
-  const isAdminPass =
-    password === adminPassword ||
-    password === "ssf2026" ||
-    password === "admin@123";
+  const isAdminPass = Boolean(adminPassword && password === adminPassword);
 
   if (isAdminId && isAdminPass) {
     return {
@@ -186,12 +183,12 @@ export async function authenticateUser(
   const store = await getStoreData();
   const staffList = store.staff || defaultStaffAccounts;
 
-  // Special developer shortcut check
-  const isDevMatch =
-    upperId === "DEV" &&
-    (password === "dev@123" ||
-      password === adminPassword ||
-      password === "ssf2026");
+  // Developer authentication strictly requires DEV_PASSCODE or ADMIN_PASSWORD from env
+  const isDevPass = Boolean(
+    (devPasscode && password === devPasscode) ||
+    (adminPassword && password === adminPassword)
+  );
+  const isDevMatch = upperId === "DEV" && isDevPass;
 
   const staff = staffList.find((s) => s.id.trim().toUpperCase() === upperId);
 
@@ -200,7 +197,6 @@ export async function authenticateUser(
       id: "DEV",
       name: "तकनीकी सेवादार (DEV)",
       phone: "9117135379",
-      password: "dev@123",
       roleTitle: "मुख्य तकनीकी सेवादार (Technical Developer)",
       status: "active" as const,
       createdDate: "01/10/2026",
@@ -220,7 +216,13 @@ export async function authenticateUser(
       };
     }
 
-    if (targetStaff.password?.trim() === password || isDevMatch) {
+    const matchesStaffPassword = Boolean(
+      (targetStaff.password && targetStaff.password.trim() === password) ||
+      (staffEnvPassword && password === staffEnvPassword) ||
+      isDevMatch
+    );
+
+    if (matchesStaffPassword) {
       return {
         success: true,
         user: {
