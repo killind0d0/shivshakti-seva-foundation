@@ -2,35 +2,42 @@
 
 import React from "react";
 import { HandHeart, PackageCheck, Truck, Sparkles, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function HowContributionsHelp() {
+  const { isEn, t } = useLanguage();
+
   const steps = [
     {
-      step: "चरण १",
-      title: "आपका सहयोग",
-      description:
-        "जब आप संस्था को दान या सामग्री रूप में सहयोग प्रदान करते हैं, तो वह पारदर्शी रूप से सेवा कोष में दर्ज होता है।",
+      step: isEn ? "Step 1" : "चरण १",
+      title: isEn ? "Your Contribution" : "आपका सहयोग",
+      description: isEn
+        ? "When you contribute funds or resources, every rupee is transparently registered in our service ledger."
+        : "जब आप संस्था को दान या सामग्री रूप में सहयोग प्रदान करते हैं, तो वह पारदर्शी रूप से सेवा कोष में दर्ज होता है।",
       icon: <HandHeart className="w-8 h-8 text-brand-maroon-800" />,
     },
     {
-      step: "चरण २",
-      title: "राहत सामग्री",
-      description:
-        "स्थानीय आवश्यकताओं के आधार पर थोक में उच्च गुणवत्ता वाला सूखा राशन, दवाइयाँ व तिरपाल तैयार किए जाते हैं।",
+      step: isEn ? "Step 2" : "चरण २",
+      title: isEn ? "Relief Supplies" : "राहत सामग्री",
+      description: isEn
+        ? "Essential items including nutritious dry rations, medicines, and tarpaulins are procured in bulk at genuine cost."
+        : "स्थानीय आवश्यकताओं के आधार पर थोक में उच्च गुणवत्ता वाला सूखा राशन, दवाइयाँ व तिरपाल तैयार किए जाते हैं।",
       icon: <PackageCheck className="w-8 h-8 text-brand-saffron-600" />,
     },
     {
-      step: "चरण ३",
-      title: "जरूरतमंद परिवार",
-      description:
-        "बिना किसी बिचौलिए के हमारे समर्पित स्वयंसेवक नावों, वाहनों व पैदल चलकर सीधे परिवारों तक सहायता पहुँचाते हैं।",
+      step: isEn ? "Step 3" : "चरण ३",
+      title: isEn ? "Needy Families" : "जरूरतमंद परिवार",
+      description: isEn
+        ? "Without middlemen, our dedicated volunteers travel on foot, by boat, or vehicle directly to affected homes."
+        : "बिना किसी बिचौलिए के हमारे समर्पित स्वयंसेवक नावों, वाहनों व पैदल चलकर सीधे परिवारों तक सहायता पहुँचाते हैं।",
       icon: <Truck className="w-8 h-8 text-brand-maroon-800" />,
     },
     {
-      step: "चरण ४",
-      title: "बेहतर जीवन",
-      description:
-        "आपातकालीन संकट टलने के बाद शिक्षा, स्वास्थ्य और आजीविका संबल से वे पुनः स्वावलंबी बनते हैं।",
+      step: isEn ? "Step 4" : "चरण ४",
+      title: isEn ? "Dignified Life" : "बेहतर जीवन",
+      description: isEn
+        ? "Post-emergency rehabilitation in education, health, and livelihood helps families regain self-reliance."
+        : "आपातकालीन संकट टलने के बाद शिक्षा, स्वास्थ्य और आजीविका संबल से वे पुनः स्वावलंबी बनते हैं।",
       icon: <Sparkles className="w-8 h-8 text-brand-gold-600" />,
     },
   ];
@@ -38,19 +45,22 @@ export default function HowContributionsHelp() {
   return (
     <section
       className="py-16 sm:py-24 bg-brand-cream-50 border-b border-brand-maroon-100 relative"
-      aria-label="सहयोग से राहत तक की प्रक्रिया"
+      aria-label={t("सहयोग से राहत तक की प्रक्रिया", "Journey from Donation to Relief")}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-cream-200 text-brand-maroon-900 text-xs font-bold uppercase tracking-wider">
-            <span>पारदर्शी कार्यप्रणाली</span>
+            <span>{t("पारदर्शी कार्यप्रणाली", "Transparent Methodology")}</span>
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-maroon-950 tracking-tight">
-            सहयोग से सम्मान तक की यात्रा
+            {t("सहयोग से सम्मान तक की यात्रा", "Journey from Contribution to Dignity")}
           </h2>
           <p className="text-base sm:text-lg text-brand-charcoal-600 leading-relaxed font-normal">
-            "आपका सहयोग → राहत सामग्री → जरूरतमंद परिवार → बेहतर जीवन"
+            {t(
+              '"आपका सहयोग → राहत सामग्री → जरूरतमंद परिवार → बेहतर जीवन"',
+              '"Your Support → Relief Supplies → Underprivileged Families → Dignified Life"'
+            )}
           </p>
           <div className="w-16 h-1 bg-brand-gold-500 mx-auto rounded-full mt-2" />
         </div>
@@ -91,8 +101,10 @@ export default function HowContributionsHelp() {
 
         {/* Bottom Assurance Note */}
         <div className="mt-12 text-center text-xs text-brand-charcoal-500 max-w-xl mx-auto bg-white/60 p-3 rounded-xl border border-brand-maroon-100">
-          प्रत्येक चरण की फोटो, लाभार्थी सूची एवं ऑडिट रिपोर्ट संस्था के
-          पारदर्शिता रजिस्टर में नियमित रूप से दर्ज की जाती है।
+          {t(
+            "प्रत्येक चरण की फोटो, लाभार्थी सूची एवं ऑडिट रिपोर्ट संस्था के पारदर्शिता रजिस्टर में नियमित रूप से दर्ज की जाती है।",
+            "Photographs, beneficiary lists, and distribution receipts of every relief activity are diligently archived for public transparency."
+          )}
         </div>
       </div>
     </section>

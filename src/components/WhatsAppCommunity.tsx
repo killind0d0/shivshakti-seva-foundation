@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import QRCode from "qrcode";
 import {
   MessageCircle,
@@ -15,6 +14,7 @@ import {
   HeartHandshake,
   Phone,
 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface WhatsAppCommunityProps {
   whatsappLink?: string;
@@ -25,6 +25,7 @@ export default function WhatsAppCommunity({
   whatsappLink,
   phoneNumber = "+919117135379",
 }: WhatsAppCommunityProps) {
+  const { isEn, t } = useLanguage();
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [copied, setCopied] = useState(false);
 
@@ -32,12 +33,16 @@ export default function WhatsAppCommunity({
 
   // Official direct WhatsApp community join link with pre-filled volunteer community message
   const officialCommunityLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-    "नमस्ते शिवशक्ति सेवा फाउंडेशन, मैं आपके सेवादार एवं स्वयंसेवक कम्युनिटी ग्रुप से जुड़ना चाहता/चाहती हूँ।"
+    isEn
+      ? "Hello Shivshakti Seva Foundation, I would like to join your volunteer and community network."
+      : "नमस्ते शिवशक्ति सेवा फाउंडेशन, मैं आपके सेवादार एवं स्वयंसेवक कम्युनिटी ग्रुप से जुड़ना चाहता/चाहती हूँ।"
   )}`;
 
   // Direct chat link for general enquiries
   const directChatLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-    "नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे संस्था के सेवा कार्यों एवं सहायता के संबंध में सीधी जानकारी चाहिए।"
+    isEn
+      ? "Hello Shivshakti Seva Foundation, I would like to enquire about your welfare services and programs."
+      : "नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे संस्था के सेवा कार्यों एवं सहायता के संबंध में सीधी जानकारी चाहिए।"
   )}`;
 
   // Use explicit custom link if provided and not the legacy dummy link
@@ -70,7 +75,7 @@ export default function WhatsAppCommunity({
     <section
       id="whatsapp-community"
       className="py-16 sm:py-24 bg-gradient-to-b from-brand-cream-100 via-white to-brand-cream-50 border-b border-brand-maroon-100 relative overflow-hidden"
-      aria-label="आधिकारिक व्हाट्सएप कम्युनिटी"
+      aria-label={t("आधिकारिक व्हाट्सएप कम्युनिटी", "Official WhatsApp Community")}
     >
       {/* Background Decorative Accents */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
@@ -81,14 +86,16 @@ export default function WhatsAppCommunity({
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold uppercase tracking-wider">
             <MessageCircle className="w-3.5 h-3.5 text-emerald-700" />
-            <span>सीधा संवाद एवं सेवा परिवार</span>
+            <span>{t("सीधा संवाद एवं सेवा परिवार", "Direct Dialogue & Seva Family")}</span>
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-maroon-950 tracking-tight">
-            हमारे आधिकारिक व्हाट्सएप ग्रुप से जुड़ें
+            {t("हमारे आधिकारिक व्हाट्सएप ग्रुप से जुड़ें", "Join Our Official WhatsApp Community")}
           </h2>
           <p className="text-base sm:text-lg text-brand-charcoal-600 font-normal leading-relaxed">
-            क्यूआर कोड स्कैन करें या नीचे दिए बटन पर क्लिक कर सीधे शिवशक्ति सेवा
-            फाउंडेशन के सेवा परिवार का हिस्सा बनें।
+            {t(
+              "क्यूआर कोड स्कैन करें या नीचे दिए बटन पर क्लिक कर सीधे शिवशक्ति सेवा फाउंडेशन के सेवा परिवार का हिस्सा बनें।",
+              "Scan the QR code or click the button below to directly join the Shivshakti Seva Foundation family."
+            )}
           </p>
           <div className="w-16 h-1 bg-brand-gold-500 mx-auto rounded-full mt-2" />
         </div>
@@ -99,7 +106,7 @@ export default function WhatsAppCommunity({
           <div className="lg:col-span-5 bg-gradient-to-br from-brand-maroon-950 via-brand-maroon-900 to-brand-maroon-950 p-8 text-white flex flex-col items-center justify-center text-center border-b lg:border-b-0 lg:border-r border-brand-maroon-800">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-gold-300 text-xs font-semibold mb-4 border border-white/10">
               <QrCode className="w-3.5 h-3.5" />
-              <span>मोबाइल कैमरे से स्कैन करें</span>
+              <span>{t("मोबाइल कैमरे से स्कैन करें", "Scan with Mobile Camera")}</span>
             </div>
 
             {/* QR Box */}
@@ -108,24 +115,26 @@ export default function WhatsAppCommunity({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={qrDataUrl}
-                  alt="शिवशक्ति सेवा फाउंडेशन व्हाट्सएप ग्रुप क्यूआर कोड"
+                  alt={t("शिवशक्ति सेवा फाउंडेशन व्हाट्सएप ग्रुप क्यूआर कोड", "Shivshakti Seva Foundation WhatsApp QR Code")}
                   className="w-full h-auto rounded-lg block"
                   width={220}
                   height={220}
                 />
               ) : (
                 <div className="w-[200px] h-[200px] flex items-center justify-center text-brand-charcoal-400 text-xs">
-                  क्यूआर कोड लोड हो रहा है...
+                  {t("क्यूआर कोड लोड हो रहा है...", "Loading QR code...")}
                 </div>
               )}
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-600 text-white text-[11px] font-bold shadow whitespace-nowrap">
-                स्कैन करें व जुड़ें
+                {t("स्कैन करें व जुड़ें", "Scan & Join")}
               </div>
             </div>
 
             <p className="mt-6 text-xs text-brand-cream-200 leading-relaxed max-w-xs">
-              व्हाट्सएप खोलें &gt; कैमरा या क्यूआर स्कैनर चुनें &gt; इस कोड को स्कैन
-              करें।
+              {t(
+                "व्हाट्सएप खोलें > कैमरा या क्यूआर स्कैनर चुनें > इस कोड को स्कैन करें।",
+                "Open WhatsApp > Select Camera or QR Scanner > Scan this code."
+              )}
             </p>
 
             {/* Copy Link Button */}
@@ -133,17 +142,17 @@ export default function WhatsAppCommunity({
               <button
                 onClick={handleCopy}
                 className="w-full py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-brand-cream-100 flex items-center justify-center gap-2 transition"
-                aria-label="ग्रुप इनवाइट लिंक कॉपी करें"
+                aria-label={t("ग्रुप इनवाइट लिंक कॉपी करें", "Copy invite link")}
               >
                 {copied ? (
                   <>
                     <Check className="w-4 h-4 text-emerald-400" />
-                    <span className="text-emerald-300">लिंक कॉपी हो गया!</span>
+                    <span className="text-emerald-300">{t("लिंक कॉपी हो गया!", "Link Copied!")}</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-4 h-4 text-brand-gold-400" />
-                    <span>इनवाइट लिंक कॉपी करें</span>
+                    <span>{t("इनवाइट लिंक कॉपी करें", "Copy Invite Link")}</span>
                   </>
                 )}
               </button>
@@ -159,18 +168,19 @@ export default function WhatsAppCommunity({
                 </div>
                 <div>
                   <h3 className="font-heading text-xl sm:text-2xl font-bold text-brand-maroon-950">
-                    शिवशक्ति सेवा परिवार समुदाय
+                    {t("शिवशक्ति सेवा परिवार समुदाय", "Shivshakti Seva Parivar Community")}
                   </h3>
                   <p className="text-xs sm:text-sm text-emerald-700 font-bold">
-                    आधिकारिक व्हाट्सएप कम्युनिटी • २४×७ लाइव
+                    {t("आधिकारिक व्हाट्सएप कम्युनिटी • २४×७ लाइव", "Official WhatsApp Community • 24×7 Live")}
                   </p>
                 </div>
               </div>
 
               <p className="text-sm text-brand-charcoal-700 leading-relaxed">
-                इस ग्रुप का उद्देश्य सेवा कार्यों में पारदर्शिता, जरूरतमंदों की
-                त्वरित सहायता और समाज कल्याण हेतु सेवाभावी लोगों को एक मंच पर जोड़ना
-                है।
+                {t(
+                  "इस ग्रुप का उद्देश्य सेवा कार्यों में पारदर्शिता, जरूरतमंदों की त्वरित सहायता और समाज कल्याण हेतु सेवाभावी लोगों को एक मंच पर जोड़ना है।",
+                  "The objective of this community is ensuring transparent welfare services, immediate support to families in distress, and uniting compassionate hearts."
+                )}
               </p>
 
               {/* 4 Feature Points */}
@@ -179,10 +189,10 @@ export default function WhatsAppCommunity({
                   <Bell className="w-4 h-4 text-brand-saffron-600 flex-shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <strong className="block text-brand-maroon-950 font-bold">
-                      दैनिक सेवा अपडेट
+                      {t("दैनिक सेवा अपडेट", "Daily Field Updates")}
                     </strong>
                     <span className="text-brand-charcoal-600">
-                      राहत, अन्न-वस्त्र व चिकित्सा शिविर की सूचना।
+                      {t("राहत, अन्न-वस्त्र व चिकित्सा शिविर की सूचना।", "Live updates on relief work, meals, and health camps.")}
                     </span>
                   </div>
                 </div>
@@ -191,10 +201,10 @@ export default function WhatsAppCommunity({
                   <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <strong className="block text-brand-maroon-950 font-bold">
-                      २४×७ आपातकालीन सहायता
+                      {t("२४×७ आपातकालीन सहायता", "24×7 Emergency Support")}
                     </strong>
                     <span className="text-brand-charcoal-600">
-                      संकट के समय तुरंत टीम से संपर्क व समन्वय।
+                      {t("संकट के समय तुरंत टीम से संपर्क व समन्वय।", "Immediate contact and coordination during times of distress.")}
                     </span>
                   </div>
                 </div>
@@ -203,10 +213,10 @@ export default function WhatsAppCommunity({
                   <HeartHandshake className="w-4 h-4 text-brand-gold-600 flex-shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <strong className="block text-brand-maroon-950 font-bold">
-                      महिला व युवा कार्यक्रम
+                      {t("सामुदायिक व जनकल्याण", "Welfare & Social Work")}
                     </strong>
                     <span className="text-brand-charcoal-600">
-                      प्रतियोगिताओं व स्वरोजगार आदेशों की घोषणा।
+                      {t("शिक्षा, स्वास्थ्य एवं आत्मनिर्भरता कार्यक्रम।", "Education, healthcare, and self-reliance initiatives.")}
                     </span>
                   </div>
                 </div>
@@ -215,10 +225,10 @@ export default function WhatsAppCommunity({
                   <Users className="w-4 h-4 text-brand-maroon-700 flex-shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <strong className="block text-brand-maroon-950 font-bold">
-                      स्वयंसेवक सहभागिता
+                      {t("स्वयंसेवक सहभागिता", "Volunteer Opportunities")}
                     </strong>
                     <span className="text-brand-charcoal-600">
-                      अपने क्षेत्र में जरूरतमंदों की सेवा का अवसर।
+                      {t("अपने क्षेत्र में जरूरतमंदों की सेवा का अवसर।", "Opportunity to serve the needy and underprivileged.")}
                     </span>
                   </div>
                 </div>
@@ -235,7 +245,7 @@ export default function WhatsAppCommunity({
                   className="flex-1 py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-center"
                 >
                   <MessageCircle className="w-5 h-5 fill-current" />
-                  <span>सीधे व्हाट्सएप ग्रुप से जुड़ें</span>
+                  <span>{t("सीधे व्हाट्सएप ग्रुप से जुड़ें", "Join WhatsApp Community")}</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
 
@@ -246,13 +256,15 @@ export default function WhatsAppCommunity({
                   className="py-3 px-5 rounded-xl bg-brand-maroon-900 hover:bg-brand-maroon-950 text-white font-bold text-sm shadow transition flex items-center justify-center gap-2 text-center"
                 >
                   <Phone className="w-4 h-4 text-brand-gold-400" />
-                  <span>सीधे चैट करें (<span className="font-sans font-bold">+91 91171 35379</span>)</span>
+                  <span>{t("सीधे चैट करें", "Chat Directly")} (<span className="font-sans font-bold">+91 91171 35379</span>)</span>
                 </a>
               </div>
 
               <p className="text-[11px] text-center sm:text-left text-brand-charcoal-500">
-                🔒 आपका नंबर सुरक्षित रहेगा। ग्रुप केवल जनकल्याणकारी एवं सेवा
-                सूचनाओं के लिए है।
+                {t(
+                  "🔒 आपका नंबर सुरक्षित रहेगा। ग्रुप केवल जनकल्याणकारी एवं सेवा सूचनाओं के लिए है।",
+                  "🔒 Your phone number remains protected. The group is dedicated solely to humanitarian service updates."
+                )}
               </p>
             </div>
           </div>

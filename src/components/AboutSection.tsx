@@ -16,29 +16,40 @@ import TraditionalDivider from "./TraditionalDivider";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
 import ModalPortal from "./ModalPortal";
 
+import { useLanguage } from "@/context/LanguageContext";
+
 export default function AboutSection() {
   const [modalOpen, setModalOpen] = useState(false);
+  const { isEn } = useLanguage();
 
   const pillars = [
     {
       icon: <Heart className="w-5 h-5 text-brand-maroon-700" />,
-      title: "मानव सेवा",
-      description: "प्रत्येक जीव में दिव्यता का अनुभव कर निष्काम भाव से निरंतर सेवा।",
+      title: isEn ? "Humanity Service" : "मानव सेवा",
+      description: isEn
+        ? "Seeing the divine in every living being and serving continuously with selfless devotion."
+        : "प्रत्येक जीव में दिव्यता का अनुभव कर निष्काम भाव से निरंतर सेवा।",
     },
     {
       icon: <Users2 className="w-5 h-5 text-brand-saffron-600" />,
-      title: "सामाजिक समानता",
-      description: "जाति, धर्म या वर्ग से परे हर असहाय व्यक्ति को सम्मान व सहायता।",
+      title: isEn ? "Social Equality" : "सामाजिक समानता",
+      description: isEn
+        ? "Dignity, respect, and assistance for every destitute individual beyond caste or religion."
+        : "जाति, धर्म या वर्ग से परे हर असहाय व्यक्ति को सम्मान व सहायता।",
     },
     {
       icon: <ShieldAlert className="w-5 h-5 text-brand-maroon-700" />,
-      title: "त्वरित आपदा राहत",
-      description: "बाढ़ व संकट के समय बिना विलंब जमीनी स्तर पर राहत सामग्री पहुँचाना।",
+      title: isEn ? "Rapid Disaster Relief" : "त्वरित आपदा राहत",
+      description: isEn
+        ? "Immediate on-ground deployment of boats, tarpaulins, and relief supplies during floods."
+        : "बाढ़ व संकट के समय बिना विलंब जमीनी स्तर पर राहत सामग्री पहुँचाना।",
     },
     {
       icon: <GraduationCap className="w-5 h-5 text-brand-saffron-600" />,
-      title: "समुदाय का विकास",
-      description: "शिक्षा, कौशल एवं आजीविका के माध्यम से दीर्घकालिक स्वावलंबन।",
+      title: isEn ? "Community Upliftment" : "समुदाय का विकास",
+      description: isEn
+        ? "Sustainable self-reliance through education, vocational skills, and livelihoods."
+        : "शिक्षा, कौशल एवं आजीविका के माध्यम से दीर्घकालिक स्वावलंबन।",
     },
   ];
 
@@ -46,7 +57,7 @@ export default function AboutSection() {
     <section
       id="hamare-bare-mein"
       className="py-16 sm:py-24 bg-brand-cream-100/70 bg-pattern-jali border-b border-brand-maroon-100 relative"
-      aria-label="संस्था परिचय"
+      aria-label={isEn ? "About the foundation" : "संस्था परिचय"}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -56,7 +67,7 @@ export default function AboutSection() {
               <div className="relative h-80 sm:h-96 w-full">
                 <Image
                   src="/images/gallery/hero_community.jpg"
-                  alt="शिवशक्ति सेवा फाउंडेशन के सेवा कार्य"
+                  alt={isEn ? "Welfare service of Shivshakti Seva Foundation" : "शिवशक्ति सेवा फाउंडेशन के सेवा कार्य"}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 40vw"
@@ -65,31 +76,33 @@ export default function AboutSection() {
                 <div className="absolute bottom-3 left-3 right-3 text-white p-3.5 rounded-xl bg-brand-maroon-950/85 backdrop-blur-md border border-brand-gold-400/40 shadow-xl space-y-1">
                   <div className="flex items-center gap-1.5 text-[11px] font-bold text-brand-gold-400 uppercase tracking-wider">
                     <Sparkles className="w-3.5 h-3.5 text-brand-gold-300" />
-                    <span>शिवशक्ति सेवा फाउंडेशन का मूल सिद्धांत</span>
+                    <span>{isEn ? "Core Vedic Principle of the Foundation" : "शिवशक्ति सेवा फाउंडेशन का मूल सिद्धांत"}</span>
                   </div>
                   <p className="font-heading text-xs sm:text-sm font-bold text-brand-gold-200 leading-relaxed italic">
                     सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ।<br />
                     सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ।
                   </p>
                   <p className="text-[11px] text-brand-cream-200 pt-1 border-t border-brand-gold-400/20 leading-tight">
-                    <span className="text-brand-gold-300 font-bold">अर्थ: </span>
-                    सब सुखी रहें, रोगमुक्त रहें, सबका मंगल हो और कोई दुखी न हो।
+                    <span className="text-brand-gold-300 font-bold">{isEn ? "Meaning: " : "अर्थ: "}</span>
+                    {isEn
+                      ? "May all beings be happy, healthy, and free from disease, may all behold good, and may none suffer."
+                      : "सब सुखी रहें, रोगमुक्त रहें, सबका मंगल हो और कोई दुखी न हो।"}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Subtle credential badge */}
+            {/* Credential badge */}
             <div className="p-4 rounded-xl bg-white border border-brand-maroon-100 shadow-sm flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-brand-cream-200 flex items-center justify-center flex-shrink-0">
                 <Sparkles className="w-6 h-6 text-brand-gold-600" />
               </div>
               <div>
                 <h4 className="font-bold text-sm text-brand-maroon-900">
-                  आध्यात्मिक प्रेरणा एवं सामाजिक उत्तरदायित्व
+                  {isEn ? "Spiritual Inspiration & Social Responsibility" : "आध्यात्मिक प्रेरणा एवं सामाजिक उत्तरदायित्व"}
                 </h4>
                 <p className="text-xs text-brand-charcoal-600">
-                  प्राचीन भारतीय सेवा परंपरा के आधार पर आधुनिक समाज कल्याण
+                  {isEn ? "Modern community welfare rooted in ancient Indian seva tradition" : "प्राचीन भारतीय सेवा परंपरा के आधार पर आधुनिक समाज कल्याण"}
                 </p>
               </div>
             </div>
@@ -99,13 +112,13 @@ export default function AboutSection() {
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-maroon-100 text-brand-maroon-800 text-xs font-bold uppercase tracking-wider">
-                <span>संस्था का परिचय एवं उद्देश्य</span>
+                <span>{isEn ? "Foundation Profile & Objectives" : "संस्था का परिचय एवं उद्देश्य"}</span>
               </div>
               <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-brand-maroon-950 tracking-tight">
-                हमारे बारे में
+                {isEn ? "About Us" : "हमारे बारे में"}
               </h2>
               <p className="text-lg font-semibold text-brand-saffron-600">
-                करुणा, सेवा और विश्वास की अटूट परंपरा
+                {isEn ? "An Unbroken Tradition of Compassion, Service & Faith" : "करुणा, सेवा और विश्वास की अटूट परंपरा"}
               </p>
               <div className="flex justify-start pt-1">
                 <TraditionalDivider color="gold" className="my-1 !justify-start" variant="lotus" />
@@ -113,18 +126,16 @@ export default function AboutSection() {
             </div>
 
             <p className="text-base text-brand-charcoal-700 leading-relaxed">
-              <strong>शिवशक्ति सेवा फाउंडेशन</strong> एक गैर-सरकारी सामाजिक
-              कल्याण संगठन है, जो समाज के सबसे वंचित, निर्बल और प्राकृतिक आपदाओं
-              से प्रभावित लोगों के जीवन में सम्मान, राहत और आशा का संचार करने
-              के लिए समर्पित है।
+              <strong>{isEn ? "Shivshakti Seva Foundation" : "शिवशक्ति सेवा फाउंडेशन"}</strong>{" "}
+              {isEn
+                ? "is a dedicated non-governmental charitable trust based in GayaJi, Bihar, committed to bringing dignity, emergency relief, and hope to the most destitute, vulnerable, and disaster-affected families of our society."
+                : "एक गैर-सरकारी सामाजिक कल्याण संगठन है, जो समाज के सबसे वंचित, निर्बल और प्राकृतिक आपदाओं से प्रभावित लोगों के जीवन में सम्मान, राहत और आशा का संचार करने के लिए समर्पित है।"}
             </p>
 
             <p className="text-base text-brand-charcoal-700 leading-relaxed">
-              हमारा विश्वास है कि सच्चा धर्म और सच्ची आध्यात्मिकता वही है जो दुखी
-              और पीड़ित मानवों के आंसू पोंछे। बाढ़ राहत से लेकर दैनिक भोजन
-              वितरण तक, अनाथ व निर्धन बच्चों की पढ़ाई से लेकर एकाकी बुजुर्गों
-              की सेवा तक—हमारा हर प्रयास पूर्ण पारदर्शिता और आदर के साथ संचालित
-              होता है।
+              {isEn
+                ? "We believe that true spirituality lies in wiping away the tears of suffering humanity. From flood rescue operations to daily nutritious meals, from schooling for underprivileged children to caring for lonely senior citizens—every endeavor is operated with complete transparency, selfless devotion, and dignity."
+                : "हमारा विश्वास है कि सच्चा धर्म और सच्ची आध्यात्मिकता वही है जो दुखी और पीड़ित मानवों के आंसू पोंछे। बाढ़ राहत से लेकर दैनिक भोजन वितरण तक, अनाथ व निर्धन बच्चों की पढ़ाई से लेकर एकाकी बुजुर्गों की सेवा तक—हमारा हर प्रयास पूर्ण पारदर्शिता और आदर के साथ संचालित होता है।"}
             </p>
 
             {/* 4 Pillars Grid */}
@@ -149,14 +160,14 @@ export default function AboutSection() {
               ))}
             </div>
 
-            {/* Action Button: और जानें */}
+            {/* Action Button: और जानें / Learn More */}
             <div className="pt-2">
               <button
                 onClick={() => setModalOpen(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-maroon-900 hover:bg-brand-maroon-800 text-white font-semibold text-sm transition shadow-md hover:shadow-lg active:scale-95 hover:-translate-y-0.5"
-                aria-label="संस्था के बारे में और विस्तार से जानें"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-maroon-900 hover:bg-brand-maroon-800 text-white font-semibold text-sm transition shadow-md hover:shadow-lg active:scale-95 hover:-translate-y-0.5 cursor-pointer"
+                aria-label={isEn ? "Learn more about the foundation" : "संस्था के बारे में और विस्तार से जानें"}
               >
-                <span>और जानें</span>
+                <span>{isEn ? "Learn More" : "और जानें"}</span>
                 <ArrowRight className="w-4 h-4 text-brand-gold-400" />
               </button>
             </div>

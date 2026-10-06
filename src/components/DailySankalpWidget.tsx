@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import { Sparkles, Flame, CheckCircle, Share2, Heart, Users } from "lucide-react";
 import TraditionalDivider from "./TraditionalDivider";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function DailySankalpWidget() {
+  const { isEn, t } = useLanguage();
   const [hasPledged, setHasPledged] = useState(false);
   const [pledgeCount, setPledgeCount] = useState(2487);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -47,7 +49,9 @@ export default function DailySankalpWidget() {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shivshaktisevafoundation.in";
   const shareText = encodeURIComponent(
-    `मैंने आज शिवशक्ति सेवा फाउंडेशन के साथ समाज में निःस्वार्थ सेवा का पावन संकल्प लिया। आप भी जुड़ें: ${siteUrl}`
+    isEn
+      ? `I took a sacred pledge of selfless service today with Shivshakti Seva Foundation. Join us: ${siteUrl}`
+      : `मैंने आज शिवशक्ति सेवा फाउंडेशन के साथ समाज में निःस्वार्थ सेवा का पावन संकल्प लिया। आप भी जुड़ें: ${siteUrl}`
   );
   const shareWhatsappUrl = `https://wa.me/?text=${shareText}`;
 
@@ -65,10 +69,9 @@ export default function DailySankalpWidget() {
     <section
       id="seva-sankalp"
       className="py-14 sm:py-20 bg-gradient-to-b from-brand-cream-100 via-amber-50/50 to-brand-cream-100 relative overflow-hidden"
-      aria-label="आज का सेवा संकल्प"
+      aria-label={t("आज का सेवा संकल्प", "Daily Service Pledge")}
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
         {/* Outer Card with Royal Frame & Traditional Corners */}
         <div className="bg-white rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl border-2 border-brand-gold-400/50 relative overflow-hidden">
           <TraditionalCornerFlourish size={38} color="#d4af37" className="opacity-80" />
@@ -81,15 +84,18 @@ export default function DailySankalpWidget() {
             {/* Header Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-saffron-100 border border-brand-saffron-300 text-brand-maroon-950 text-xs sm:text-sm font-bold shadow-xs mb-3">
               <Flame className="w-4 h-4 text-brand-saffron-600 animate-pulse" />
-              <span>आत्मिक संकल्प • आज की चेतना</span>
+              <span>{t("आत्मिक संकल्प • आज की चेतना", "Daily Pledge • Spiritual Awakening")}</span>
             </div>
 
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brand-maroon-950 tracking-tight leading-tight">
-              आज का पावन सेवा संकल्प
+              {t("आज का पावन सेवा संकल्प", "Daily Sacred Service Pledge")}
             </h2>
 
             <p className="mt-2 text-sm sm:text-base text-brand-charcoal-700 font-medium">
-              “प्रत्येक दिन किसी एक बेसहारा के चेहरे पर मुस्कान लाने का प्रण ही सबसे बड़ा पुण्य है।”
+              {t(
+                "“प्रत्येक दिन किसी एक बेसहारा के चेहरे पर मुस्कान लाने का प्रण ही सबसे बड़ा पुण्य है।”",
+                "“The pledge to bring a smile to at least one distressed soul every day is the highest virtue.”"
+              )}
             </p>
 
             <TraditionalDivider />
@@ -101,10 +107,12 @@ export default function DailySankalpWidget() {
               </div>
               <div className="text-left">
                 <div className="text-[11px] font-bold text-brand-maroon-800 uppercase tracking-wider">
-                  आपके सेवा संकल्प
+                  {t("आपके सेवा संकल्प", "Community Pledges")}
                 </div>
                 <div className="text-xl sm:text-2xl font-black font-heading text-brand-maroon-950">
-                  {formatHindiNumber(pledgeCount)} सेवा संकल्प
+                  {isEn
+                    ? `${pledgeCount.toLocaleString("en-IN")} Pledges Taken`
+                    : `${formatHindiNumber(pledgeCount)} सेवा संकल्प`}
                 </div>
               </div>
             </div>
@@ -117,7 +125,7 @@ export default function DailySankalpWidget() {
                   className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 sm:py-5 rounded-2xl text-base sm:text-lg font-extrabold text-white bg-gradient-to-r from-brand-maroon-900 via-brand-maroon-800 to-brand-saffron-700 hover:from-brand-maroon-850 hover:to-brand-saffron-600 shadow-xl hover:shadow-2xl transition-all duration-300 active:scale-95 border-2 border-brand-gold-400"
                 >
                   <Flame className="w-6 h-6 text-brand-gold-300 group-hover:scale-110 transition-transform animate-bounce" />
-                  <span>मैंने आज सेवा का संकल्प लिया</span>
+                  <span>{t("मैंने आज सेवा का संकल्प लिया", "I Take the Sacred Service Pledge Today")}</span>
                   <Sparkles className="w-5 h-5 text-brand-gold-300 group-hover:rotate-12 transition-transform" />
                 </button>
               ) : (
@@ -127,15 +135,23 @@ export default function DailySankalpWidget() {
                   </div>
 
                   <h3 className="font-heading text-xl sm:text-2xl font-bold text-brand-maroon-950">
-                    साधुवाद! आपका पावन संकल्प स्वीकार हुआ
+                    {t("साधुवाद! आपका पावन संकल्प स्वीकार हुआ", "Blessings! Your Sacred Pledge is Accepted")}
                   </h3>
 
                   <p className="mt-2 text-sm sm:text-base text-brand-charcoal-800 font-medium">
-                    आपका यह संकल्प समाज में करुणा और सहायता की एक नई ज्योति प्रज्वलित करेगा।
+                    {t(
+                      "आपका यह संकल्प समाज में करुणा और सहायता की एक नई ज्योति प्रज्वलित करेगा।",
+                      "Your noble pledge ignites a beacon of compassion and hope in our community."
+                    )}
                   </p>
 
                   <div className="mt-4 p-3 rounded-xl bg-white/80 border border-brand-gold-300 text-xs sm:text-sm font-semibold text-brand-maroon-900">
                     ॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः । सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ॥
+                    {isEn && (
+                      <span className="block mt-1 text-xs text-brand-charcoal-700 font-normal italic">
+                        (May all beings be happy, may all beings be free from suffering and disease.)
+                      </span>
+                    )}
                   </div>
 
                   {/* Share on WhatsApp */}
@@ -147,7 +163,7 @@ export default function DailySankalpWidget() {
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all hover:scale-105"
                     >
                       <Share2 className="w-4 h-4" />
-                      <span>व्हाट्सएप पर यह संकल्प साझा करें</span>
+                      <span>{t("व्हाट्सएप पर यह संकल्प साझा करें", "Share Pledge on WhatsApp")}</span>
                     </a>
                   </div>
                 </div>
@@ -158,16 +174,23 @@ export default function DailySankalpWidget() {
             {showCelebration && (
               <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1.5 rounded-full animate-bounce">
                 <Heart className="w-4 h-4 text-emerald-600 fill-current" />
-                <span>आपका नाम सेवा संकल्प रजिस्टर में सम्मिलित हुआ!</span>
+                <span>
+                  {t(
+                    "आपका नाम सेवा संकल्प रजिस्टर में सम्मिलित हुआ!",
+                    "Your pledge has been recorded in the Seva Ledger!"
+                  )}
+                </span>
               </div>
             )}
 
             <div className="mt-6 text-[11px] sm:text-xs text-brand-charcoal-500 font-medium">
-              * यह संकल्प मन, वचन या कर्म से किसी भी ज़रूरतमंद व्यक्ति, मूक प्राणी या समाज की सहायता का आत्मिक प्रण है।
+              {t(
+                "* यह संकल्प मन, वचन या कर्म से किसी भी ज़रूरतमंद व्यक्ति, मूक प्राणी या समाज की सहायता का आत्मिक प्रण है।",
+                "* This pledge is a heartfelt commitment to assist anyone in need, stray animals, or society with mind, speech, and deeds."
+              )}
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

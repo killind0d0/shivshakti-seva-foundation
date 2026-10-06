@@ -122,7 +122,7 @@ export default function ShareCard({
                   शिवशक्ति सेवा फाउंडेशन
                 </h4>
                 <p className="text-[11px] text-brand-cream-200">
-                  माँ मंगलागौरी, गया जी (बिहार)
+                  गयाजी, बिहार, भारत
                 </p>
 
                 <div className="my-4 py-3 px-4 rounded-xl bg-white/10 border border-brand-gold-400/40 backdrop-blur-xs">

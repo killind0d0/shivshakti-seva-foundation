@@ -92,7 +92,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <div className="bg-brand-cream-50 p-4 rounded-lg border border-brand-maroon-100 mt-4">
             <p><strong>शिवशक्ति सेवा फाउंडेशन</strong></p>
-            <p>पता: माँ मंगलागौरी, गया जी (बिहार) - ८२३००१</p>
+            <p>पता: गयाजी, बिहार, भारत</p>
             <p>ईमेल: <a href="mailto:akashgiri91171@gmail.com" className="text-brand-maroon-700 hover:underline">akashgiri91171@gmail.com</a></p>
             <p>फोन: <a href="tel:+919117135379" className="text-brand-maroon-700 hover:underline">+91 91171 35379</a></p>
             <p>वेबसाइट: <a href="https://shivshaktisevafoundation.in" className="text-brand-maroon-700 hover:underline">www.shivshaktisevafoundation.in</a></p>

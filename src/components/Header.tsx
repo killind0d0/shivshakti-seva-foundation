@@ -18,7 +18,11 @@ import {
   Camera,
   Flame,
   Heart,
+  Eye,
 } from "lucide-react";
+import { useVisitorCount } from "@/hooks/useVisitorCount";
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageSwitch from "./LanguageSwitch";
 
 interface HeaderProps {
   onOpenDonation: () => void;
@@ -36,8 +40,10 @@ export default function Header({
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [internalMobileMenuOpen, setInternalMobileMenuOpen] = useState(false);
+  const { isEn } = useLanguage();
   const mobileMenuOpen =
     isMobileMenuOpen !== undefined ? isMobileMenuOpen : internalMobileMenuOpen;
+  const visitorCount = useVisitorCount();
 
   useEffect(() => {
     setMounted(true);
@@ -98,7 +104,7 @@ export default function Header({
         "hamari-sevayein",
         "seva-sankalp",
         "field-work-spotlight",
-        "mahila-pratiyogita",
+        "vishesh-karyakram",
         "whatsapp-community",
         "hamare-abhiyan",
         "hamara-prabhav",
@@ -158,60 +164,60 @@ export default function Header({
 
   // Main primary links shown directly on desktop
   const primaryLinks = [
-    { label: "मुख्य पृष्ठ", href: "#mukhya-prishth" },
-    { label: "हमारे बारे में", href: "#hamare-bare-mein" },
-    { label: "हमारी सेवाएँ", href: "#hamari-sevayein" },
-    { label: "अभियान", href: "#hamare-abhiyan" },
-    { label: "प्रभाव", href: "#hamara-prabhav" },
-    { label: "संपर्क", href: "#sampark" },
+    { label: isEn ? "Home" : "मुख्य पृष्ठ", href: "#mukhya-prishth" },
+    { label: isEn ? "About Us" : "हमारे बारे में", href: "#hamare-bare-mein" },
+    { label: isEn ? "Our Services" : "हमारी सेवाएँ", href: "#hamari-sevayein" },
+    { label: isEn ? "Campaigns" : "अभियान", href: "#hamare-abhiyan" },
+    { label: isEn ? "Impact" : "प्रभाव", href: "#hamara-prabhav" },
+    { label: isEn ? "Contact" : "संपर्क", href: "#sampark" },
   ];
 
   // Secondary/special links grouped in refined dropdown
   const specialLinks = [
     {
-      label: "संस्थापक का संदेश",
-      sublabel: "निःस्वार्थ सेवा व सत्यं शिवं सुन्दरम्",
+      label: isEn ? "Founder's Message" : "संस्थापक का संदेश",
+      sublabel: isEn ? "Selfless service & humanitarian values" : "निःस्वार्थ सेवा व सत्यं शिवं सुन्दरम्",
       href: "#sansthapak-sandesh",
       icon: Heart,
-      badge: "पावन विचार",
+      badge: isEn ? "Message" : "पावन विचार",
     },
     {
-      label: "आज का सेवा संकल्प",
-      sublabel: "सामूहिक जन-संकल्प में सम्मिलित हों",
+      label: isEn ? "Daily Service Pledge" : "आज का सेवा संकल्प",
+      sublabel: isEn ? "Join the collective public pledge" : "सामूहिक जन-संकल्प में सम्मिलित हों",
       href: "#seva-sankalp",
       icon: Flame,
-      badge: "संकल्प लें",
+      badge: isEn ? "Pledge" : "संकल्प लें",
     },
     {
-      label: "धरातल स्पॉटलाइट",
-      sublabel: "वास्तविक कहानियाँ एवं छायाचित्र",
+      label: isEn ? "Field Spotlight" : "धरातल स्पॉटलाइट",
+      sublabel: isEn ? "Real grassroots photos & stories" : "वास्तविक कहानियाँ एवं छायाचित्र",
       href: "#field-work-spotlight",
       icon: Camera,
-      badge: "सजीव दृश्य",
+      badge: isEn ? "Live" : "सजीव दृश्य",
     },
     {
-      label: "महिला स्वावलंबन",
-      sublabel: "हुनर प्रतियोगिता एवं आजीविका संबल",
-      href: "#mahila-pratiyogita",
-      icon: Award,
-      badge: "प्रतियोगिता",
+      label: isEn ? "Special Program" : "विशेष कार्यक्रम",
+      sublabel: isEn ? "Pitripaksha Puja, Tarpan & Free Food" : "पितृपक्ष पूजन, जल तर्पण एवं भोजन वितरण",
+      href: "#vishesh-karyakram",
+      icon: Flame,
+      badge: isEn ? "Free" : "निःशुल्क",
     },
     {
-      label: "व्हाट्सएप ग्रुप",
-      sublabel: "आधिकारिक कम्युनिटी एवं त्वरित सूचनाएं",
+      label: isEn ? "WhatsApp Group" : "व्हाट्सएप ग्रुप",
+      sublabel: isEn ? "Official community & instant alerts" : "आधिकारिक कम्युनिटी एवं त्वरित सूचनाएं",
       href: "#whatsapp-community",
       icon: MessageCircle,
-      badge: "२४×७ लाइव",
+      badge: isEn ? "24x7" : "२४×७ लाइव",
     },
     {
-      label: "चित्र दीर्घा",
-      sublabel: "राहत एवं जनकल्याण कार्यों के दृश्य",
+      label: isEn ? "Photo Gallery" : "चित्र दीर्घा",
+      sublabel: isEn ? "Ground relief & welfare photos" : "राहत एवं जनकल्याण कार्यों के दृश्य",
       href: "#chitra-deergha",
       icon: ImageIcon,
     },
     {
-      label: "समाचार एवं गतिविधियाँ",
-      sublabel: "आगामी शिविर एवं ताज़ा समाचार",
+      label: isEn ? "News & Events" : "समाचार एवं गतिविधियाँ",
+      sublabel: isEn ? "Upcoming camps & latest news" : "आगामी शिविर एवं ताज़ा समाचार",
       href: "#samachar",
       icon: Newspaper,
     },
@@ -219,39 +225,39 @@ export default function Header({
 
   // Complete list for mobile drawer
   const allMobileLinks = [
-    { label: "मुख्य पृष्ठ", href: "#mukhya-prishth" },
-    { label: "हमारे बारे में", href: "#hamare-bare-mein" },
+    { label: isEn ? "Home" : "मुख्य पृष्ठ", href: "#mukhya-prishth" },
+    { label: isEn ? "About Us" : "हमारे बारे में", href: "#hamare-bare-mein" },
     {
-      label: "संस्थापक का संदेश",
+      label: isEn ? "Founder's Message" : "संस्थापक का संदेश",
       href: "#sansthapak-sandesh",
       highlight: true,
     },
-    { label: "हमारी सेवाएँ", href: "#hamari-sevayein" },
+    { label: isEn ? "Our Services" : "हमारी सेवाएँ", href: "#hamari-sevayein" },
     {
-      label: "आज का सेवा संकल्प",
+      label: isEn ? "Daily Service Pledge" : "आज का सेवा संकल्प",
       href: "#seva-sankalp",
       highlight: true,
     },
     {
-      label: "धरातल स्पॉटलाइट (फ़ोटो व कहानियाँ)",
+      label: isEn ? "Field Spotlight (Photos & Stories)" : "धरातल स्पॉटलाइट (फ़ोटो व कहानियाँ)",
       href: "#field-work-spotlight",
       highlight: true,
     },
     {
-      label: "महिला स्वावलंबन (प्रतियोगिता)",
-      href: "#mahila-pratiyogita",
+      label: isEn ? "Special Program (Pitripaksha)" : "विशेष कार्यक्रम (पितृपक्ष तर्पण)",
+      href: "#vishesh-karyakram",
       highlight: true,
     },
     {
-      label: "व्हाट्सएप ग्रुप (कम्युनिटी)",
+      label: isEn ? "WhatsApp Group (Community)" : "व्हाट्सएप ग्रुप (कम्युनिटी)",
       href: "#whatsapp-community",
       highlight: true,
     },
-    { label: "आपदा राहत अभियान", href: "#hamare-abhiyan" },
-    { label: "हमारा प्रभाव", href: "#hamara-prabhav" },
-    { label: "चित्र दीर्घा", href: "#chitra-deergha" },
-    { label: "समाचार एवं गतिविधियाँ", href: "#samachar" },
-    { label: "संपर्क करें", href: "#sampark" },
+    { label: isEn ? "Disaster Relief Mission" : "आपदा राहत अभियान", href: "#hamare-abhiyan" },
+    { label: isEn ? "Our Impact" : "हमारा प्रभाव", href: "#hamara-prabhav" },
+    { label: isEn ? "Photo Gallery" : "चित्र दीर्घा", href: "#chitra-deergha" },
+    { label: isEn ? "News & Events" : "समाचार एवं गतिविधियाँ", href: "#samachar" },
+    { label: isEn ? "Contact Us" : "संपर्क करें", href: "#sampark" },
   ];
 
   return (
@@ -289,10 +295,10 @@ export default function Header({
 
             <div className="flex flex-col min-w-0">
               <span className="font-heading text-[15px] xs:text-base sm:text-xl lg:text-2xl font-extrabold tracking-tight text-brand-maroon-950 leading-tight group-hover:text-brand-saffron-600 transition-colors whitespace-nowrap">
-                शिवशक्ति सेवा फाउंडेशन
+                {isEn ? "Shivshakti Seva Foundation" : "शिवशक्ति सेवा फाउंडेशन"}
               </span>
               <span className="text-[10px] sm:text-[11px] font-semibold text-brand-maroon-700 tracking-wider hidden sm:block">
-                मानव सेवा • करुणा • सामाजिक उत्थान
+                {isEn ? "Humanity Service • Compassion • Upliftment" : "मानव सेवा • करुणा • सामाजिक उत्थान"}
               </span>
             </div>
           </a>
@@ -347,7 +353,7 @@ export default function Header({
                     aria-haspopup="true"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-brand-saffron-600" />
-                    <span>विशेष पहल</span>
+                    <span>{isEn ? "Initiatives" : "विशेष पहल"}</span>
                     {isSpecialActive && (
                       <span className="w-1.5 h-1.5 rounded-full bg-brand-saffron-600 animate-pulse" />
                     )}
@@ -444,24 +450,37 @@ export default function Header({
 
           {/* 3. Right Action Buttons: Sleek & Compact */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+            {/* Live Website Visitor Counter Badge */}
+            <div
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full bg-brand-maroon-950 text-brand-gold-300 border border-brand-gold-500/40 text-[10px] sm:text-xs font-semibold shadow-xs select-none"
+              title={isEn ? "Live Website Visitors" : "वेबसाइट अवलोकन (Live Visitors)"}
+            >
+              <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-brand-gold-400" />
+              <span className="font-mono font-bold tracking-wider">{visitorCount.toLocaleString("en-IN")}+</span>
+              <span className="hidden md:inline text-[10px] text-brand-cream-300 font-sans">{isEn ? "Visitors" : "आगंतुक"}</span>
+            </div>
+
+            {/* English / Hindi Translation Switch */}
+            <LanguageSwitch variant="header" className="hidden sm:inline-flex" />
+
             {/* Quick Phone Call Button on Desktop */}
             <a
               href="tel:+919117135379"
               className="hidden 2xl:inline-flex items-center gap-1.5 text-xs font-bold text-brand-maroon-900 hover:text-brand-saffron-600 px-2 py-1 rounded-lg transition"
-              title="सीधे फोन करें"
+              title={isEn ? "Call directly" : "सीधे फोन करें"}
             >
               <Phone className="w-3.5 h-3.5 text-brand-saffron-600" />
               <span className="font-sans font-bold tracking-wide">91171 35379</span>
             </a>
 
-            {/* Primary CTA (सहयोग करें) — Hidden on mobile UI as sticky footer button is present */}
+            {/* Primary CTA (सहयोग करें / Donate) */}
             <button
               onClick={onOpenDonation}
               className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-brand-maroon-800 via-brand-maroon-700 to-brand-maroon-900 hover:from-brand-maroon-700 hover:to-brand-maroon-800 rounded-xl shadow-xs hover:shadow-md transition active:scale-95 border-b-2 border-brand-gold-500 whitespace-nowrap"
-              aria-label="संस्था को सहयोग प्रदान करें"
+              aria-label={isEn ? "Support the foundation" : "संस्था को सहयोग प्रदान करें"}
             >
               <HeartHandshake className="w-4 h-4 text-brand-gold-400" />
-              <span>सहयोग करें</span>
+              <span>{isEn ? "Donate" : "सहयोग करें"}</span>
             </button>
 
             {/* Mobile / Tablet Menu Hamburger Button */}
@@ -523,17 +542,17 @@ export default function Header({
                     />
                     <div>
                       <h2 className="font-heading text-base font-bold text-brand-maroon-950">
-                        शिवशक्ति सेवा फाउंडेशन
+                        {isEn ? "Shivshakti Seva Foundation" : "शिवशक्ति सेवा फाउंडेशन"}
                       </h2>
                       <p className="text-[10px] text-brand-charcoal-600 font-medium">
-                        मानव सेवा • करुणा • सामाजिक उत्थान
+                        {isEn ? "Humanity Service • Compassion • Upliftment" : "मानव सेवा • करुणा • सामाजिक उत्थान"}
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setMobileMenuOpen(false)}
                     className="p-2 rounded-xl text-brand-maroon-900 hover:bg-brand-cream-200 transition"
-                    aria-label="मेनू बंद करें"
+                    aria-label={isEn ? "Close menu" : "मेनू बंद करें"}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -569,18 +588,32 @@ export default function Header({
 
               {/* Bottom Actions in Drawer: Fully visible with tap-to-call clarity */}
               <div className="pt-4 border-t border-brand-maroon-100 space-y-3 mt-6">
+                {/* Mobile Language Switcher */}
+                <LanguageSwitch variant="mobile" />
+
+                {/* Mobile Visitor Count Indicator */}
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-brand-maroon-950 text-brand-gold-300 text-xs font-semibold">
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-brand-gold-400" />
+                    <span>{isEn ? "Website Visitors:" : "वेबसाइट अवलोकन (Visitors):"}</span>
+                  </div>
+                  <span className="font-mono font-bold tracking-wider bg-brand-maroon-900 px-2 py-0.5 rounded border border-brand-gold-500/40">
+                    {visitorCount.toLocaleString("en-IN")}+
+                  </span>
+                </div>
+
                 {/* Direct Tap to Call Banner for Mobile */}
                 <a
                   href="tel:+919117135379"
                   className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold flex flex-col items-center justify-center gap-0.5 border border-emerald-500/50 shadow-sm transition active:scale-98"
-                  title="टैप करते ही सीधा डायलर खुलेगा"
+                  title={isEn ? "Tap to call directly" : "टैप करते ही सीधा डायलर खुलेगा"}
                 >
                   <div className="flex items-center gap-2">
                     <Phone className="w-4 h-4 text-emerald-200 animate-pulse" />
                     <span className="text-sm font-sans font-extrabold tracking-wide">+91 91171 35379</span>
                   </div>
                   <span className="text-[10px] text-emerald-100 font-medium">
-                    (टैप करें — डायरेक्ट डायलर खुलेगा, नंबर लिखने की आवश्यकता नहीं)
+                    {isEn ? "(Tap to dial directly)" : "(टैप करें — डायरेक्ट डायलर खुलेगा, नंबर लिखने की आवश्यकता नहीं)"}
                   </span>
                 </a>
 
@@ -594,7 +627,7 @@ export default function Header({
                     }}
                     className="py-2.5 px-2 rounded-xl bg-brand-cream-100 hover:bg-brand-cream-200 text-brand-maroon-950 font-bold text-xs flex items-center justify-center gap-1.5 transition border border-brand-maroon-200"
                   >
-                    <span>सहायता मांगें</span>
+                    <span>{isEn ? "Request Aid" : "सहायता मांगें"}</span>
                   </button>
 
                   <button
@@ -606,7 +639,7 @@ export default function Header({
                     className="py-2.5 px-2 rounded-xl bg-gradient-to-r from-brand-maroon-900 to-brand-maroon-800 hover:from-brand-maroon-850 hover:to-brand-saffron-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition border-b-2 border-brand-gold-400"
                   >
                     <HeartHandshake className="w-4 h-4 text-brand-gold-300" />
-                    <span>सहयोग करें</span>
+                    <span>{isEn ? "Donate" : "सहयोग करें"}</span>
                   </button>
                 </div>
               </div>

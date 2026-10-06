@@ -190,7 +190,7 @@ export default function DevSetupBanner() {
             शिवशक्ति सेवा फाउंडेशन
           </h1>
           <p className="text-xs sm:text-sm text-brand-cream-200 font-medium">
-            माँ मंगलागौरी, गया जी (बिहार) • जनकल्याण एवं मानव सेवा संकल्प
+            गयाजी, बिहार, भारत • जनकल्याण एवं मानव सेवा संकल्प
           </p>
         </div>
 

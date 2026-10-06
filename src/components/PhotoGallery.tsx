@@ -7,25 +7,27 @@ import { GalleryPhoto } from "@/data/foundationData";
 import TraditionalDivider from "./TraditionalDivider";
 import RangoliCorner from "./RangoliCorner";
 import ModalPortal from "./ModalPortal";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface PhotoGalleryProps {
   photos: GalleryPhoto[];
 }
 
 export default function PhotoGallery({ photos = [] }: PhotoGalleryProps) {
+  const { isEn, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const categories = [
-    { id: "all", name: "सभी चित्र" },
-    { id: "relief", name: "राहत एवं बाढ़ सहायता" },
-    { id: "food", name: "भोजन वितरण" },
-    { id: "education", name: "शिक्षा एवं बच्चे" },
-    { id: "health", name: "स्वास्थ्य शिविर" },
-    { id: "elderly", name: "वृद्ध सहायता" },
-    { id: "women", name: "महिला कल्याण" },
-    { id: "volunteers", name: "स्वयंसेवक एवं समुदाय" },
+    { id: "all", name: t("सभी चित्र", "All Photos") },
+    { id: "relief", name: t("राहत एवं बाढ़ सहायता", "Disaster Relief") },
+    { id: "food", name: t("भोजन वितरण", "Food Distribution") },
+    { id: "education", name: t("शिक्षा एवं बच्चे", "Education & Children") },
+    { id: "health", name: t("स्वास्थ्य शिविर", "Medical Camps") },
+    { id: "elderly", name: t("वृद्ध सहायता", "Elderly Care") },
+    { id: "women", name: t("महिला कल्याण", "Women Empowerment") },
+    { id: "volunteers", name: t("स्वयंसेवक एवं समुदाय", "Volunteers & Community") },
   ];
 
   const safePhotos = photos || [];
@@ -72,7 +74,7 @@ export default function PhotoGallery({ photos = [] }: PhotoGalleryProps) {
     <section
       id="chitra-deergha"
       className="py-16 sm:py-24 bg-brand-cream-50 bg-pattern-mandala border-b border-brand-maroon-100 relative overflow-hidden"
-      aria-label="चित्र दीर्घा"
+      aria-label={t("चित्र दीर्घा", "Photo Gallery")}
     >
       {/* Background Indian Rangoli / Kolam Diagonal Motifs (Desktop Only, Zero Text Overlap) */}
       <RangoliCorner position="top-right" size={360} opacity={0.065} className="hidden lg:block" />
@@ -82,14 +84,16 @@ export default function PhotoGallery({ photos = [] }: PhotoGalleryProps) {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-cream-200 text-brand-maroon-900 text-xs font-bold uppercase tracking-wider">
-            <span>जमीनी सेवा की झलकियाँ</span>
+            <span>{t("जमीनी सेवा की झलकियाँ", "Glimpses of Grassroots Action")}</span>
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-maroon-950 tracking-tight">
-            चित्र दीर्घा
+            {t("चित्र दीर्घा", "Photo Gallery")}
           </h2>
           <p className="text-base sm:text-lg text-brand-charcoal-600 font-normal leading-relaxed">
-            प्रत्येक तस्वीर मानवीय संवेदना, निःस्वार्थ सेवा और उम्मीद के पुनः
-            जागृत होने की सजीव गवाह है।
+            {t(
+              "प्रत्येक तस्वीर मानवीय संवेदना, निःस्वार्थ सेवा और उम्मीद के पुनः जागृत होने की सजीव गवाह है।",
+              "Each photograph is living testimony to compassion, selfless service, and rekindled hope across our communities."
+            )}
           </p>
           <TraditionalDivider color="gold" variant="lotus" className="mt-2" />
         </div>
@@ -176,15 +180,15 @@ export default function PhotoGallery({ photos = [] }: PhotoGalleryProps) {
               <div className="p-3 sm:p-4 bg-brand-maroon-950 border-b border-brand-maroon-800/80 flex items-center justify-between z-30 shrink-0">
                 <div className="flex items-center gap-2">
                   <span className="text-xs sm:text-sm font-bold text-brand-gold-300">
-                    छायाचित्र दीर्घा • {activePhotoIndex + 1} / {filteredPhotos.length}
+                    {t("छायाचित्र दीर्घा", "Photo Gallery")} • {activePhotoIndex + 1} / {filteredPhotos.length}
                   </span>
                 </div>
                 <button
                   onClick={closeLightbox}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition border border-white/20 active:scale-95 cursor-pointer"
-                  aria-label="दीर्घा बंद करें"
+                  aria-label={t("दीर्घा बंद करें", "Close Gallery")}
                 >
-                  <span>बंद करें</span>
+                  <span>{t("बंद करें", "Close")}</span>
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -193,14 +197,14 @@ export default function PhotoGallery({ photos = [] }: PhotoGalleryProps) {
               <button
                 onClick={prevPhoto}
                 className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-brand-maroon-800 text-white transition shadow-md"
-                aria-label="पिछला चित्र"
+                aria-label={t("पिछला चित्र", "Previous photo")}
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={nextPhoto}
                 className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-brand-maroon-800 text-white transition shadow-md"
-                aria-label="अगला चित्र"
+                aria-label={t("अगला चित्र", "Next photo")}
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -235,7 +239,10 @@ export default function PhotoGallery({ photos = [] }: PhotoGalleryProps) {
                 </div>
 
                 <div className="text-xs text-brand-cream-400 text-right flex-shrink-0">
-                  चित्र {activePhotoIndex + 1} / {filteredPhotos.length}
+                  {t(
+                    `चित्र ${activePhotoIndex + 1} / ${filteredPhotos.length}`,
+                    `Photo ${activePhotoIndex + 1} of ${filteredPhotos.length}`
+                  )}
                 </div>
               </div>
             </div>

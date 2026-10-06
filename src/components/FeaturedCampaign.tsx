@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { CampaignData } from "@/data/foundationData";
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/context/LanguageContext";
+import { englishCampaign } from "@/data/translations";
 
 interface FeaturedCampaignProps {
   campaign: CampaignData;
@@ -25,15 +27,30 @@ export default function FeaturedCampaign({
   campaign,
   onOpenDonation,
 }: FeaturedCampaignProps) {
+  const { isEn, t } = useLanguage();
   const [sectionRef, isInView] = useInView<HTMLDivElement>({
     threshold: 0.15,
     triggerOnce: true,
   });
 
+  const activeCampaign = isEn
+    ? {
+        ...campaign,
+        title: englishCampaign.title,
+        subtitle: englishCampaign.subtitle,
+        badge: englishCampaign.badge,
+        objective: englishCampaign.objective,
+        affectedRegion: englishCampaign.affectedRegion,
+        neededHelp: englishCampaign.neededHelp,
+        workDoneSoFar: englishCampaign.workDoneSoFar,
+        nextSteps: englishCampaign.nextSteps,
+      }
+    : campaign;
+
   const handleShare = () => {
-    const text = `शिवशक्ति सेवा फाउंडेशन — ${campaign.title}\n${campaign.subtitle}\nसहयोग हेतु वेबसाइट देखें: ${typeof window !== "undefined" ? window.location.href : ""}`;
+    const text = `शिवशक्ति सेवा फाउंडेशन — ${activeCampaign.title}\n${activeCampaign.subtitle}\nसहयोग हेतु वेबसाइट देखें: ${typeof window !== "undefined" ? window.location.href : ""}`;
     if (typeof navigator !== "undefined" && navigator.share) {
-      navigator.share({ title: campaign.title, text }).catch(() => {});
+      navigator.share({ title: activeCampaign.title, text }).catch(() => {});
     } else if (typeof window !== "undefined") {
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
     }
@@ -44,7 +61,7 @@ export default function FeaturedCampaign({
       ref={sectionRef}
       id="hamare-abhiyan"
       className="py-16 sm:py-24 bg-brand-maroon-950 text-white relative overflow-hidden"
-      aria-label="प्रमुख राहत अभियान"
+      aria-label={t("प्रमुख राहत अभियान", "Featured Relief Campaign")}
     >
       {/* Background ambient texture */}
       <div className="absolute inset-0 bg-pattern-subtle opacity-5 pointer-events-none" />
@@ -56,13 +73,13 @@ export default function FeaturedCampaign({
           <div className="space-y-3 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-saffron-500/20 text-brand-saffron-400 border border-brand-saffron-500/30 text-xs font-bold uppercase tracking-wider">
               <LifeBuoy className="w-3.5 h-3.5 text-brand-saffron-400 animate-spin [animation-duration:8s]" />
-              <span>{campaign.badge}</span>
+              <span>{activeCampaign.badge}</span>
             </div>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-cream-50 tracking-tight">
-              {campaign.title}
+              {activeCampaign.title}
             </h2>
             <p className="text-base sm:text-lg text-brand-cream-300">
-              {campaign.subtitle}
+              {activeCampaign.subtitle}
             </p>
           </div>
 
@@ -71,7 +88,7 @@ export default function FeaturedCampaign({
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
             </span>
-            <span className="font-semibold">वर्तमान में जमीनी स्तर पर सक्रिय</span>
+            <span className="font-semibold">{t("वर्तमान में जमीनी स्तर पर सक्रिय", "Currently Active On Ground")}</span>
           </div>
         </div>
 
@@ -82,7 +99,7 @@ export default function FeaturedCampaign({
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-brand-maroon-800 bg-brand-maroon-900 aspect-[4/3] group">
               <Image
                 src={campaign.imageUrl || "/images/gallery/flood_relief_action.jpg"}
-                alt="बाढ़ राहत एवं पुनर्वास अभियान का जमीनी दृश्य"
+                alt={t("बाढ़ राहत एवं पुनर्वास अभियान का जमीनी दृश्य", "Flood relief and rehabilitation ground photo")}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 sizes="(max-width: 1024px) 100vw, 40vw"
@@ -91,7 +108,7 @@ export default function FeaturedCampaign({
               <div className="absolute bottom-4 left-4 right-4">
                 <div className="flex items-center gap-2 text-xs font-semibold text-brand-gold-300">
                   <MapPin className="w-4 h-4 text-brand-saffron-400" />
-                  <span>प्रभावित क्षेत्र: {campaign.affectedRegion}</span>
+                  <span>{t("प्रभावित क्षेत्र: ", "Affected Region: ")}{activeCampaign.affectedRegion}</span>
                 </div>
               </div>
             </div>
@@ -101,18 +118,18 @@ export default function FeaturedCampaign({
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-xs text-brand-cream-300 uppercase tracking-wider font-semibold">
-                    राहत संबल प्रगति
+                    {t("राहत संबल प्रगति", "Relief Fund Progress")}
                   </span>
                   <div className="font-heading text-2xl font-bold text-brand-gold-400">
-                    {campaign.collectedAmount}
+                    {activeCampaign.collectedAmount}
                   </div>
                 </div>
                 <div className="text-right">
                   <span className="text-xs text-brand-cream-400">
-                    अनुमानित लक्ष्य
+                    {t("अनुमानित लक्ष्य", "Estimated Target")}
                   </span>
                   <div className="text-sm font-semibold text-brand-cream-200">
-                    {campaign.targetAmount}
+                    {activeCampaign.targetAmount}
                   </div>
                 </div>
               </div>
@@ -122,19 +139,19 @@ export default function FeaturedCampaign({
                 <div className="w-full bg-brand-maroon-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-brand-maroon-800">
                   <div
                     className="bg-gradient-to-r from-brand-gold-500 via-brand-saffron-400 to-brand-gold-500 bg-[length:200%_100%] animate-shimmer h-full rounded-full transition-all duration-1000 ease-out"
-                    style={{ width: isInView ? `${campaign.percent}%` : "0%" }}
+                    style={{ width: isInView ? `${activeCampaign.percent}%` : "0%" }}
                     role="progressbar"
-                    aria-valuenow={isInView ? campaign.percent : 0}
+                    aria-valuenow={isInView ? activeCampaign.percent : 0}
                     aria-valuemin={0}
                     aria-valuemax={100}
                   />
                 </div>
                 <div className="flex justify-between text-xs text-brand-cream-300 font-medium">
-                  <span>{campaign.percent}% लक्ष्य पूर्ण</span>
-                  <span>शेष आवश्यकता प्रगति पर</span>
+                  <span>{activeCampaign.percent}% {t("लक्ष्य पूर्ण", "Goal Completed")}</span>
+                  <span>{t("शेष आवश्यकता प्रगति पर", "Remaining Target in Progress")}</span>
                 </div>
                 <p className="text-[10px] text-brand-cream-400/70 text-right mt-0.5">
-                  अंतिम अद्यतन: ०१ अक्टूबर २०२६
+                  {t("अंतिम अद्यतन: ०१ अक्टूबर २०२६", "Last Updated: 01 October 2026")}
                 </p>
               </div>
 
@@ -144,15 +161,15 @@ export default function FeaturedCampaign({
                   className="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-saffron-500 to-brand-saffron-600 hover:from-brand-saffron-600 hover:to-brand-saffron-700 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition border-b-2 border-brand-gold-400 active:scale-95"
                 >
                   <HeartHandshake className="w-5 h-5 text-brand-gold-200" />
-                  <span>अभियान में सहयोग करें</span>
+                  <span>{t("अभियान में सहयोग करें", "Support This Campaign")}</span>
                 </button>
                 <button
                   onClick={handleShare}
                   className="py-3.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 text-sm font-semibold flex items-center justify-center gap-2 border border-white/20 transition active:scale-95"
-                  title="इस अभियान को साझा करें"
+                  title={t("इस अभियान को साझा करें", "Share this campaign")}
                 >
                   <Share2 className="w-4 h-4 text-brand-gold-300" />
-                  <span className="hidden sm:inline">साझा करें</span>
+                  <span className="hidden sm:inline">{t("साझा करें", "Share")}</span>
                 </button>
               </div>
             </div>
@@ -164,10 +181,10 @@ export default function FeaturedCampaign({
             <div className="p-6 rounded-2xl bg-brand-maroon-900/40 border border-brand-maroon-800 space-y-2">
               <div className="flex items-center gap-2 text-brand-gold-400 font-bold text-sm">
                 <Target className="w-4 h-4" />
-                <span>अभियान का उद्देश्य</span>
+                <span>{t("अभियान का उद्देश्य", "Mission Objective")}</span>
               </div>
               <p className="text-sm sm:text-base text-brand-cream-200 leading-relaxed font-normal">
-                {campaign.objective}
+                {activeCampaign.objective}
               </p>
             </div>
 
@@ -175,10 +192,10 @@ export default function FeaturedCampaign({
             <div className="p-6 rounded-2xl bg-brand-maroon-900/40 border border-brand-maroon-800 space-y-3">
               <div className="flex items-center gap-2 text-brand-saffron-400 font-bold text-sm">
                 <AlertCircle className="w-4 h-4" />
-                <span>आवश्यक सहायता सामग्री</span>
+                <span>{t("आवश्यक सहायता सामग्री", "Urgent Relief Materials Needed")}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {campaign.neededHelp.map((item, idx) => (
+                {activeCampaign.neededHelp.map((item, idx) => (
                   <div
                     key={idx}
                     className="flex items-start gap-2 p-2.5 rounded-lg bg-brand-maroon-950/60 border border-brand-maroon-800 text-xs sm:text-sm text-brand-cream-200"
@@ -194,10 +211,10 @@ export default function FeaturedCampaign({
             <div className="p-6 rounded-2xl bg-brand-maroon-900/40 border border-brand-maroon-800 space-y-3">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
                 <CheckCircle className="w-4 h-4" />
-                <span>अब तक का कार्य (जमीनी प्रगति)</span>
+                <span>{t("अब तक का कार्य (जमीनी प्रगति)", "Work Done So Far (Ground Progress)")}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {campaign.workDoneSoFar.map((item, idx) => (
+                {activeCampaign.workDoneSoFar.map((item, idx) => (
                   <div
                     key={idx}
                     className="flex items-start gap-2 p-2.5 rounded-lg bg-brand-maroon-950/60 border border-brand-maroon-800 text-xs sm:text-sm text-brand-cream-200"
@@ -213,10 +230,10 @@ export default function FeaturedCampaign({
             <div className="p-6 rounded-2xl bg-brand-maroon-900/40 border border-brand-maroon-800 space-y-3">
               <div className="flex items-center gap-2 text-brand-gold-400 font-bold text-sm">
                 <LifeBuoy className="w-4 h-4" />
-                <span>आगे की आवश्यकता एवं आगामी चरण</span>
+                <span>{t("आगे की आवश्यकता एवं आगामी चरण", "Next Phase & Ongoing Requirements")}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {campaign.nextSteps.map((item, idx) => (
+                {activeCampaign.nextSteps.map((item, idx) => (
                   <div
                     key={idx}
                     className="flex items-start gap-2 p-2.5 rounded-lg bg-brand-maroon-950/60 border border-brand-maroon-800 text-xs sm:text-sm text-brand-cream-300"

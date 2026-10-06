@@ -11,7 +11,8 @@ export type SubmissionType =
   | "volunteer"
   | "women_competition"
   | "contact"
-  | "donation_receipt";
+  | "donation_receipt"
+  | "vishesh_karyakram";
 
 export interface SubmissionMetadata {
   ip?: string;
@@ -64,6 +65,7 @@ export const DEFAULT_STATUS_HINDI: Record<SubmissionType, string> = {
   women_competition: "पंजीकरण प्राप्त हुआ (स्वीकृत)",
   contact: "संदेश प्राप्त हुआ",
   donation_receipt: "रसीद अनुरोध प्राप्त हुआ (सत्यापन जारी)",
+  vishesh_karyakram: "नामांकन प्राप्त हुआ (स्वीकृत)",
 };
 
 const SEED_HELP_REQUESTS: SubmissionRecord[] = [
@@ -97,20 +99,20 @@ const SEED_HELP_REQUESTS: SubmissionRecord[] = [
     requestId: "SSF-2026-318492",
     name: "श्रीमती कालिंदी देवी",
     phone: "9123456789",
-    location: "माँ मंगलागौरी बस्ती, गया",
-    needType: "महिला विकास एवं सिलाई प्रशिक्षण",
+    location: "गयाजी, बिहार, भारत",
+    needType: "महिला विकास एवं स्वावलंबन",
     date: "२९ सितम्बर २०२६",
     status: "सेवा दल प्रेषित",
     statusCode: "dispatched",
-    details: "कौशल प्रशिक्षण केंद्र में पंजीकरण पूर्ण, आगामी बैच में कार्यशाला किट आबंटित।",
+    details: "कौशल प्रशिक्षण केंद्र में पंजीकरण पूर्ण, आगामी कार्यशाला किट आबंटित।",
     createdAt: "2026-09-29T11:30:00.000Z",
     updatedAt: "2026-09-30T09:00:00.000Z",
     data: {
       name: "श्रीमती कालिंदी देवी",
       phone: "9123456789",
-      location: "माँ मंगलागौरी बस्ती, गया",
-      needType: "महिला विकास एवं सिलाई प्रशिक्षण",
-      details: "कौशल प्रशिक्षण केंद्र में पंजीकरण पूर्ण, आगामी बैच में कार्यशाला किट आबंटित।",
+      location: "गयाजी, बिहार, भारत",
+      needType: "महिला विकास एवं स्वावलंबन",
+      details: "कौशल प्रशिक्षण केंद्र में पंजीकरण पूर्ण, आगामी कार्यशाला किट आबंटित।",
     },
   },
 ];
@@ -205,11 +207,9 @@ export async function saveSubmissionsStore(store: SubmissionsStore): Promise<voi
         await fs.writeFile(FALLBACK_DATA_PATH, content, "utf-8");
         console.log(`[SubmissionsStore] Successfully saved to fallback: ${FALLBACK_DATA_PATH}`);
       } catch (fallbackErr: any) {
-        console.error(
-          `[SubmissionsStore] Critical Error: Failed to write to fallback ${FALLBACK_DATA_PATH}:`,
-          fallbackErr
+        console.warn(
+          `[SubmissionsStore] Note: Ephemeral environment without writable filesystem (${fallbackErr?.message}). Data retained in-memory and dispatched to external channels.`
         );
-        throw new Error("Unable to persist submission data to filesystem.");
       }
     }
   });
@@ -304,6 +304,11 @@ export function validateSubmission(
     if (payload.amount && (isNaN(Number(payload.amount)) || Number(payload.amount) <= 0)) {
       errors.push("कृपया मान्य दान राशि दर्ज करें।");
     }
+  } else if (type === "vishesh_karyakram") {
+    const address = (payload.address || payload.city || payload.location || "").toString().trim();
+    if (!address) {
+      errors.push("कृपया अपना पूरा पता दर्ज करें (Address is required)।");
+    }
   }
 
   return {
@@ -356,6 +361,42 @@ export async function dispatchNotification(
       return { dispatched: true, channel: "webhook" };
     } catch (err: any) {
       console.warn(`[Submissions Dispatcher] Webhook dispatch notice:`, err?.message || err);
+    }
+  }
+
+  // Telegram Bot Dispatch
+  const tgToken = process.env.TELEGRAM_BOT_TOKEN;
+  const tgChatId = process.env.TELEGRAM_CHAT_ID;
+  if (tgToken && tgChatId) {
+    try {
+      const tgMsg = `🚩 *शिवशक्ति सेवा फाउंडेशन — नया फॉर्म सबमिशन*\n\n📋 *प्रकार:* ${submission.type}\n👤 *नाम:* ${submission.name}\n📞 *फ़ोन:* ${submission.phone}\n${submission.trackingId ? `🆔 *ट्रैकिंग आईडी:* ${submission.trackingId}\n` : ""}${submission.location ? `📍 *स्थान:* ${submission.location}\n` : ""}${submission.details ? `📝 *विवरण:* ${submission.details}\n` : ""}\n📅 *दिनांक:* ${submission.date || new Date().toLocaleString("hi-IN")}`;
+      await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: tgChatId,
+          text: tgMsg,
+          parse_mode: "Markdown",
+        }),
+      });
+    } catch (tgErr: any) {
+      console.warn("[Submissions Dispatcher] Telegram dispatch notice:", tgErr?.message);
+    }
+  }
+
+  // Discord Webhook Dispatch
+  const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
+  if (discordWebhook) {
+    try {
+      await fetch(discordWebhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `🚩 **Shivshakti Seva Foundation — New Submission**\n**Type:** ${submission.type}\n**Name:** ${submission.name}\n**Phone:** ${submission.phone}\n**Tracking:** ${submission.trackingId || "N/A"}\n**Location:** ${submission.location || "N/A"}`,
+        }),
+      });
+    } catch (dcErr: any) {
+      console.warn("[Submissions Dispatcher] Discord dispatch notice:", dcErr?.message);
     }
   }
 

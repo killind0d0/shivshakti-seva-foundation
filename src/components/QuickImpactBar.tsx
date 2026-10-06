@@ -82,11 +82,16 @@ function AnimatedStatCard({
   );
 }
 
+import { useLanguage } from "@/context/LanguageContext";
+import { englishStats } from "@/data/translations";
+
 export default function QuickImpactBar({ stats }: QuickImpactBarProps) {
   const [sectionRef, isInView] = useInView<HTMLDivElement>({
     threshold: 0.2,
     triggerOnce: true,
   });
+  const { isEn } = useLanguage();
+  const activeStats = isEn ? englishStats : stats;
 
   const icons = [
     <Users key="users" className="w-6 h-6 text-brand-saffron-500" />,
@@ -98,7 +103,7 @@ export default function QuickImpactBar({ stats }: QuickImpactBarProps) {
   return (
     <section
       ref={sectionRef}
-      aria-label="प्रभाव आंकड़े एवं उपलब्धियाँ"
+      aria-label={isEn ? "Impact statistics and achievements" : "प्रभाव आंकड़े एवं उपलब्धियाँ"}
       className="relative z-20 bg-white border-y border-brand-maroon-100 shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -110,21 +115,21 @@ export default function QuickImpactBar({ stats }: QuickImpactBarProps) {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
             </span>
             <span className="text-brand-maroon-900 font-bold">
-              जमीनी सेवा प्रभाव
+              {isEn ? "Ground Service Impact" : "जमीनी सेवा प्रभाव"}
             </span>
             <span className="text-brand-charcoal-500 hidden sm:inline">
-              (सत्यापित जमीनी रिकॉर्ड्स पर आधारित)
+              {isEn ? "(Based on verified ground records)" : "(सत्यापित जमीनी रिकॉर्ड्स पर आधारित)"}
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-[11px] text-brand-charcoal-600 bg-brand-cream-100 px-2.5 py-1 rounded-full border border-brand-cream-300">
             <Info className="w-3.5 h-3.5 text-brand-maroon-700" />
-            <span>संस्था द्वारा सत्यापित व प्रमाणित आंकड़े</span>
+            <span>{isEn ? "Officially documented & audited records" : "संस्था द्वारा सत्यापित व प्रमाणित आंकड़े"}</span>
           </div>
         </div>
 
         {/* 4 Animated Statistics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {stats.map((stat, idx) => (
+          {activeStats.map((stat, idx) => (
             <AnimatedStatCard
               key={idx}
               stat={stat}

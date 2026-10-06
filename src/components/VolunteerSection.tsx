@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import { HeartHandshake, CheckCircle2, AlertCircle, Sparkles, Send, MessageCircle } from "lucide-react";
-import { getWhatsAppUrl } from "@/utils/whatsappHelper";
+import { getWhatsAppUrl, openWhatsAppDirect } from "@/utils/whatsappHelper";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function VolunteerSection() {
+  const { isEn, t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -20,7 +22,7 @@ export default function VolunteerSection() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [whatsappText, setWhatsappText] = useState<string>("");
 
-  const serviceOptions = [
+  const hindiServiceOptions = [
     "आपदा एवं बाढ़ राहत",
     "भोजन एवं राशन वितरण",
     "शिक्षा एवं बाल संस्कार",
@@ -30,21 +32,33 @@ export default function VolunteerSection() {
     "अन्य सामाजिक कार्य",
   ];
 
+  const englishServiceOptions = [
+    "Disaster & Flood Relief",
+    "Food & Ration Distribution",
+    "Education & Child Development",
+    "Medical & Health Camps",
+    "Elderly & Destitute Care",
+    "Social Media & Community Outreach",
+    "Other Community Service",
+  ];
+
+  const serviceOptions = isEn ? englishServiceOptions : hindiServiceOptions;
+
   const validate = () => {
     const errs: Record<string, string> = {};
     if (!formData.name.trim()) {
-      errs.name = "कृपया अपना पूरा नाम दर्ज करें।";
+      errs.name = t("कृपया अपना पूरा नाम दर्ज करें।", "Please enter your full name.");
     }
     if (!formData.mobile.trim()) {
-      errs.mobile = "कृपया अपना १० अंकों का मोबाइल नंबर दर्ज करें।";
+      errs.mobile = t("कृपया अपना १० अंकों का मोबाइल नंबर दर्ज करें।", "Please enter your 10-digit mobile number.");
     } else if (!/^[0-9]{10}$/.test(formData.mobile.replace(/[\s-]/g, ""))) {
-      errs.mobile = "कृपया मान्य १० अंकों का मोबाइल नंबर लिखें।";
+      errs.mobile = t("कृपया मान्य १० अंकों का मोबाइल नंबर लिखें।", "Please enter a valid 10-digit mobile number.");
     }
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errs.email = "कृपया सही ईमेल पता दर्ज करें (उदा. nam@example.com)।";
+      errs.email = t("कृपया सही ईमेल पता दर्ज करें (उदा. nam@example.com)।", "Please enter a valid email address.");
     }
     if (!formData.city.trim()) {
-      errs.city = "कृपया अपना नगर या जिला दर्ज करें।";
+      errs.city = t("कृपया अपना नगर या जिला दर्ज करें।", "Please enter your city or district.");
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -56,8 +70,13 @@ export default function VolunteerSection() {
     setSubmitError(null);
     setIsSubmitting(true);
 
-    const msg = `🚩 *स्वयंसेवक पंजीकरण — शिवशक्ति सेवा फाउंडेशन*\n• नाम: ${formData.name.trim()}\n• मोबाइल: ${formData.mobile.trim()}\n• ईमेल: ${formData.email.trim() || "लागू नहीं"}\n• शहर: ${formData.city.trim()}\n• सेवा क्षेत्र: ${formData.serviceType}\n• संदेश/अनुभव: ${formData.message?.trim() || "लागू नहीं"}\n• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    const msg = isEn
+      ? `🚩 *Volunteer Application — Shivshakti Seva Foundation*\n• Name: ${formData.name.trim()}\n• Mobile: ${formData.mobile.trim()}\n• Email: ${formData.email.trim() || "N/A"}\n• City: ${formData.city.trim()}\n• Area of Service: ${formData.serviceType}\n• Message/Skills: ${formData.message?.trim() || "N/A"}\n• Date: ${new Date().toLocaleDateString("en-US")}`
+      : `🚩 *स्वयंसेवक पंजीकरण — शिवशक्ति सेवा फाउंडेशन*\n• नाम: ${formData.name.trim()}\n• मोबाइल: ${formData.mobile.trim()}\n• ईमेल: ${formData.email.trim() || "लागू नहीं"}\n• शहर: ${formData.city.trim()}\n• सेवा क्षेत्र: ${formData.serviceType}\n• संदेश/अनुभव: ${formData.message?.trim() || "लागू नहीं"}\n• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
     setWhatsappText(msg);
+
+    // Immediately open WhatsApp so submission reaches Foundation WhatsApp in real-time
+    openWhatsAppDirect(msg);
 
     try {
       await fetch('/api/submissions', {
@@ -103,7 +122,7 @@ export default function VolunteerSection() {
     <section
       id="swayamsevak"
       className="py-16 sm:py-24 bg-brand-cream-100/60 border-b border-brand-maroon-100 relative"
-      aria-label="स्वयंसेवक पंजीकरण"
+      aria-label={t("स्वयंसेवक पंजीकरण", "Volunteer Registration")}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -111,17 +130,18 @@ export default function VolunteerSection() {
           <div className="lg:col-span-5 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-saffron-100 text-brand-saffron-800 text-xs font-bold uppercase tracking-wider">
               <HeartHandshake className="w-4 h-4 text-brand-saffron-600" />
-              <span>मानव सेवा का पावन अवसर</span>
+              <span>{t("मानव सेवा का पावन अवसर", "Sacred Opportunity to Serve")}</span>
             </div>
 
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-maroon-950 tracking-tight">
-              सेवा से जुड़ें
+              {t("सेवा से जुड़ें", "Join Our Mission")}
             </h2>
 
             <p className="text-base sm:text-lg text-brand-charcoal-700 leading-relaxed font-normal">
-              आप अपने समय, ज्ञान, श्रम और कौशल के माध्यम से असहायों के जीवन में
-              सच्चा परिवर्तन ला सकते हैं। आइए, हमारे साथ कदम से कदम मिलाकर
-              मानवता की सेवा करें।
+              {t(
+                "आप अपने समय, ज्ञान, श्रम और कौशल के माध्यम से असहायों के जीवन में सच्चा परिवर्तन ला सकते हैं। आइए, हमारे साथ कदम से कदम मिलाकर मानवता की सेवा करें।",
+                "You can bring real change to the lives of the underprivileged through your time, knowledge, effort, and skills. Step forward and join hands with us to serve humanity."
+              )}
             </p>
 
             <div className="space-y-3 pt-2">
@@ -131,10 +151,13 @@ export default function VolunteerSection() {
                 </div>
                 <div>
                   <h4 className="font-bold text-sm text-brand-maroon-900">
-                    लचीला समय, असीम संतुष्टि
+                    {t("लचीला समय, असीम संतुष्टि", "Flexible Hours, Boundless Fulfillment")}
                   </h4>
                   <p className="text-xs text-brand-charcoal-600">
-                    आप सप्ताहांत अथवा अपनी सुविधानुसार सेवा कार्यों में भाग ले सकते हैं।
+                    {t(
+                      "आप सप्ताहांत अथवा अपनी सुविधानुसार सेवा कार्यों में भाग ले सकते हैं।",
+                      "Participate on weekends or during your free hours at your own convenience."
+                    )}
                   </p>
                 </div>
               </div>
@@ -145,25 +168,30 @@ export default function VolunteerSection() {
                 </div>
                 <div>
                   <h4 className="font-bold text-sm text-brand-maroon-900">
-                    सीधा जमीनी अनुभव
+                    {t("सीधा जमीनी अनुभव", "Direct Ground Experience")}
                   </h4>
                   <p className="text-xs text-brand-charcoal-600">
-                    राहत शिविरों, सचल रसोई और अध्ययन केंद्रों में सीधे जुड़कर कार्य करें।
+                    {t(
+                      "राहत शिविरों, सचल रसोई और अध्ययन केंद्रों में सीधे जुड़कर कार्य करें।",
+                      "Engage directly in relief camps, mobile community kitchens, and education centers."
+                    )}
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Simple Accessible Hindi Form */}
+          {/* Right Column: Simple Accessible Form */}
           <div className="lg:col-span-7">
             <div className="p-6 sm:p-8 rounded-2xl bg-white border border-brand-maroon-200/80 shadow-xl relative">
               <h3 className="font-heading text-2xl font-bold text-brand-maroon-950 mb-2">
-                स्वयंसेवक आवेदन पत्र
+                {t("स्वयंसेवक आवेदन पत्र", "Volunteer Application Form")}
               </h3>
               <p className="text-xs sm:text-sm text-brand-charcoal-600 mb-6">
-                कृपया नीचे दिया गया संक्षिप्त विवरण भरें। हमारी समन्वय समिति
-                शीघ्र आपसे संपर्क करेगी।
+                {t(
+                  "कृपया नीचे दिया गया संक्षिप्त विवरण भरें। हमारी समन्वय समिति शीघ्र आपसे संपर्क करेगी।",
+                  "Please fill in the brief details below. Our coordination committee will get in touch with you shortly."
+                )}
               </p>
 
               {isSubmitted ? (
@@ -173,14 +201,17 @@ export default function VolunteerSection() {
                   </div>
                   <div className="space-y-1">
                     <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-200/80 px-3 py-1 rounded-full inline-block">
-                      अभिनंदन एवं आभार!
+                      {t("अभिनंदन एवं आभार!", "Welcome & Thank You!")}
                     </span>
                     <h4 className="font-heading text-2xl font-bold text-emerald-950">
-                      आपका आवेदन सफलतापूर्वक प्राप्त हुआ!
+                      {t("आपका आवेदन सफलतापूर्वक प्राप्त हुआ!", "Your Application Has Been Received!")}
                     </h4>
                   </div>
                   <p className="text-sm text-emerald-900 leading-relaxed max-w-md mx-auto font-medium">
-                    शिवशक्ति सेवा परिवार में आपका हार्दिक स्वागत है। हमारे सेवा समन्वयक शीघ्र ही आपसे संपर्क करेंगे।
+                    {t(
+                      "शिवशक्ति सेवा परिवार में आपका हार्दिक स्वागत है। हमारे सेवा समन्वयक शीघ्र ही आपसे संपर्क करेंगे।",
+                      "A warm welcome to the Shivshakti Seva family. Our service coordinators will contact you shortly."
+                    )}
                   </p>
 
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -191,7 +222,7 @@ export default function VolunteerSection() {
                       className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs sm:text-sm shadow-md transition-all inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
                     >
                       <MessageCircle className="w-4 h-4 text-emerald-200" />
-                      <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
+                      <span>{t("📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)", "📤 Send Details on WhatsApp")}</span>
                     </a>
                     <button
                       onClick={() => {
@@ -201,17 +232,20 @@ export default function VolunteerSection() {
                           mobile: "",
                           email: "",
                           city: "",
-                          serviceType: "आपदा एवं बाढ़ राहत",
+                          serviceType: isEn ? "Disaster & Flood Relief" : "आपदा एवं बाढ़ राहत",
                           message: "",
                         });
                       }}
                       className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white text-emerald-900 border border-emerald-300 font-semibold text-xs hover:bg-emerald-50 transition"
                     >
-                      नया आवेदन करें
+                      {t("नया आवेदन करें", "Submit Another Application")}
                     </button>
                   </div>
                   <p className="text-[11px] text-emerald-800 font-medium">
-                    WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
+                    {t(
+                      "WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।",
+                      "Sending via WhatsApp is required so the foundation immediately receives your request (+91 91171 35379)."
+                    )}
                   </p>
                 </div>
               ) : (
@@ -229,7 +263,7 @@ export default function VolunteerSection() {
                       htmlFor="vol-name"
                       className="block text-xs sm:text-sm font-bold text-brand-charcoal-800 mb-1"
                     >
-                      पूरा नाम <span className="text-brand-saffron-600">*</span>
+                      {t("पूरा नाम", "Full Name")} <span className="text-brand-saffron-600">*</span>
                     </label>
                     <input
                       id="vol-name"
@@ -238,7 +272,7 @@ export default function VolunteerSection() {
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
                       }
-                      placeholder="उदा. राजेश कुमार शर्मा"
+                      placeholder={t("उदा. राजेश कुमार शर्मा", "e.g. Rajesh Kumar Sharma")}
                       className={`w-full px-3.5 py-2.5 rounded-lg border text-sm focus:outline-none transition ${
                         errors.name
                           ? "border-red-500 bg-red-50/50"
@@ -260,7 +294,7 @@ export default function VolunteerSection() {
                         htmlFor="vol-mobile"
                         className="block text-xs sm:text-sm font-bold text-brand-charcoal-800 mb-1"
                       >
-                        मोबाइल नंबर (१० अंक){" "}
+                        {t("मोबाइल नंबर (१० अंक)", "Mobile Number (10 Digits)")}{" "}
                         <span className="text-brand-saffron-600">*</span>
                       </label>
                       <input
@@ -270,7 +304,7 @@ export default function VolunteerSection() {
                         onChange={(e) =>
                           setFormData({ ...formData, mobile: e.target.value })
                         }
-                        placeholder="उदा. ९८७६५४३२१०"
+                        placeholder={t("उदा. ९८७६५४३२१०", "e.g. 9876543210")}
                         className={`w-full px-3.5 py-2.5 rounded-lg border text-sm focus:outline-none transition ${
                           errors.mobile
                             ? "border-red-500 bg-red-50/50"
@@ -290,7 +324,7 @@ export default function VolunteerSection() {
                         htmlFor="vol-city"
                         className="block text-xs sm:text-sm font-bold text-brand-charcoal-800 mb-1"
                       >
-                        नगर / जिला{" "}
+                        {t("नगर / जिला", "City / District")}{" "}
                         <span className="text-brand-saffron-600">*</span>
                       </label>
                       <input
@@ -300,7 +334,7 @@ export default function VolunteerSection() {
                         onChange={(e) =>
                           setFormData({ ...formData, city: e.target.value })
                         }
-                        placeholder="उदा. वाराणसी, गोरखपुर"
+                        placeholder={t("उदा. गया, वाराणसी", "e.g. Gaya, Varanasi")}
                         className={`w-full px-3.5 py-2.5 rounded-lg border text-sm focus:outline-none transition ${
                           errors.city
                             ? "border-red-500 bg-red-50/50"
@@ -323,7 +357,7 @@ export default function VolunteerSection() {
                         htmlFor="vol-email"
                         className="block text-xs sm:text-sm font-bold text-brand-charcoal-800 mb-1"
                       >
-                        ईमेल पता (वैकल्पिक)
+                        {t("ईमेल पता (वैकल्पिक)", "Email Address (Optional)")}
                       </label>
                       <input
                         id="vol-email"
@@ -352,7 +386,7 @@ export default function VolunteerSection() {
                         htmlFor="vol-service"
                         className="block text-xs sm:text-sm font-bold text-brand-charcoal-800 mb-1"
                       >
-                        आप किस प्रकार सेवा करना चाहते हैं?
+                        {t("आप किस प्रकार सेवा करना चाहते हैं?", "How would you like to serve?")}
                       </label>
                       <select
                         id="vol-service"
@@ -380,7 +414,7 @@ export default function VolunteerSection() {
                       htmlFor="vol-msg"
                       className="block text-xs sm:text-sm font-bold text-brand-charcoal-800 mb-1"
                     >
-                      संदेश या विशेष कौशल (वैकल्पिक)
+                      {t("संदेश या विशेष कौशल (वैकल्पिक)", "Message or Special Skills (Optional)")}
                     </label>
                     <textarea
                       id="vol-msg"
@@ -389,7 +423,10 @@ export default function VolunteerSection() {
                       onChange={(e) =>
                         setFormData({ ...formData, message: e.target.value })
                       }
-                      placeholder="उदा. मैं सप्ताहांत में चिकित्सा शिविर या भोजन वितरण में सहयोग दे सकता हूँ।"
+                      placeholder={t(
+                        "उदा. मैं सप्ताहांत में चिकित्सा शिविर या भोजन वितरण में सहयोग दे सकता हूँ।",
+                        "e.g. I can assist in relief distribution, medical camps or community outreach on weekends."
+                      )}
                       className="w-full px-3.5 py-2 rounded-lg border border-brand-maroon-200 text-sm focus:outline-none focus:border-brand-saffron-500 focus:ring-1 focus:ring-brand-saffron-500"
                     />
                   </div>
@@ -402,11 +439,11 @@ export default function VolunteerSection() {
                       className="w-full py-3.5 px-6 rounded-xl bg-brand-maroon-800 hover:bg-brand-maroon-700 text-white font-bold text-base shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                     >
                       {isSubmitting ? (
-                        <span>कृपया प्रतीक्षा करें...</span>
+                        <span>{t("कृपया प्रतीक्षा करें...", "Please wait...")}</span>
                       ) : (
                         <>
                           <Send className="w-4 h-4 text-brand-gold-400" />
-                          <span>स्वयंसेवक बनें — आवेदन जमा करें</span>
+                          <span>{t("स्वयंसेवक बनें — आवेदन जमा करें", "Become a Volunteer — Submit Application")}</span>
                         </>
                       )}
                     </button>

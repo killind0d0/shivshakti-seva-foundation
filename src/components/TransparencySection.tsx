@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import RangoliCorner from "./RangoliCorner";
 import ModalPortal from "./ModalPortal";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface TransparencyDoc {
   id: string;
@@ -26,50 +27,89 @@ interface TransparencyDoc {
   size: string;
   date: string;
   note: string;
-  status: "उपलब्ध (सार्वजनिक PDF)" | "सत्यापित अनुरोध पर उपलब्ध";
+  status: string;
   pdfUrl?: string;
   description: string;
 }
 
-export default function TransparencySection() {
-  const [selectedDoc, setSelectedDoc] = useState<TransparencyDoc | null>(null);
+const hindiReports: TransparencyDoc[] = [
+  {
+    id: "mandate",
+    title: "संस्था पंजीकरण, ट्रस्ट डीड एवं विधिक घोषणा सारांश (२०२६)",
+    type: "वैधानिक अभिलेख (PDF)",
+    size: "१५ केबी",
+    date: "२०२६ अधिकृत",
+    note: "सार्वजनिक सत्यापन हेतु प्रमाणित सारांश",
+    status: "उपलब्ध (सार्वजनिक PDF)",
+    pdfUrl: "/docs/shivshakti_seva_foundation_mandate_2026.pdf",
+    description:
+      "शिवशक्ति सेवा फाउंडेशन का आधिकारिक विधिक स्वरूप, पंजीकृत कार्यालय, मुख्य न्यास उद्देश्य, 80G आयकर विधिक स्थिति एवं सार्वजनिक पारदर्शिता घोषणा पत्र।",
+  },
+  {
+    id: "annual-report",
+    title: "वार्षिक सेवा एवं गतिविधि सारांश रिपोर्ट (२०२५-२६)",
+    type: "वार्षिक सेवा अभिलेख",
+    size: "२.४ एमबी",
+    date: "मार्च २०२६",
+    note: "संस्था द्वारा अधिकृत एवं सत्यापित प्रारूप",
+    status: "सत्यापित अनुरोध पर उपलब्ध",
+    description:
+      "विगत वित्तीय वर्ष में संस्था द्वारा संचालित राहत शिविर, भोजन व राशन किट वितरण, स्वास्थ्य शिविर एवं बाल शिक्षा सहायता अभियानों की संकलित रिपोर्ट।",
+  },
+  {
+    id: "relief-audit",
+    title: "बाढ़ राहत एवं पुनर्वास व्यय पारदर्शिता पत्रक",
+    type: "ऑडिट व्यय विवरण",
+    size: "१.८ एमबी",
+    date: "सितंबर २०२६",
+    note: "जमीनी राहत सामग्री क्रय एवं वितरण विवरण",
+    status: "सत्यापित अनुरोध पर उपलब्ध",
+    description:
+      "आपदा प्रभावित क्षेत्रों में तिरपाल, सूखा राशन किट, दवाइयों एवं नाव रेस्क्यू पर हुए वास्तविक व्यय का वाउचर व लाभार्थी आधारित लेखा विवरण।",
+  },
+];
 
-  const reports: TransparencyDoc[] = [
-    {
-      id: "mandate",
-      title: "संस्था पंजीकरण, ट्रस्ट डीड एवं विधिक घोषणा सारांश (२०२६)",
-      type: "वैधानिक अभिलेख (PDF)",
-      size: "१५ केबी",
-      date: "२०२६ अधिकृत",
-      note: "सार्वजनिक सत्यापन हेतु प्रमाणित सारांश",
-      status: "उपलब्ध (सार्वजनिक PDF)",
-      pdfUrl: "/docs/shivshakti_seva_foundation_mandate_2026.pdf",
-      description:
-        "शिवशक्ति सेवा फाउंडेशन का आधिकारिक विधिक स्वरूप, पंजीकृत कार्यालय, मुख्य न्यास उद्देश्य, 80G आयकर विधिक स्थिति एवं सार्वजनिक पारदर्शिता घोषणा पत्र।",
-    },
-    {
-      id: "annual-report",
-      title: "वार्षिक सेवा एवं गतिविधि सारांश रिपोर्ट (२०२५-२६)",
-      type: "वार्षिक सेवा अभिलेख",
-      size: "२.४ एमबी",
-      date: "मार्च २०२६",
-      note: "संस्था द्वारा अधिकृत एवं सत्यापित प्रारूप",
-      status: "सत्यापित अनुरोध पर उपलब्ध",
-      description:
-        "विगत वित्तीय वर्ष में संस्था द्वारा संचालित राहत शिविर, भोजन व राशन किट वितरण, स्वास्थ्य शिविर एवं बाल शिक्षा सहायता अभियानों की संकलित रिपोर्ट।",
-    },
-    {
-      id: "relief-audit",
-      title: "बाढ़ राहत एवं पुनर्वास व्यय पारदर्शिता पत्रक",
-      type: "ऑडिट व्यय विवरण",
-      size: "१.८ एमबी",
-      date: "सितंबर २०२६",
-      note: "जमीनी राहत सामग्री क्रय एवं वितरण विवरण",
-      status: "सत्यापित अनुरोध पर उपलब्ध",
-      description:
-        "आपदा प्रभावित क्षेत्रों में तिरपाल, सूखा राशन किट, दवाइयों एवं नाव रेस्क्यू पर हुए वास्तविक व्यय का वाउचर व लाभार्थी आधारित लेखा विवरण।",
-    },
-  ];
+const englishReports: TransparencyDoc[] = [
+  {
+    id: "mandate",
+    title: "Trust Registration, Charter & Statutory Mandate Summary (2026)",
+    type: "Statutory Record (PDF)",
+    size: "15 KB",
+    date: "2026 Authorized",
+    note: "Certified summary for public verification",
+    status: "Available (Public PDF)",
+    pdfUrl: "/docs/shivshakti_seva_foundation_mandate_2026.pdf",
+    description:
+      "Official legal constitution, registered office, primary trust objectives, 80G income tax statutory status, and public transparency charter of Shivshakti Seva Foundation.",
+  },
+  {
+    id: "annual-report",
+    title: "Annual Welfare Service & Activity Summary Report (2025-26)",
+    type: "Annual Service Record",
+    size: "2.4 MB",
+    date: "March 2026",
+    note: "Verified institutional summary",
+    status: "Available on Verified Request",
+    description:
+      "Consolidated report of relief camps, food & ration kit distribution drives, medical relief camps, and child education assistance missions conducted during the past fiscal year.",
+  },
+  {
+    id: "relief-audit",
+    title: "Flood Relief & Rehabilitation Expenditure Transparency Sheet",
+    type: "Audit Expenditure Report",
+    size: "1.8 MB",
+    date: "September 2026",
+    note: "Ground material procurement and distribution details",
+    status: "Available on Verified Request",
+    description:
+      "Voucher and beneficiary-backed accounting details of actual expenditures incurred on tarpaulins, dry rations, medicines, and rescue operations in disaster-affected areas.",
+  },
+];
+
+export default function TransparencySection() {
+  const { isEn, t } = useLanguage();
+  const [selectedDoc, setSelectedDoc] = useState<TransparencyDoc | null>(null);
+  const reports = isEn ? englishReports : hindiReports;
 
   // Close modal on escape
   useEffect(() => {
@@ -85,7 +125,7 @@ export default function TransparencySection() {
     <section
       id="transparency"
       className="py-16 sm:py-24 bg-white border-b border-brand-maroon-100 relative overflow-hidden"
-      aria-label="पारदर्शिता एवं उत्तरदायित्व"
+      aria-label={t("पारदर्शिता एवं उत्तरदायित्व", "Transparency & Accountability")}
     >
       {/* Background Indian Rangoli / Kolam Diagonal Motifs (Desktop Only, Zero Text Overlap) */}
       <RangoliCorner position="top-right" size={360} opacity={0.065} className="hidden lg:block" />
@@ -96,15 +136,16 @@ export default function TransparencySection() {
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold uppercase tracking-wider">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>विश्वास और सत्यनिष्ठा</span>
+            <span>{t("विश्वास और सत्यनिष्ठा", "Trust & Integrity")}</span>
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-maroon-950 tracking-tight">
-            पारदर्शिता और उत्तरदायित्व
+            {t("पारदर्शिता और उत्तरदायित्व", "Transparency & Accountability")}
           </h2>
           <p className="text-base sm:text-lg text-brand-charcoal-600 font-normal leading-relaxed">
-            शिवशक्ति सेवा फाउंडेशन में हम मानते हैं कि जन-सहयोग केवल धन नहीं,
-            बल्कि एक पावन अमानत है जिसकी पाई-पाई का हिसाब समाज के समक्ष प्रस्तुत
-            होना चाहिए।
+            {t(
+              "शिवशक्ति सेवा फाउंडेशन में हम मानते हैं कि जन-सहयोग केवल धन नहीं, बल्कि एक पावन अमानत है जिसकी पाई-पाई का हिसाब समाज के समक्ष प्रस्तुत होना चाहिए।",
+              "At Shivshakti Seva Foundation, we believe that public contributions are not merely money, but a sacred trust where every single rupee must be accounted for before society."
+            )}
           </p>
           <div className="w-16 h-1 bg-brand-gold-500 mx-auto rounded-full mt-2" />
         </div>
@@ -116,12 +157,13 @@ export default function TransparencySection() {
               <ShieldCheck className="w-6 h-6 text-brand-maroon-800" />
             </div>
             <h3 className="font-heading text-lg font-bold text-brand-maroon-950 group-hover:text-brand-saffron-600 transition-colors">
-              प्रत्यक्ष सेवा उपयोग संकल्प
+              {t("प्रत्यक्ष सेवा उपयोग संकल्प", "Direct Relief Utilization Resolve")}
             </h3>
             <p className="text-xs sm:text-sm text-brand-charcoal-600 leading-relaxed font-normal">
-              राहत एवं सेवा कार्यों हेतु प्राप्त दान राशि का अधिकतम भाग सीधे
-              राशन, दवाइयों, तिरपाल और शिक्षा सामग्री के क्रय में उपयोग किया
-              जाता है।
+              {t(
+                "राहत एवं सेवा कार्यों हेतु प्राप्त दान राशि का अधिकतम भाग सीधे राशन, दवाइयों, तिरपाल और शिक्षा सामग्री के क्रय में उपयोग किया जाता है।",
+                "The largest portion of donations received for relief and service works is directly utilized to procure rations, medicines, tarpaulins, and educational materials."
+              )}
             </p>
           </div>
 
@@ -130,11 +172,13 @@ export default function TransparencySection() {
               <Building className="w-6 h-6 text-brand-saffron-600" />
             </div>
             <h3 className="font-heading text-lg font-bold text-brand-maroon-950 group-hover:text-brand-saffron-600 transition-colors">
-              वार्षिक वित्तीय लेखापरीक्षण (ऑडिट)
+              {t("वार्षिक वित्तीय लेखापरीक्षण (ऑडिट)", "Annual Financial Audit")}
             </h3>
             <p className="text-xs sm:text-sm text-brand-charcoal-600 leading-relaxed font-normal">
-              संस्था के सभी खातों का संचालन स्वतंत्र चार्टर्ड अकाउंटेंट द्वारा
-              ऑडिट किया जाता है और रिपोर्ट समय-समय पर सार्वजनिक की जाती है।
+              {t(
+                "संस्था के सभी खातों का संचालन स्वतंत्र चार्टर्ड अकाउंटेंट द्वारा ऑडिट किया जाता है और रिपोर्ट समय-समय पर सार्वजनिक की जाती है।",
+                "All accounts of the foundation are audited by independent Chartered Accountants, and reports are published periodically for public oversight."
+              )}
             </p>
           </div>
 
@@ -143,11 +187,13 @@ export default function TransparencySection() {
               <CheckCircle className="w-6 h-6 text-emerald-600" />
             </div>
             <h3 className="font-heading text-lg font-bold text-brand-maroon-950 group-hover:text-brand-saffron-600 transition-colors">
-              सत्यापित जमीनी लाभार्थी सूची
+              {t("सत्यापित जमीनी लाभार्थी सूची", "Verified Ground Beneficiary Register")}
             </h3>
             <p className="text-xs sm:text-sm text-brand-charcoal-600 leading-relaxed font-normal">
-              सामग्री वितरण के समय प्रत्येक लाभार्थी परिवार का ब्यौरा दर्ज किया
-              जाता है ताकि किसी भी प्रकार के दोहराव अथवा अपव्यय से बचा जा सके।
+              {t(
+                "सामग्री वितरण के समय प्रत्येक लाभार्थी परिवार का ब्यौरा दर्ज किया जाता है ताकि किसी भी प्रकार के दोहराव अथवा अपव्यय से बचा जा सके।",
+                "Detailed registers are maintained for every beneficiary family during relief distribution to avoid any duplication or waste."
+              )}
             </p>
           </div>
         </div>
@@ -156,33 +202,33 @@ export default function TransparencySection() {
         <div className="p-6 sm:p-7 rounded-2xl bg-white border border-brand-maroon-100 shadow-md mb-12">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <h3 className="font-heading text-base sm:text-lg font-bold text-brand-maroon-950">
-              निधि उपयोग अनुपात (प्रति ₹१०० सहयोग का वितरण)
+              {t("निधि उपयोग अनुपात (प्रति ₹१०० सहयोग का वितरण)", "Fund Utilization Ratio (Allocation per ₹100 Contribution)")}
             </h3>
             <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 inline-block w-fit">
-              १००% पारदर्शी प्रबंधन
+              {t("१००% पारदर्शी प्रबंधन", "100% Transparent Governance")}
             </span>
           </div>
 
           {/* Segmented bar */}
           <div className="w-full h-4 rounded-full overflow-hidden flex bg-brand-cream-200 p-0.5 border border-brand-maroon-100 shadow-inner">
-            <div className="bg-emerald-600 h-full rounded-l-full" style={{ width: "85%" }} title="85% प्रत्यक्ष राहत" />
-            <div className="bg-brand-saffron-500 h-full" style={{ width: "10%" }} title="10% जमीनी व्यवस्था" />
-            <div className="bg-brand-gold-500 h-full rounded-r-full" style={{ width: "5%" }} title="5% प्रशासनिक" />
+            <div className="bg-emerald-600 h-full rounded-l-full" style={{ width: "85%" }} title={t("85% प्रत्यक्ष राहत", "85% Direct Relief")} />
+            <div className="bg-brand-saffron-500 h-full" style={{ width: "10%" }} title={t("10% जमीनी व्यवस्था", "10% Field Logistics")} />
+            <div className="bg-brand-gold-500 h-full rounded-r-full" style={{ width: "5%" }} title={t("5% प्रशासनिक", "5% Administration")} />
           </div>
 
           {/* Legend */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 text-xs font-medium text-brand-charcoal-700">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-emerald-600 flex-shrink-0" />
-              <span><strong>८५%</strong> प्रत्यक्ष सेवा एवं राहत सामग्री</span>
+              <span><strong>{t("८५%", "85%")}</strong> {t("प्रत्यक्ष सेवा एवं राहत सामग्री", "Direct Service & Relief Supplies")}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-brand-saffron-500 flex-shrink-0" />
-              <span><strong>१०%</strong> परिवहन, भंडारण एवं फील्ड लॉजिस्टिक्स</span>
+              <span><strong>{t("१०%", "10%")}</strong> {t("परिवहन, भंडारण एवं फील्ड लॉजिस्टिक्स", "Transport, Storage & Field Logistics")}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-brand-gold-500 flex-shrink-0" />
-              <span><strong>५%</strong> प्रशासनिक एवं वैधानिक संधारण</span>
+              <span><strong>{t("५%", "5%")}</strong> {t("प्रशासनिक एवं वैधानिक संधारण", "Administrative & Statutory Maintenance")}</span>
             </div>
           </div>
         </div>
@@ -192,15 +238,18 @@ export default function TransparencySection() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
               <h3 className="font-heading text-xl font-bold text-brand-maroon-950">
-                सार्वजनिक रिपोर्ट एवं विधिक दस्तावेज
+                {t("सार्वजनिक रिपोर्ट एवं विधिक दस्तावेज", "Public Reports & Statutory Records")}
               </h3>
               <p className="text-xs sm:text-sm text-brand-charcoal-600">
-                संस्था की कार्यप्रणाली, विधिक स्वरूप और वैधानिक विवरण की अधिकृत प्रतियां
+                {t(
+                  "संस्था की कार्यप्रणाली, विधिक स्वरूप और वैधानिक विवरण की अधिकृत प्रतियां",
+                  "Official copies of foundation operations, legal constitution, and statutory records"
+                )}
               </p>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-brand-maroon-800 bg-white px-3 py-1.5 rounded-lg border border-brand-cream-300">
               <Info className="w-4 h-4 text-brand-gold-600" />
-              <span>संस्था द्वारा अधिकृत सार्वजनिक अभिलेख</span>
+              <span>{t("संस्था द्वारा अधिकृत सार्वजनिक अभिलेख", "Official Public Records")}</span>
             </div>
           </div>
 
@@ -221,7 +270,7 @@ export default function TransparencySection() {
                       </h4>
                       {report.pdfUrl && (
                         <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
-                          PDF उपलब्ध
+                          {t("PDF उपलब्ध", "PDF Available")}
                         </span>
                       )}
                     </div>
@@ -246,10 +295,10 @@ export default function TransparencySection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition shadow-xs"
-                      title="आधिकारिक पीडीएफ दस्तावेज सीधे खोलें"
+                      title={t("आधिकारिक पीडीएफ दस्तावेज सीधे खोलें", "Open official PDF document")}
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>PDF डाउनलोड</span>
+                      <span>{t("PDF डाउनलोड", "Download PDF")}</span>
                     </a>
                   )}
                   <button
@@ -257,7 +306,7 @@ export default function TransparencySection() {
                     className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-brand-cream-100 hover:bg-brand-maroon-900 text-brand-maroon-900 hover:text-white border border-brand-maroon-200 text-xs font-bold transition"
                   >
                     <Eye className="w-3.5 h-3.5" />
-                    <span>दस्तावेज देखें / अनुरोध करें</span>
+                    <span>{t("दस्तावेज देखें / अनुरोध करें", "View / Request Document")}</span>
                   </button>
                 </div>
               </div>
@@ -282,7 +331,7 @@ export default function TransparencySection() {
                 type="button"
                 onClick={() => setSelectedDoc(null)}
                 className="absolute top-4 right-4 p-2 rounded-full hover:bg-brand-cream-100 text-brand-charcoal-400 hover:text-brand-maroon-900 transition cursor-pointer"
-                aria-label="बंद करें"
+                aria-label={t("बंद करें", "Close")}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -291,7 +340,7 @@ export default function TransparencySection() {
               <div className="space-y-2 pr-6">
                 <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-brand-saffron-100 text-brand-saffron-800 text-[11px] font-bold uppercase tracking-wider">
                   <ShieldCheck className="w-3.5 h-3.5 text-brand-saffron-700" />
-                  <span>आधिकारिक विधिक एवं पारदर्शिता अभिलेख</span>
+                  <span>{t("आधिकारिक विधिक एवं पारदर्शिता अभिलेख", "Official Legal & Transparency Records")}</span>
                 </div>
                 <h3 className="font-heading text-xl sm:text-2xl font-bold text-brand-maroon-950 leading-snug">
                   {selectedDoc.title}
@@ -306,44 +355,44 @@ export default function TransparencySection() {
                 <div className="flex items-center gap-2 pb-2 border-b border-brand-cream-200">
                   <Building2 className="w-4 h-4 text-brand-maroon-800" />
                   <span className="font-heading text-xs sm:text-sm font-bold text-brand-maroon-950">
-                    शिवशक्ति सेवा फाउंडेशन — अधिकृत विधिक विवरण
+                    {t("शिवशक्ति सेवा फाउंडेशन — अधिकृत विधिक विवरण", "Shivshakti Seva Foundation — Official Legal Details")}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div>
-                    <span className="text-brand-charcoal-500 block">संस्था का नाम:</span>
-                    <strong className="text-brand-maroon-950">शिवशक्ति सेवा फाउंडेशन</strong>
+                    <span className="text-brand-charcoal-500 block">{t("संस्था का नाम:", "Organization Name:")}</span>
+                    <strong className="text-brand-maroon-950">{t("शिवशक्ति सेवा फाउंडेशन", "Shivshakti Seva Foundation")}</strong>
                   </div>
 
                   <div>
-                    <span className="text-brand-charcoal-500 block">विधिक स्वरूप:</span>
-                    <strong className="text-brand-charcoal-800">पंजीकृत सामाजिक सेवा न्यास</strong>
+                    <span className="text-brand-charcoal-500 block">{t("विधिक स्वरूप:", "Legal Structure:")}</span>
+                    <strong className="text-brand-charcoal-800">{t("पंजीकृत सामाजिक सेवा न्यास", "Registered Social Welfare Trust")}</strong>
                   </div>
 
                   <div>
-                    <span className="text-brand-charcoal-500 block">पंजीकृत मुख्य कार्यालय:</span>
+                    <span className="text-brand-charcoal-500 block">{t("पंजीकृत मुख्य कार्यालय:", "Registered Head Office:")}</span>
                     <span className="text-brand-charcoal-800 font-medium">
-                      माँ मंगलागौरी, गया जी (बिहार) - 823001
+                      {t("गयाजी, बिहार, भारत", "GayaJi, Bihar, India")}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-brand-charcoal-500 block">आयकर अधिनियम 80G स्थिति:</span>
+                    <span className="text-brand-charcoal-500 block">{t("आयकर अधिनियम 80G स्थिति:", "Income Tax 80G Status:")}</span>
                     <span className="text-amber-800 font-semibold">
-                      80G आयकर छूट प्रमाण पत्र विधिक प्रक्रियाधीन
+                      {t("80G आयकर छूट प्रमाण पत्र विधिक प्रक्रियाधीन", "80G Tax Exemption Certificate under statutory processing")}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-brand-charcoal-500 block">अधिकृत हेल्पलाइन:</span>
+                    <span className="text-brand-charcoal-500 block">{t("अधिकृत हेल्पलाइन:", "Authorized Helpline:")}</span>
                     <a href="tel:+919117135379" className="font-sans font-bold text-brand-maroon-900 hover:underline">
                       +91 91171 35379 (24×7)
                     </a>
                   </div>
 
                   <div>
-                    <span className="text-brand-charcoal-500 block">अधिकृत ईमेल:</span>
+                    <span className="text-brand-charcoal-500 block">{t("अधिकृत ईमेल:", "Authorized Email:")}</span>
                     <a href="mailto:akashgiri91171@gmail.com" className="font-sans font-semibold text-brand-maroon-900 hover:underline">
                       akashgiri91171@gmail.com
                     </a>
@@ -362,21 +411,24 @@ export default function TransparencySection() {
                       className="w-full py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-center"
                     >
                       <Download className="w-4 h-4" />
-                      <span>आधिकारिक सारांश दस्तावेज खोलें व डाउनलोड करें (PDF)</span>
+                      <span>{t("आधिकारिक सारांश दस्तावेज खोलें व डाउनलोड करें (PDF)", "Open & Download Official Summary (PDF)")}</span>
                       <ExternalLink className="w-4 h-4" />
                     </a>
                     <p className="text-[11px] text-center text-brand-charcoal-500">
-                      संस्था द्वारा सार्वजनिक अवलोकन हेतु जारी अधिकृत सारांश प्रारूप
+                      {t("संस्था द्वारा सार्वजनिक अवलोकन हेतु जारी अधिकृत सारांश प्रारूप", "Official summary format issued by the foundation for public review")}
                     </p>
                   </div>
                 ) : (
                   <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
                     <p className="font-bold flex items-center gap-1.5 text-amber-950">
                       <Info className="w-4 h-4 text-amber-700" />
-                      <span>दस्तावेज प्रतिलिपि उपलब्धता सूचना:</span>
+                      <span>{t("दस्तावेज प्रतिलिपि उपलब्धता सूचना:", "Document Copy Availability Notice:")}</span>
                     </p>
                     <p className="leading-relaxed">
-                      यह विस्तृत ऑडिट व गतिविधि अभिलेख न्यास के आंतरिक रिकॉर्ड एवं विधिक संधारण में सुरक्षित है। आप व्हाट्सएप या ईमेल के माध्यम से संस्था सचिव / अधिकृत अधिकारी से इसकी सत्यापित मुद्रित अथवा डिजिटल प्रतिलिपि सीधे प्राप्त कर सकते हैं।
+                      {t(
+                        "यह विस्तृत ऑडिट व गतिविधि अभिलेख न्यास के आंतरिक रिकॉर्ड एवं विधिक संधारण में सुरक्षित है। आप व्हाट्सएप या ईमेल के माध्यम से संस्था सचिव / अधिकृत अधिकारी से इसकी सत्यापित मुद्रित अथवा डिजिटल प्रतिलिपि सीधे प्राप्त कर सकते हैं।",
+                        "This detailed audit and activity record is securely preserved in the trust's statutory records. You can obtain a verified print or digital copy directly via WhatsApp or email from the foundation's secretary / authorized officer."
+                      )}
                     </p>
                   </div>
                 )}
@@ -384,26 +436,32 @@ export default function TransparencySection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
                   <a
                     href={`https://wa.me/919117135379?text=${encodeURIComponent(
-                      `नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे संस्था के आधिकारिक दस्तावेज "${selectedDoc.title}" की प्रतिलिपि की आवश्यकता है। कृपया मार्गदर्शन करें।`
+                      isEn
+                        ? `Hello Shivshakti Seva Foundation, I request a copy of the official document "${selectedDoc.title}". Please guide me.`
+                        : `नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे संस्था के आधिकारिक दस्तावेज "${selectedDoc.title}" की प्रतिलिपि की आवश्यकता है। कृपया मार्गदर्शन करें।`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4 fill-current" />
-                    <span>व्हाट्सएप पर प्रतिलिपि मांगें</span>
+                    <span>{t("व्हाट्सएप पर प्रतिलिपि मांगें", "Request Copy on WhatsApp")}</span>
                   </a>
 
                   <a
                     href={`mailto:akashgiri91171@gmail.com?subject=${encodeURIComponent(
-                      `दस्तावेज प्रतिलिपि अनुरोध: ${selectedDoc.title}`
+                      isEn
+                        ? `Document Copy Request: ${selectedDoc.title}`
+                        : `दस्तावेज प्रतिलिपि अनुरोध: ${selectedDoc.title}`
                     )}&body=${encodeURIComponent(
-                      `नमस्ते शिवशक्ति सेवा फाउंडेशन,\n\nकृपया मुझे संस्था के अधिकृत दस्तावेज "${selectedDoc.title}" की सत्यापित प्रतिलिपि प्रेषित करने की कृपा करें।\n\nअनुरोधकर्ता का नाम:\nमोबाइल नंबर:\nउद्देश्य:`
+                      isEn
+                        ? `Hello Shivshakti Seva Foundation,\n\nPlease provide a verified copy of the official document "${selectedDoc.title}".\n\nRequester Name:\nMobile Number:\nPurpose:`
+                        : `नमस्ते शिवशक्ति सेवा फाउंडेशन,\n\nकृपया मुझे संस्था के अधिकृत दस्तावेज "${selectedDoc.title}" की सत्यापित प्रतिलिपि प्रेषित करने की कृपा करें।\n\nअनुरोधकर्ता का नाम:\nमोबाइल नंबर:\nउद्देश्य:`
                     )}`}
                     className="py-2.5 px-4 rounded-xl bg-brand-maroon-900 hover:bg-brand-maroon-950 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-2"
                   >
                     <Mail className="w-4 h-4 text-brand-gold-400" />
-                    <span>ईमेल द्वारा अनुरोध भेजें</span>
+                    <span>{t("ईमेल द्वारा अनुरोध भेजें", "Send Request via Email")}</span>
                   </a>
                 </div>
 
@@ -413,7 +471,7 @@ export default function TransparencySection() {
                     className="inline-flex items-center gap-1 text-xs text-brand-charcoal-600 hover:text-brand-maroon-900 font-medium transition"
                   >
                     <Phone className="w-3 h-3 text-brand-gold-600" />
-                    <span>कार्यालय में सीधे बात करें: <strong>+91 91171 35379</strong></span>
+                    <span>{t("कार्यालय में सीधे बात करें: ", "Speak Directly to Office: ")}<strong>+91 91171 35379</strong></span>
                   </a>
                 </div>
               </div>

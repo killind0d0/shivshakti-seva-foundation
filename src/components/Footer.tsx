@@ -21,6 +21,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import ModalPortal from "./ModalPortal";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface FooterProps {
   onOpenDonation: () => void;
@@ -28,36 +29,23 @@ interface FooterProps {
 }
 
 export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
+  const { isEn, t } = useLanguage();
   const [policyModal, setPolicyModal] = useState<"privacy" | "terms" | null>(null);
-  const [visitorCount, setVisitorCount] = useState<number>(1);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("ssf_browser_visits");
-      let current = stored ? parseInt(stored, 10) : 0;
-      if (isNaN(current)) current = 0;
-      current += 1;
-      localStorage.setItem("ssf_browser_visits", current.toString());
-      setVisitorCount(current);
-    } catch {
-      setVisitorCount(1);
-    }
-  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const navLinks = [
-    { label: "मुख्य पृष्ठ", href: "#mukhya-prishth" },
-    { label: "हमारे बारे में", href: "#hamare-bare-mein" },
-    { label: "हमारी सेवाएँ", href: "#hamari-sevayein" },
-    { label: "महिला स्वावलंबन", href: "#mahila-pratiyogita" },
-    { label: "व्हाट्सएप ग्रुप", href: "#whatsapp-community" },
-    { label: "अभियान", href: "#hamare-abhiyan" },
-    { label: "चित्र दीर्घा", href: "#chitra-deergha" },
-    { label: "समाचार", href: "#samachar" },
-    { label: "संपर्क करें", href: "#sampark" },
+    { label: t("मुख्य पृष्ठ", "Home"), href: "#mukhya-prishth" },
+    { label: t("हमारे बारे में", "About Us"), href: "#hamare-bare-mein" },
+    { label: t("हमारी सेवाएँ", "Our Services"), href: "#hamari-sevayein" },
+    { label: t("विशेष कार्यक्रम", "Special Programs"), href: "#vishesh-karyakram" },
+    { label: t("व्हाट्सएप ग्रुप", "WhatsApp Group"), href: "#whatsapp-community" },
+    { label: t("अभियान", "Campaigns"), href: "#hamare-abhiyan" },
+    { label: t("चित्र दीर्घा", "Gallery"), href: "#chitra-deergha" },
+    { label: t("समाचार", "News"), href: "#samachar" },
+    { label: t("संपर्क करें", "Contact"), href: "#sampark" },
   ];
 
   const handleFooterLink = (e: React.MouseEvent, href: string) => {
@@ -83,7 +71,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
               <div className="w-13 h-13 rounded-full bg-brand-maroon-900/80 p-1 flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform">
                 <Image
                   src="/images/logo/logo_emblem.png"
-                  alt="शिवशक्ति सेवा फाउंडेशन"
+                  alt={t("शिवशक्ति सेवा फाउंडेशन", "Shivshakti Seva Foundation")}
                   width={48}
                   height={48}
                   className="rounded-full"
@@ -91,31 +79,31 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
               </div>
               <div>
                 <h3 className="font-heading text-xl sm:text-2xl font-bold text-brand-cream-50 leading-tight group-hover:text-brand-gold-300 transition-colors">
-                  शिवशक्ति सेवा फाउंडेशन
+                  {t("शिवशक्ति सेवा फाउंडेशन", "Shivshakti Seva Foundation")}
                 </h3>
                 <p className="text-xs text-brand-gold-400 font-medium">
-                  मानव सेवा • करुणा • सामाजिक उत्थान
+                  {t("मानव सेवा • करुणा • सामाजिक उत्थान", "Humanity Service • Compassion • Social Upliftment")}
                 </p>
               </div>
             </div>
 
             <p className="text-xs sm:text-sm text-brand-cream-200/90 leading-relaxed font-normal">
-              शिवशक्ति सेवा फाउंडेशन जरूरतमंद, निर्धन, असहाय और प्राकृतिक आपदा से
-              प्रभावित परिवारों के साथ निरंतर खड़ा रहकर भोजन, आश्रय, शिक्षा,
-              स्वास्थ्य और पुनर्वास के माध्यम से मानवता की सेवा के लिए समर्पित
-              एक पावन न्यास है।
+              {t(
+                "शिवशक्ति सेवा फाउंडेशन जरूरतमंद, निर्धन, असहाय और प्राकृतिक आपदा से प्रभावित परिवारों के साथ निरंतर खड़ा रहकर भोजन, आश्रय, शिक्षा, स्वास्थ्य और पुनर्वास के माध्यम से मानवता की सेवा के लिए समर्पित एक पावन न्यास है।",
+                "Shivshakti Seva Foundation is a consecrated trust dedicated to serving humanity through nourishment, shelter, education, healthcare, and rehabilitation for underprivileged, vulnerable, and disaster-affected families."
+              )}
             </p>
 
             <div className="p-3 rounded-xl bg-brand-maroon-900/60 border border-brand-maroon-800 text-xs text-brand-gold-300 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-brand-gold-400 flex-shrink-0" />
-              <span>"सेवा केवल सहायता नहीं, मानवता के प्रति हमारा दायित्व है।"</span>
+              <span>{t("\"सेवा केवल सहायता नहीं, मानवता के प्रति हमारा दायित्व है।\"", "\"Service is not mere assistance, but our sacred duty towards humanity.\"")}</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="font-heading text-base font-bold text-brand-gold-400 pb-2 border-b border-brand-maroon-800">
-              त्वरित लिंक
+              {t("त्वरित लिंक", "Quick Links")}
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-brand-cream-300">
               {navLinks.map((link) => (
@@ -135,7 +123,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
           {/* Contact & Support CTA */}
           <div className="lg:col-span-4 space-y-4">
             <h4 className="font-heading text-base font-bold text-brand-gold-400 pb-2 border-b border-brand-maroon-800">
-              सहयोग एवं हेल्पलाइन
+              {t("सहयोग एवं हेल्पलाइन", "Support & Helpline")}
             </h4>
 
             <div className="space-y-2.5 text-xs text-brand-cream-200">
@@ -146,10 +134,10 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                     href="tel:+919117135379"
                     className="hover:text-brand-gold-300 font-bold tracking-wide transition block text-sm"
                   >
-                    हेल्पलाइन: <span className="font-sans font-extrabold">+91 91171 35379</span>
+                    {t("हेल्पलाइन: ", "Helpline: ")}<span className="font-sans font-extrabold">+91 91171 35379</span>
                   </a>
                   <span className="text-[11px] text-brand-cream-300">
-                    २४×७ सदैव उपलब्ध (दिन-रात सेवा)
+                    {t("२४×७ सदैव उपलब्ध (दिन-रात सेवा)", "24×7 Available Always (Round-the-clock service)")}
                   </span>
                 </div>
               </div>
@@ -176,14 +164,14 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-brand-saffron-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <span className="block font-semibold">मुख्य कार्यालय: माँ मंगलागौरी, गया जी (बिहार)</span>
+                  <span className="block font-semibold">{t("मुख्य कार्यालय: गयाजी, बिहार, भारत", "Head Office: GayaJi, Bihar, India")}</span>
                   <a
                     href="https://maps.app.goo.gl/T3QqWjCGMkx9KVJr9?g_st=ac"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[11px] text-brand-gold-300 hover:text-white underline underline-offset-2 flex items-center gap-1 mt-0.5"
                   >
-                    <span>गूगल मैप्स पर देखें (Google Maps) ↗</span>
+                    <span>{t("गूगल मैप्स पर देखें (Google Maps) ↗", "View on Google Maps ↗")}</span>
                   </a>
                 </div>
               </div>
@@ -195,31 +183,25 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-brand-saffron-500 to-brand-saffron-600 hover:from-brand-saffron-600 hover:to-brand-saffron-700 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 border-b-2 border-brand-gold-400"
               >
                 <HeartHandshake className="w-4 h-4 text-brand-gold-200" />
-                <span>अभी सहयोग करें</span>
+                <span>{t("अभी सहयोग करें", "Contribute Now")}</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Total Visitors Counter Badge - Regal & Sacred Aesthetic */}
-      <div className="border-t border-brand-maroon-900/90 py-5 bg-brand-maroon-950/80">
+      {/* Sacred Trust Strip */}
+      <div className="border-t border-brand-maroon-900/90 py-4 bg-brand-maroon-950/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 text-brand-gold-300">
             <Sparkles className="w-4 h-4 text-brand-gold-400" />
             <span className="font-heading text-sm text-brand-cream-100">
-              मानवता की सेवा में जन-जन का विश्वास
+              {t("मानवता की सेवा में जन-जन का विश्वास • सत्यं शिवं सुन्दरम्", "Public Trust in Service of Humanity • Truth • Goodness • Beauty")}
             </span>
           </div>
 
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-brand-maroon-900/80 border border-brand-gold-500/40 shadow-inner">
-            <div className="flex items-center gap-1.5 text-xs text-brand-gold-300 font-medium">
-              <Eye className="w-3.5 h-3.5 text-brand-gold-400" />
-              <span>वेबसाइट अवलोकन (संकेतक):</span>
-            </div>
-            <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-bold tracking-wider text-brand-gold-300 bg-brand-maroon-950 px-2.5 py-0.5 rounded border border-brand-gold-600/40 shadow-xs">
-              <span>{visitorCount.toLocaleString("en-IN")}+</span>
-            </div>
+          <div className="text-brand-cream-300 text-xs">
+            <span>{t("पंजीकृत जन-कल्याण न्यास • गयाजी, बिहार (भारत)", "Registered Public Welfare Trust • GayaJi, Bihar (India)")}</span>
           </div>
         </div>
       </div>
@@ -228,7 +210,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
       <div className="bg-brand-maroon-950/95 border-t border-brand-maroon-900 py-6 text-xs text-brand-cream-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            © २०२६ शिवशक्ति सेवा फाउंडेशन (shivshaktisevafoundation.in)। सर्वाधिकार सुरक्षित।
+            {t("© २०२६ शिवशक्ति सेवा फाउंडेशन (shivshaktisevafoundation.in)। सर्वाधिकार सुरक्षित।", "© 2026 Shivshakti Seva Foundation (shivshaktisevafoundation.in). All rights reserved.")}
           </div>
 
           <div className="flex items-center gap-4 flex-wrap justify-center">
@@ -237,10 +219,10 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                 onClick={() => setPolicyModal("privacy")}
                 className="hover:text-brand-gold-400 underline transition"
               >
-                गोपनीयता नीति
+                {t("गोपनीयता नीति", "Privacy Policy")}
               </button>
               <Link href="/privacy" className="text-[10px] text-brand-gold-500/80 hover:text-brand-gold-400 transition-colors">
-                (विस्तृत पृष्ठ)
+                {t("(विस्तृत पृष्ठ)", "(Detailed Page)")}
               </Link>
             </div>
             <span>•</span>
@@ -249,10 +231,10 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                 onClick={() => setPolicyModal("terms")}
                 className="hover:text-brand-gold-400 underline transition"
               >
-                नियम एवं शर्तें
+                {t("नियम एवं शर्तें", "Terms & Conditions")}
               </button>
               <Link href="/terms" className="text-[10px] text-brand-gold-500/80 hover:text-brand-gold-400 transition-colors">
-                (विस्तृत पृष्ठ)
+                {t("(विस्तृत पृष्ठ)", "(Detailed Page)")}
               </Link>
             </div>
             {onOpenAdmin && (
@@ -263,7 +245,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                   className="hover:text-brand-gold-400 underline transition flex items-center gap-1 font-bold text-brand-gold-300"
                 >
                   <Lock className="w-3 h-3" />
-                  <span>प्रशासक एवं सेवादार पोर्टल</span>
+                  <span>{t("प्रशासक एवं सेवादार पोर्टल", "Admin & Sevadar Portal")}</span>
                 </button>
               </>
             )}
@@ -271,23 +253,23 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
             <button
               onClick={scrollToTop}
               className="flex items-center gap-1 hover:text-white transition"
-              aria-label="पृष्ठ के शीर्ष पर जाएं"
+              aria-label={t("पृष्ठ के शीर्ष पर जाएं", "Scroll to top")}
             >
-              <span>शीर्ष पर जाएँ</span>
+              <span>{t("शीर्ष पर जाएँ", "Back to Top")}</span>
               <ChevronUp className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* 5. SJ Digitals Signature & Hindi Promotional Banner (Compact & Elegant) */}
+      {/* 5. SJ Digitals Signature & Promotional Banner */}
       <aside
-        aria-label="एस.जे. डिजिटल्स सिग्नेचर एवं विकास सूचना"
+        aria-label={t("एस.जे. डिजिटल्स सिग्नेचर एवं विकास सूचना", "SJ Digitals Signature & Development Notice")}
         className="relative bg-gradient-to-r from-[#140204] via-[#220407] to-[#140204] text-white border-t border-brand-gold-500/40 py-3.5 sm:py-4 px-4 sm:px-6 lg:px-8 shadow-inner"
       >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 text-center md:text-left">
           
-          {/* Left: Compact Monogram & Hindi Signature */}
+          {/* Left: Compact Monogram & Signature */}
           <div className="flex items-center gap-3 justify-center md:justify-start flex-wrap">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 p-0.5 shrink-0 shadow-sm">
               <div className="w-full h-full rounded-[6px] bg-[#1e0306] flex items-center justify-center font-heading font-black text-amber-300 text-xs tracking-tight">
@@ -297,14 +279,14 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
             
             <div className="text-xs sm:text-[13px] leading-snug">
               <span className="text-brand-cream-300">
-                वेबसाइट निर्माण एवं तकनीकी प्रबंधन:
+                {t("वेबसाइट निर्माण एवं तकनीकी प्रबंधन:", "Website Development & Technical Management:")}
               </span>{" "}
               <strong className="text-brand-gold-300 font-bold">
-                एस.जे. डिजिटल्स (SJ Digitals)
+                {t("एस.जे. डिजिटल्स (SJ Digitals)", "SJ Digitals")}
               </strong>
               <span className="hidden sm:inline text-brand-gold-500/60 mx-1.5">•</span>
               <span className="block sm:inline text-[11px] sm:text-xs text-brand-cream-300/80">
-                अपने संस्थान या व्यापार हेतु आधुनिक वेबसाइट बनवाएं
+                {t("अपने संस्थान या व्यापार हेतु आधुनिक वेबसाइट बनवाएं", "Get a modern website crafted for your institution or business")}
               </span>
             </div>
           </div>
@@ -316,7 +298,7 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-brand-gold-300 hover:text-white border border-brand-gold-500/30 transition text-xs font-semibold whitespace-nowrap"
-              title="SJ Digitals वेबसाइट"
+              title={t("SJ Digitals वेबसाइट", "SJ Digitals Website")}
             >
               <Globe className="w-3.5 h-3.5 text-brand-gold-400" />
               <span>suryajyoti.digital</span>
@@ -324,23 +306,25 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
 
             <a
               href={`https://api.whatsapp.com/send?phone=917004185301&text=${encodeURIComponent(
-                "नमस्ते SJ Digitals! मुझे वेबसाइट एवं डिजिटल सेवाओं के लिए जानकारी चाहिए।"
+                isEn
+                  ? "Hello SJ Digitals! I want information regarding website development and digital services."
+                  : "नमस्ते SJ Digitals! मुझे वेबसाइट एवं डिजिटल सेवाओं के लिए जानकारी चाहिए।"
               )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition text-xs whitespace-nowrap shadow-xs"
-              title="व्हाट्सएप पर संपर्क करें"
+              title={t("व्हाट्सएप पर संपर्क करें", "Contact on WhatsApp")}
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>व्हाट्सएप</span>
+              <span>{t("व्हाट्सएप", "WhatsApp")}</span>
             </a>
 
             <a
               href="tel:+917004185301"
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-brand-cream-200 hover:text-white border border-white/15 transition text-xs font-medium whitespace-nowrap"
-              title="सीधे कॉल करें"
+              title={t("सीधे कॉल करें", "Call Directly")}
             >
-              <Phone className="w-3 h-3 text-brand-gold-400" />
+              <Phone className="w-3.5 h-3.5 text-brand-gold-400" />
               <span className="font-sans font-bold">+91 70041 85301</span>
             </a>
           </div>
@@ -363,14 +347,14 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
             >
               <div className="p-4 bg-brand-maroon-950 text-white flex items-center justify-between">
                 <h3 className="font-heading text-lg font-bold text-brand-gold-300">
-                  {policyModal === "privacy" ? "गोपनीयता नीति" : "नियम एवं शर्तें"}
+                  {policyModal === "privacy" ? t("गोपनीयता नीति", "Privacy Policy") : t("नियम एवं शर्तें", "Terms & Conditions")}
                 </h3>
                 <button
                   onClick={() => setPolicyModal(null)}
                   className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium flex items-center gap-1 transition border border-white/20"
-                  aria-label="बंद करें"
+                  aria-label={t("बंद करें", "Close")}
                 >
-                  <span>बंद करें</span>
+                  <span>{t("बंद करें", "Close")}</span>
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -379,42 +363,52 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                 {policyModal === "privacy" ? (
                   <>
                     <p>
-                      शिवशक्ति सेवा फाउंडेशन अपने सभी दाताओं, स्वयंसेवकों और
-                      लाभार्थियों की व्यक्तिगत गोपनीयता का आदर करता है।
+                      {t(
+                        "शिवशक्ति सेवा फाउंडेशन अपने सभी दाताओं, स्वयंसेवकों और लाभार्थियों की व्यक्तिगत गोपनीयता का आदर करता है।",
+                        "Shivshakti Seva Foundation deeply respects the privacy of all donors, volunteers, and beneficiaries."
+                      )}
                     </p>
                     <h4 className="font-bold text-brand-maroon-900 pt-1">
-                      जानकारी का संग्रह एवं सुरक्षा
+                      {t("जानकारी का संग्रह एवं सुरक्षा", "Information Collection & Protection")}
                     </h4>
                     <p>
-                      आपके द्वारा प्रदान किया गया नाम, मोबाइल नंबर अथवा ईमेल पता
-                      केवल सेवा समन्वय, रसीद प्रेषण और आधिकारिक पत्राचार हेतु उपयोग
-                      किया जाता है। हम किसी भी तृतीय पक्ष को आपकी जानकारी साझा
-                      नहीं करते।
+                      {t(
+                        "आपके द्वारा प्रदान किया गया नाम, मोबाइल नंबर अथवा ईमेल पता केवल सेवा समन्वय, रसीद प्रेषण और आधिकारिक पत्राचार हेतु उपयोग किया जाता है। हम किसी भी तृतीय पक्ष को आपकी जानकारी साझा नहीं करते।",
+                        "The name, mobile number, or email address provided by you is used solely for service coordination, receipt dispatch, and official communications. We never share your data with any third party."
+                      )}
                     </p>
                     <p>
-                      दान एवं वित्तीय हस्तांतरण पूर्णतः सुरक्षित बैंकिंग एवं
-                      यूपीआई माध्यमों से संचालित होते हैं।
+                      {t(
+                        "दान एवं वित्तीय हस्तांतरण पूर्णतः सुरक्षित बैंकिंग एवं यूपीआई माध्यमों से संचालित होते हैं।",
+                        "Donations and financial transactions are conducted through fully secured banking and verified UPI channels."
+                      )}
                     </p>
                   </>
                 ) : (
                   <>
                     <p>
-                      यह वेबसाइट शिवशक्ति सेवा फाउंडेशन के जनकल्याणकारी कार्यों की
-                      जानकारी और जन-सहयोग हेतु संचालित है।
+                      {t(
+                        "यह वेबसाइट शिवशक्ति सेवा फाउंडेशन के जनकल्याणकारी कार्यों की जानकारी और जन-सहयोग हेतु संचालित है।",
+                        "This website is operated to provide transparency on the humanitarian welfare activities of Shivshakti Seva Foundation and facilitate community participation."
+                      )}
                     </p>
                     <h4 className="font-bold text-brand-maroon-900 pt-1">
-                      सहयोग एवं उपयोग के नियम
+                      {t("सहयोग एवं उपयोग के नियम", "Rules of Participation & Website Terms")}
                     </h4>
                     <p>
-                      १. संस्था को दिया जाने वाला प्रत्येक दान पूर्णतः स्वैच्छिक है।
+                      {t("१. संस्था को दिया जाने वाला प्रत्येक दान पूर्णतः स्वैच्छिक है।", "1. Every donation made to the foundation is strictly voluntary.")}
                     </p>
                     <p>
-                      २. प्राप्त राशि का उपयोग प्राकृतिक आपदा राहत, भोजन वितरण,
-                      शिक्षा, स्वास्थ्य एवं पुनर्वास कार्यों में किया जाता है।
+                      {t(
+                        "२. प्राप्त राशि का उपयोग प्राकृतिक आपदा राहत, भोजन वितरण, शिक्षा, स्वास्थ्य एवं पुनर्वास कार्यों में किया जाता है।",
+                        "2. Contributions are directly allocated towards natural disaster relief, meal distributions, education, healthcare, and rehabilitation initiatives."
+                      )}
                     </p>
                     <p>
-                      ३. किसी भी अनधिकृत अथवा व्यावसायिक प्रयोजन हेतु संस्था के नाम
-                      अथवा प्रतीक चिन्ह का उपयोग वर्जित है।
+                      {t(
+                        "३. किसी भी अनधिकृत अथवा व्यावसायिक प्रयोजन हेतु संस्था के नाम अथवा प्रतीक चिन्ह का उपयोग वर्जित है।",
+                        "3. Any unauthorized or commercial use of the foundation's name or emblem is strictly prohibited."
+                      )}
                     </p>
                   </>
                 )}
@@ -426,13 +420,13 @@ export default function Footer({ onOpenDonation, onOpenAdmin }: FooterProps) {
                   className="text-brand-maroon-700 hover:text-brand-maroon-900 underline text-xs font-semibold"
                   onClick={() => setPolicyModal(null)}
                 >
-                  संपूर्ण विवरण पढ़ें
+                  {t("संपूर्ण विवरण पढ़ें", "Read Complete Details")}
                 </Link>
                 <button
                   onClick={() => setPolicyModal(null)}
                   className="px-4 py-1.5 rounded-lg bg-brand-maroon-800 text-white font-semibold text-xs hover:bg-brand-maroon-900 transition"
                 >
-                  समझ लिया
+                  {t("समझ लिया", "Understood")}
                 </button>
               </div>
             </div>

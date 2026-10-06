@@ -5,13 +5,16 @@ import Image from "next/image";
 import { Quote, ShieldCheck, Heart, Sparkles, Phone, Mail, Award } from "lucide-react";
 import TraditionalDivider from "./TraditionalDivider";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function FoundersVision() {
+  const { isEn, t } = useLanguage();
+
   return (
     <section
       id="sansthapak-sandesh"
       className="py-16 sm:py-24 bg-parchment-traditional relative overflow-hidden border-y-2 border-brand-gold-400/30"
-      aria-label="संस्थापक का संदेश"
+      aria-label={t("संस्थापक का संदेश", "Founder's Message")}
     >
       {/* Decorative Subtle Background Watermark */}
       <div
@@ -25,15 +28,15 @@ export default function FoundersVision() {
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-maroon-900/10 border border-brand-gold-500/40 text-brand-maroon-900 text-xs sm:text-sm font-bold shadow-xs mb-4">
             <Sparkles className="w-3.5 h-3.5 text-brand-gold-600" />
-            <span>धरातल से सीधा संवाद • मानवीय नेतृत्व</span>
+            <span>{t("धरातल से सीधा संवाद • मानवीय नेतृत्व", "Direct Ground Dialogue • Compassionate Leadership")}</span>
           </div>
 
           <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl font-extrabold text-brand-maroon-950 tracking-tight leading-tight">
-            संस्थापक एवं मुख्य सेवादार का पावन संदेश
+            {t("संस्थापक एवं मुख्य सेवादार का पावन संदेश", "Sacred Message from Founder & Chief Sevadar")}
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-brand-maroon-900/80 font-medium">
-            “नर सेवा ही नारायण सेवा है — जब तक अंतिम पंक्ति के व्यक्ति के चेहरे पर मुस्कान न हो, हमारा संकल्प अधूरा है।”
+            {t("“नर सेवा ही नारायण सेवा है — जब तक अंतिम पंक्ति के व्यक्ति के चेहरे पर मुस्कान न हो, हमारा संकल्प अधूरा है।”", "“Service to humanity is service to the Divine — until the person in the last row smiles, our mission remains unfinished.”")}
           </p>
 
           <TraditionalDivider />
@@ -52,25 +55,34 @@ export default function FoundersVision() {
               </div>
               <div>
                 <span className="text-xs uppercase tracking-widest font-bold text-brand-gold-700 block">
-                  आधिकारिक वक्तव्य
+                  {t("आधिकारिक वक्तव्य", "Official Statement")}
                 </span>
                 <h3 className="font-heading text-lg sm:text-xl font-bold text-brand-maroon-950">
-                  आदरणीय बंधुओं, माताओं एवं सेवा सहयोगियों,
+                  {t("आदरणीय बंधुओं, माताओं एवं सेवा सहयोगियों,", "Respected Brothers, Sisters, Mothers & Companions in Service,")}
                 </h3>
               </div>
             </div>
 
             <div className="space-y-4 text-brand-charcoal-800 text-sm sm:text-base devanagari-relaxed font-normal">
               <p className="dropcap-traditional">
-                शिवशक्ति सेवा फाउंडेशन की नींव किसी पद या प्रचार के लिए नहीं, बल्कि समाज के उस मूक दर्द को बांटने के लिए रखी गई है जिसे अक्सर अनदेखा कर दिया जाता है। जब कोई भूखा सोता है, कोई असहाय बहन अपने स्वावलंबन के लिए संघर्ष करती है, या कोई अनाथ बच्चा शिक्षा से वंचित रह जाता है, तब हमारा हृदय व्यथित होता है।
+                {t(
+                  "शिवशक्ति सेवा फाउंडेशन की नींव किसी पद या प्रचार के लिए नहीं, बल्कि समाज के उस मूक दर्द को बांटने के लिए रखी गई है जिसे अक्सर अनदेखा कर दिया जाता है। जब कोई भूखा सोता है, कोई असहाय बहन अपने स्वावलंबन के लिए संघर्ष करती है, या कोई अनाथ बच्चा शिक्षा से वंचित रह जाता है, तब हमारा हृदय व्यथित होता है।",
+                  "The Shivshakti Seva Foundation was founded not for title or publicity, but to address the silent suffering in society that often goes unnoticed. When anyone sleeps hungry, when a vulnerable sister struggles for self-reliance, or when an orphaned child is deprived of education, our hearts are deeply moved."
+                )}
               </p>
 
               <p>
-                हमारा दृढ़ विश्वास है कि सच्चा धर्म वही है जो पीड़ित के आँसू पोंछ सके। हमने यह प्रण लिया है कि आपके द्वारा दिया गया एक-एक रुपया और हमारे कार्यकर्ताओं का हर एक पसीना सीधे धरातल पर पहुंचेगा। संस्था का प्रत्येक प्रकल्प पूर्ण निष्पक्षता, पारदर्शी लेखा-जोखा और सनातन करुणा की भावना से संचालित होता है।
+                {t(
+                  "हमारा दृढ़ विश्वास है कि सच्चा धर्म वही है जो पीड़ित के आँसू पोंछ सके। हमने यह प्रण लिया है कि आपके द्वारा दिया गया एक-एक रुपया और हमारे कार्यकर्ताओं का हर एक पसीना सीधे धरातल पर पहुंचेगा। संस्था का प्रत्येक प्रकल्प पूर्ण निष्पक्षता, पारदर्शी लेखा-जोखा और सनातन करुणा की भावना से संचालित होता है।",
+                  "We firmly believe that true faith is that which wipes the tears of the suffering. We have resolved that every single rupee contributed and every drop of effort by our volunteers reaches directly to the grassroots. Every mission is conducted with absolute impartiality, transparent accounting, and compassionate devotion."
+                )}
               </p>
 
               <p className="italic text-brand-maroon-900 font-semibold bg-brand-cream-100/70 p-3.5 rounded-xl border-l-4 border-brand-saffron-500">
-                “सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः — यह केवल एक श्लोक नहीं, हमारी प्रत्येक साँस और हर सेवा अभियान का जीवन-मंत्र है।”
+                {t(
+                  "“सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः — यह केवल एक श्लोक नहीं, हमारी प्रत्येक साँस और हर सेवा अभियान का जीवन-मंत्र है।”",
+                  "“Sarve Bhavantu Sukhinah, Sarve Santu Niramayah (May all beings be happy, may all beings be healthy) — this is not merely a verse, but the guiding mantra of every breath and service campaign we undertake.”"
+                )}
               </p>
             </div>
 
@@ -89,16 +101,16 @@ export default function FoundersVision() {
                 <div>
                   <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-brand-gold-500/15 border border-brand-gold-500/40 text-[10px] font-bold text-brand-maroon-900 mb-1">
                     <Award className="w-3 h-3 text-brand-gold-600" />
-                    <span>मुख्य मार्गदर्शक एवं प्रेरणास्रोत</span>
+                    <span>{t("मुख्य मार्गदर्शक एवं प्रेरणास्रोत", "Chief Mentor & Inspiration")}</span>
                   </div>
                   <h3 className="font-heading text-xl sm:text-2xl font-black text-brand-maroon-950 tracking-tight leading-tight">
-                    आकाश जयदेव गिरि
+                    {t("आकाश जयदेव गिरि", "Akash Jaidev Giri")}
                   </h3>
                   <div className="font-serif text-xs sm:text-sm font-bold text-brand-saffron-800 tracking-wide">
                     (Akash Jaidev Giri)
                   </div>
                   <div className="text-xs font-bold text-brand-maroon-900 mt-1">
-                    संस्थापक एवं मुख्य सेवादार • <span className="text-brand-charcoal-600 font-medium">शिवशक्ति सेवा फाउंडेशन</span>
+                    {t("संस्थापक एवं मुख्य सेवादार • ", "Founder & Chief Sevadar • ")}<span className="text-brand-charcoal-600 font-medium">{t("शिवशक्ति सेवा फाउंडेशन", "Shivshakti Seva Foundation")}</span>
                   </div>
                 </div>
               </div>
@@ -110,10 +122,10 @@ export default function FoundersVision() {
                 </div>
                 <div className="text-left">
                   <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">
-                    प्रमाणित सेवा संकल्प
+                    {t("प्रमाणित सेवा संकल्प", "Certified Service Resolve")}
                   </span>
                   <span className="text-xs font-black text-brand-maroon-950">
-                    सत्यं • शिवं • सुन्दरम्
+                    {t("सत्यं • शिवं • सुन्दरम्", "Truth • Purity • Humanity")}
                   </span>
                 </div>
               </div>
@@ -126,7 +138,7 @@ export default function FoundersVision() {
                 className="inline-flex items-center gap-1.5 hover:text-brand-saffron-600 transition"
               >
                 <Phone className="w-3.5 h-3.5 text-brand-saffron-600" />
-                <span>सीधा संवाद: <span className="font-sans font-bold tracking-wide">91171 35379</span></span>
+                <span>{t("सीधा संवाद: ", "Direct Contact: ")}<span className="font-sans font-bold tracking-wide">91171 35379</span></span>
               </a>
               <span className="text-brand-gold-400">•</span>
               <a
@@ -154,7 +166,7 @@ export default function FoundersVision() {
 
                 <Image
                   src="/images/founder.png"
-                  alt="आकाश जयदेव गिरि (Akash Jaidev Giri) — संस्थापक एवं मुख्य सेवादार (शिवशक्ति सेवा फाउंडेशन)"
+                  alt={t("आकाश जयदेव गिरि (Akash Jaidev Giri) — संस्थापक एवं मुख्य सेवादार (शिवशक्ति सेवा फाउंडेशन)", "Akash Jaidev Giri — Founder & Chief Sevadar (Shivshakti Seva Foundation)")}
                   fill
                   sizes="(max-width: 768px) 100vw, 440px"
                   className="object-contain object-bottom group-hover:scale-[1.02] transition-transform duration-500 drop-shadow-2xl"
@@ -165,7 +177,7 @@ export default function FoundersVision() {
                 <div className="absolute top-4 left-4 z-10">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-maroon-900/90 text-brand-gold-300 text-[11px] font-bold tracking-wide backdrop-blur-md shadow-md border border-brand-gold-500/40">
                     <Award className="w-3.5 h-3.5 text-brand-gold-400" />
-                    <span>संस्थापक एवं मुख्य मार्गदर्शक</span>
+                    <span>{t("संस्थापक एवं मुख्य मार्गदर्शक", "Founder & Chief Mentor")}</span>
                   </div>
                 </div>
               </div>
@@ -175,10 +187,10 @@ export default function FoundersVision() {
                 <div className="text-center mb-4">
                   <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-brand-maroon-900 via-amber-900 to-brand-maroon-950 text-brand-gold-300 text-xs font-bold tracking-wide shadow-sm border border-brand-gold-500/50 mb-2.5">
                     <Award className="w-3.5 h-3.5 text-brand-gold-400" />
-                    <span>पावन प्रेरणास्रोत एवं मुख्य मार्गदर्शक</span>
+                    <span>{t("पावन प्रेरणास्रोत एवं मुख्य मार्गदर्शक", "Sacred Inspiration & Chief Mentor")}</span>
                   </div>
                   <h4 className="font-heading text-2xl sm:text-3xl font-extrabold text-brand-maroon-950 tracking-normal leading-tight">
-                    आकाश जयदेव गिरि
+                    {t("आकाश जयदेव गिरि", "Akash Jaidev Giri")}
                   </h4>
                   <div className="font-serif text-sm sm:text-base font-bold text-brand-saffron-800 tracking-wider mt-0.5">
                     (Akash Jaidev Giri)
@@ -192,10 +204,10 @@ export default function FoundersVision() {
                   </div>
 
                   <p className="text-xs sm:text-sm font-bold text-brand-maroon-900 tracking-wide uppercase">
-                    संस्थापक एवं मुख्य सेवादार • शिवशक्ति सेवा फाउंडेशन
+                    {t("संस्थापक एवं मुख्य सेवादार • शिवशक्ति सेवा फाउंडेशन", "Founder & Chief Sevadar • Shivshakti Seva Foundation")}
                   </p>
                   <p className="text-xs text-brand-charcoal-700 italic mt-3 bg-white/80 p-2.5 rounded-xl border border-brand-gold-300/30 shadow-2xs leading-relaxed">
-                    “सेवा केवल सहायता नहीं, मानवता के प्रति हमारा परम पावन दायित्व है।”
+                    {t("“सेवा केवल सहायता नहीं, मानवता के प्रति हमारा परम पावन दायित्व है।”", "“Service is not mere assistance, but our most sacred duty towards humanity.”")}
                   </p>
                 </div>
 
@@ -206,7 +218,7 @@ export default function FoundersVision() {
                       100%
                     </div>
                     <div className="text-[11px] font-bold text-brand-maroon-800 mt-0.5">
-                      निःस्वार्थ समर्पण
+                      {t("निःस्वार्थ समर्पण", "Selfless Dedication")}
                     </div>
                   </div>
                   <div className="p-3 rounded-2xl bg-white border border-brand-gold-400/30 shadow-2xs">
@@ -214,7 +226,7 @@ export default function FoundersVision() {
                       24×7
                     </div>
                     <div className="text-[11px] font-bold text-brand-maroon-800 mt-0.5">
-                      सेवा तत्परता
+                      {t("सेवा तत्परता", "Service Readiness")}
                     </div>
                   </div>
                 </div>
@@ -229,12 +241,13 @@ export default function FoundersVision() {
                 </div>
                 <div>
                   <h4 className="font-heading text-sm sm:text-base font-bold text-brand-gold-300">
-                    हमारा त्रिसूत्रीय संकल्प
+                    {t("हमारा त्रिसूत्रीय संकल्प", "Our Three-Fold Pledge")}
                   </h4>
                   <p className="text-xs text-white/85 mt-1 leading-relaxed">
-                    १. पूर्ण वित्तीय शुचिता एवं पारदर्शी लेखा <br />
-                    २. बिना किसी भेदभाव के सर्वजन हिताय सेवा <br />
-                    ३. सहायता प्राप्त करने वाले की गरिमा का पूर्ण सम्मान
+                    {t(
+                      "१. पूर्ण वित्तीय शुचिता एवं पारदर्शी लेखा \n२. बिना किसी भेदभाव के सर्वजन हिताय सेवा \n३. सहायता प्राप्त करने वाले की गरिमा का पूर्ण सम्मान",
+                      "1. Absolute financial integrity & open accounts \n2. Service for all beings without discrimination \n3. Deep respect for the dignity of beneficiaries"
+                    )}
                   </p>
                 </div>
               </div>

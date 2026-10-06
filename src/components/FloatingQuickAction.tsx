@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import {
   MessageCircle,
   Phone,
-  HelpCircle,
   X,
   ChevronUp,
   Flame,
@@ -13,6 +12,7 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import TraditionalCornerFlourish from "./TraditionalCornerFlourish";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface FloatingQuickActionProps {
   phoneNumber?: string;
@@ -25,6 +25,7 @@ export default function FloatingQuickAction({
   onOpenHelp,
   isHidden = false,
 }: FloatingQuickActionProps) {
+  const { isEn, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -42,7 +43,9 @@ export default function FloatingQuickAction({
 
   const cleanNumber = phoneNumber.replace(/[^0-9]/g, "");
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(
-    "नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे सेवा सहयोग एवं कार्यों की जानकारी चाहिए।"
+    isEn
+      ? "Hello Shivshakti Seva Foundation, I would like to enquire about your welfare programs and support."
+      : "नमस्ते शिवशक्ति सेवा फाउंडेशन, मुझे सेवा सहयोग एवं कार्यों की जानकारी चाहिए।"
   )}`;
   const mapsUrl = "https://maps.app.goo.gl/T3QqWjCGMkx9KVJr9?g_st=ac";
 
@@ -54,7 +57,7 @@ export default function FloatingQuickAction({
   return (
     <aside
       id="floating-quick-action"
-      aria-label="त्वरित सेवा सारथी एवं सहायता विकल्प"
+      aria-label={t("त्वरित सेवा सारथी एवं सहायता विकल्प", "Quick Help & Helpline Widget")}
       className="fixed bottom-20 right-3.5 sm:bottom-6 sm:right-6 z-30 flex flex-col items-end gap-2"
     >
       {/* Scroll to Top Floating Button */}
@@ -62,8 +65,8 @@ export default function FloatingQuickAction({
         <button
           onClick={scrollToTop}
           className="p-2.5 rounded-full bg-brand-maroon-900/95 hover:bg-brand-maroon-950 text-brand-gold-300 hover:text-white border-2 border-brand-gold-400/70 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 active:scale-95 animate-scaleIn"
-          aria-label="शीर्ष पर जाएँ"
-          title="शीर्ष पर जाएँ"
+          aria-label={t("शीर्ष पर जाएँ", "Scroll to top")}
+          title={t("शीर्ष पर जाएँ", "Scroll to top")}
         >
           <ChevronUp className="w-5 h-5" />
         </button>
@@ -82,12 +85,12 @@ export default function FloatingQuickAction({
               </div>
               <div>
                 <h4 className="font-heading text-sm font-bold text-brand-maroon-950 leading-tight">
-                  २४×७ सेवा सारथी
+                  {t("२४×७ सेवा सारथी", "24×7 Seva Helpdesk")}
                 </h4>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block" />
                   <span className="text-[10px] font-bold text-emerald-700">
-                    सहायता हेतु तत्पर
+                    {t("सहायता हेतु तत्पर", "Ready to Assist")}
                   </span>
                 </div>
               </div>
@@ -96,8 +99,8 @@ export default function FloatingQuickAction({
             <button
               onClick={() => setIsOpen(false)}
               className="p-1 rounded-lg text-brand-charcoal-400 hover:text-brand-maroon-900 hover:bg-brand-cream-100 transition"
-              aria-label="सहायता पट्टी बंद करें"
-              title="बंद करें"
+              aria-label={t("सहायता पट्टी बंद करें", "Close help panel")}
+              title={t("बंद करें", "Close")}
             >
               <X className="w-4 h-4" />
             </button>
@@ -116,10 +119,10 @@ export default function FloatingQuickAction({
                 <div className="p-1.5 rounded-lg bg-white/20">
                   <MessageCircle className="w-4 h-4 fill-current" />
                 </div>
-                <span>व्हाट्सएप पर सीधा संदेश</span>
+                <span>{t("व्हाट्सएप पर सीधा संदेश", "Message on WhatsApp")}</span>
               </div>
               <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded text-white group-hover:translate-x-0.5 transition-transform">
-                चैट करें →
+                {t("चैट करें →", "Chat →")}
               </span>
             </a>
 
@@ -127,19 +130,21 @@ export default function FloatingQuickAction({
             <a
               href={`tel:+${cleanNumber}`}
               className="flex items-center justify-between p-2.5 rounded-xl bg-brand-maroon-900 hover:bg-brand-maroon-950 text-white text-xs font-bold shadow-sm transition hover:shadow-md active:scale-98 group"
-              title="टैप करते ही सीधा डायलर खुलेगा"
+              title={t("टैप करते ही सीधा डायलर खुलेगा", "Tap to open phone dialer")}
             >
               <div className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-brand-gold-500 text-brand-maroon-950">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <span>कॉल: <span className="font-sans font-extrabold tracking-wide">91171 35379</span></span>
-                  <span className="text-[9px] text-brand-gold-300 font-normal">टैप करते ही डायलर खुलेगा</span>
+                  <span>{t("कॉल:", "Call:")} <span className="font-sans font-extrabold tracking-wide">91171 35379</span></span>
+                  <span className="text-[9px] text-brand-gold-300 font-normal">
+                    {t("टैप करते ही डायलर खुलेगा", "Tap to dial directly")}
+                  </span>
                 </div>
               </div>
               <span className="text-[10px] text-brand-gold-300 font-bold bg-white/10 px-1.5 py-0.5 rounded">
-                डायल ↗
+                {t("डायल ↗", "Dial ↗")}
               </span>
             </a>
 
@@ -156,10 +161,10 @@ export default function FloatingQuickAction({
                   <div className="p-1.5 rounded-lg bg-brand-saffron-100 text-brand-saffron-700">
                     <HeartHandshake className="w-4 h-4" />
                   </div>
-                  <span>सहायता अनुरोध दर्ज करें</span>
+                  <span>{t("सहायता अनुरोध दर्ज करें", "Request Emergency Help")}</span>
                 </div>
                 <span className="text-[10px] text-brand-saffron-700">
-                  फॉर्म भरें →
+                  {t("फॉर्म भरें →", "Apply →")}
                 </span>
               </button>
             )}
@@ -173,17 +178,17 @@ export default function FloatingQuickAction({
             >
               <div className="flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-red-600 flex-shrink-0" />
-                <span className="truncate">कार्यालय: माँ मंगलागौरी, गया जी</span>
+                <span className="truncate">{t("कार्यालय: गयाजी, बिहार, भारत", "Office: GayaJi, Bihar, India")}</span>
               </div>
               <span className="text-[9px] text-brand-gold-700 font-bold flex-shrink-0 ml-1">
-                मैप ↗
+                {t("मैप ↗", "Map ↗")}
               </span>
             </a>
           </div>
 
           <div className="mt-3 pt-2 border-t border-brand-maroon-100/60 text-center">
             <span className="text-[10px] font-medium text-brand-charcoal-500">
-              मानव सेवा ही ईश्वर आराधना है
+              {t("मानव सेवा ही ईश्वर आराधना है", "Service to Humanity is Service to the Divine")}
             </span>
           </div>
         </div>
@@ -192,8 +197,8 @@ export default function FloatingQuickAction({
         <button
           onClick={() => setIsOpen(true)}
           className="group relative flex items-center justify-center sm:justify-start gap-2 sm:gap-2.5 w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 rounded-full bg-gradient-to-r from-brand-maroon-900 via-brand-maroon-850 to-brand-saffron-600 text-white font-bold text-xs sm:text-sm shadow-2xl border-2 border-brand-gold-400 hover:scale-105 active:scale-95 transition-all duration-300"
-          aria-label="२४×७ सेवा सारथी सहायता विकल्प खोलें"
-          title="त्वरित सहायता व संपर्क खोलें (२४×७ सेवा सारथी)"
+          aria-label={t("२४×७ सेवा सारथी सहायता विकल्प खोलें", "Open 24×7 Helpdesk Widget")}
+          title={t("त्वरित सहायता व संपर्क खोलें (२४×७ सेवा सारथी)", "Open quick helpline & support")}
         >
           {/* Subtle Ambient Pulse Ring */}
           <span className="absolute -inset-1 rounded-full bg-brand-gold-400/30 animate-pulse pointer-events-none" />
@@ -206,10 +211,10 @@ export default function FloatingQuickAction({
           {/* Label with Live Indicator (Hidden on mobile circle, visible on tablet/desktop) */}
           <div className="hidden sm:flex flex-col items-start text-left">
             <span className="leading-tight font-heading text-brand-gold-200 text-xs sm:text-sm tracking-wide whitespace-nowrap">
-              २४×७ सेवा सारथी
+              {t("२४×७ सेवा सारथी", "24×7 Seva Helpdesk")}
             </span>
             <span className="text-[10px] text-brand-cream-200 font-normal whitespace-nowrap">
-              सहायता एवं संपर्क सूत्र
+              {t("सहायता एवं संपर्क सूत्र", "Helpline & Direct Contact")}
             </span>
           </div>
 

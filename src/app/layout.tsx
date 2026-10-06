@@ -64,6 +64,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
+import { LanguageProvider } from "@/context/LanguageContext";
+
 export default function RootLayout({
   children,
 }: {
@@ -93,7 +95,35 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-brand-cream-100 text-brand-charcoal-900 antialiased selection:bg-brand-saffron-500 selection:text-white">
-        {children}
+        {/* Single Global Mount Point for Google Website Translator */}
+        <div id="google_translate_element" aria-hidden="true" />
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              function googleTranslateElementInit() {
+                try {
+                  if (window.google && window.google.translate) {
+                    new google.translate.TranslateElement({
+                      pageLanguage: 'hi',
+                      includedLanguages: 'en,hi',
+                      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                      autoDisplay: false
+                    }, 'google_translate_element');
+                  }
+                } catch (e) {
+                  console.warn('Google Translate Init Warning:', e);
+                }
+              }
+            `,
+          }}
+        />
+        <script
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          async
+        />
       </body>
     </html>
   );

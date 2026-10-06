@@ -19,12 +19,16 @@ const ALLOWED_TYPES = new Set<SubmissionType>([
   "women_competition",
   "contact",
   "donation_receipt",
+  "vishesh_karyakram",
 ]);
 
 /**
  * Infer submission type if not explicitly supplied in request
  */
 function inferSubmissionType(body: Record<string, any>): SubmissionType {
+  if (body.pitraDevtaName || body.fatherName) {
+    return "vishesh_karyakram";
+  }
   if (body.needType || body.location || body.requestId) {
     return "help_request";
   }

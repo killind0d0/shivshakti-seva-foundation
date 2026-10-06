@@ -5,7 +5,6 @@ import ModalPortal from "./ModalPortal";
 import Image from "next/image";
 import QRCode from "qrcode";
 import {
-  HeartHandshake,
   QrCode,
   Building2,
   Copy,
@@ -25,8 +24,9 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { FoundationData } from "@/data/foundationData";
-import { getWhatsAppUrl } from "@/utils/whatsappHelper";
+import { getWhatsAppUrl, openWhatsAppDirect } from "@/utils/whatsappHelper";
 import PaymentAppBadges from "./PaymentAppBadges";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface DonationModalProps {
   isOpen: boolean;
@@ -39,6 +39,7 @@ export default function DonationModal({
   onClose,
   donationConfig,
 }: DonationModalProps) {
+  const { isEn, t } = useLanguage();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"upi" | "bank" | "receipt">("upi");
   const [selectedAmount, setSelectedAmount] = useState<number | null>(1100);
@@ -106,10 +107,10 @@ export default function DonationModal({
   if (!isOpen || !mounted) return null;
 
   const predefinedAmounts = [
-    { value: 500, label: "₹ 500", note: "राशन किट" },
-    { value: 1100, label: "₹ 1,100", note: "शिक्षा संबल" },
-    { value: 2100, label: "₹ 2,100", note: "आपदा राहत" },
-    { value: 5100, label: "₹ 5,100", note: "स्वास्थ्य शिविर" },
+    { value: 500, label: "₹ 500", note: t("राशन किट", "Ration Kit") },
+    { value: 1100, label: "₹ 1,100", note: t("शिक्षा संबल", "Education Aid") },
+    { value: 2100, label: "₹ 2,100", note: t("आपदा राहत", "Disaster Relief") },
+    { value: 5100, label: "₹ 5,100", note: t("स्वास्थ्य शिविर", "Medical Camp") },
   ];
 
   const handleCopy = (text: string, fieldName: string) => {
@@ -125,14 +126,19 @@ export default function DonationModal({
   const handleReceiptSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!donorName.trim() || !donorPhone.trim()) {
-      setReceiptError("कृपया अपना नाम और मोबाइल नंबर अवश्य दर्ज करें।");
+      setReceiptError(t("कृपया अपना नाम और मोबाइल नंबर अवश्य दर्ज करें।", "Please enter your name and phone number."));
       return;
     }
     setReceiptError(null);
     setIsSubmitting(true);
 
-    const msg = `🙏 *80G दान रसीद अनुरोध — शिवशक्ति सेवा फाउंडेशन*\n• दाता: ${donorName.trim()}\n• मोबाइल: ${donorPhone.trim()}\n• ईमेल: ${donorEmail.trim() || "लागू नहीं"}\n• शहर: ${donorCity.trim() || "लागू नहीं"}\n• पैन नंबर: ${donorPan.trim() || "लागू नहीं"}\n• यूटीआर/लेनदेन आईडी: ${transactionRef.trim() || "लागू नहीं"}\n• सहयोग राशि: ₹${effectiveAmount}\n• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
+    const msg = isEn
+      ? `🙏 *80G DONATION RECEIPT REQUEST — Shivshakti Seva Foundation*\n• Donor: ${donorName.trim()}\n• Mobile: ${donorPhone.trim()}\n• Email: ${donorEmail.trim() || "N/A"}\n• City: ${donorCity.trim() || "N/A"}\n• PAN: ${donorPan.trim() || "N/A"}\n• UTR/Transaction Ref: ${transactionRef.trim() || "N/A"}\n• Amount: ₹${effectiveAmount}\n• Date: ${new Date().toLocaleDateString("en-US")}`
+      : `🙏 *80G दान रसीद अनुरोध — शिवशक्ति सेवा फाउंडेशन*\n• दाता: ${donorName.trim()}\n• मोबाइल: ${donorPhone.trim()}\n• ईमेल: ${donorEmail.trim() || "लागू नहीं"}\n• शहर: ${donorCity.trim() || "लागू नहीं"}\n• पैन नंबर: ${donorPan.trim() || "लागू नहीं"}\n• यूटीआर/लेनदेन आईडी: ${transactionRef.trim() || "लागू नहीं"}\n• सहयोग राशि: ₹${effectiveAmount}\n• दिनांक: ${new Date().toLocaleDateString("hi-IN")}`;
     setReceiptWhatsappText(msg);
+
+    // Immediately open WhatsApp so donation receipt request reaches Foundation accounts team
+    openWhatsAppDirect(msg);
 
     const submissionData = {
       type: "donation_receipt",
@@ -208,19 +214,22 @@ export default function DonationModal({
                 id="donation-modal-title"
                 className="font-heading text-base sm:text-lg lg:text-xl font-bold text-brand-gold-300 truncate"
               >
-                सहयोग करें — शिवशक्ति सेवा कोष
+                {t("सहयोग करें — शिवशक्ति सेवा कोष", "Contribute — Shivshakti Seva Fund")}
               </h2>
               <p className="text-[11px] sm:text-xs text-brand-cream-200/90 truncate">
-                प्रत्येक अंशदान सीधे पीड़ित एवं जरूरतमंद परिवारों तक पहुँचता है
+                {t(
+                  "प्रत्येक अंशदान सीधे पीड़ित एवं जरूरतमंद परिवारों तक पहुँचता है",
+                  "Every contribution directly reaches distressed and underprivileged families"
+                )}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-brand-cream-100 hover:text-white transition font-bold text-xs border border-white/20 active:scale-95 flex-shrink-0"
-            aria-label="संवाद बंद करें"
+            aria-label={t("संवाद बंद करें", "Close Dialog")}
           >
-            <span className="hidden sm:inline">बंद करें</span>
+            <span className="hidden sm:inline">{t("बंद करें", "Close")}</span>
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -231,11 +240,11 @@ export default function DonationModal({
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-bold text-brand-maroon-950 uppercase tracking-wide">
-                सहयोग राशि चुनें:
+                {t("सहयोग राशि चुनें:", "Select Contribution Amount:")}
               </label>
               {effectiveAmount > 0 && (
                 <span className="text-xs font-bold text-brand-saffron-700 bg-brand-saffron-50 px-2.5 py-0.5 rounded-full border border-brand-saffron-200">
-                  चयनित राशि: ₹ {effectiveAmount.toLocaleString("en-IN")}
+                  {t("चयनित राशि:", "Selected Amount:")} ₹ {effectiveAmount.toLocaleString("en-IN")}
                 </span>
               )}
             </div>
@@ -278,7 +287,7 @@ export default function DonationModal({
                   setCustomAmount(e.target.value);
                   setSelectedAmount(null);
                 }}
-                placeholder="अन्य इच्छित राशि यहाँ दर्ज करें (उदा. 5100)"
+                placeholder={t("अन्य इच्छित राशि यहाँ दर्ज करें (उदा. 5100)", "Enter any other amount (e.g. 5100)")}
                 className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-brand-maroon-200 text-xs sm:text-sm bg-brand-cream-50 focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 font-sans"
               />
             </div>
@@ -295,7 +304,7 @@ export default function DonationModal({
               }`}
             >
               <QrCode className="w-4 h-4 text-brand-saffron-600" />
-              <span>यूपीआई (UPI / QR)</span>
+              <span>{t("यूपीआई (UPI / QR)", "UPI / QR Code")}</span>
             </button>
             {Boolean(donationConfig?.accountNumber) && (
               <button
@@ -307,7 +316,7 @@ export default function DonationModal({
                 }`}
               >
                 <Building2 className="w-4 h-4 text-brand-maroon-800" />
-                <span>बैंक खाता विवरण</span>
+                <span>{t("बैंक खाता विवरण", "Bank Account")}</span>
               </button>
             )}
             <button
@@ -319,7 +328,7 @@ export default function DonationModal({
               }`}
             >
               <FileText className="w-4 h-4 text-emerald-600" />
-              <span>दान रसीद फॉर्म</span>
+              <span>{t("दान रसीद फॉर्म", "Receipt Request")}</span>
             </button>
           </div>
 
@@ -333,7 +342,7 @@ export default function DonationModal({
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
                       src={qrCodeDataUrl}
-                      alt="यूपीआई भुगतान क्यूआर कोड"
+                      alt={t("यूपीआई भुगतान क्यूआर कोड", "UPI Payment QR Code")}
                       className="w-full h-full object-contain"
                     />
                   ) : (
@@ -348,10 +357,10 @@ export default function DonationModal({
                 <div className="space-y-3 flex-1 w-full">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-brand-charcoal-600 uppercase">
-                      आधिकारिक UPI पहचान:
+                      {t("आधिकारिक UPI पहचान:", "Official UPI ID:")}
                     </span>
                     <span className="text-xs px-2.5 py-0.5 rounded-full bg-brand-gold-100 text-brand-maroon-900 font-bold border border-brand-gold-300">
-                      ₹ {effectiveAmount > 0 ? effectiveAmount.toLocaleString("en-IN") : "इच्छानुसार"}
+                      ₹ {effectiveAmount > 0 ? effectiveAmount.toLocaleString("en-IN") : (isEn ? "Any Amount" : "इच्छानुसार")}
                     </span>
                   </div>
 
@@ -369,11 +378,11 @@ export default function DonationModal({
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-[10px] font-bold text-brand-saffron-800 bg-brand-saffron-100 px-1.5 py-0.2 rounded">
-                            एयरटेल पेमेंट्स बैंक
+                            {t("एयरटेल पेमेंट्स बैंक", "Airtel Payments Bank")}
                           </span>
                           {selectedUpiId === primaryUpi && (
                             <span className="text-[10px] text-emerald-700 font-bold">
-                              • क्यूआर सक्रिय
+                              {t("• क्यूआर सक्रिय", "• Active QR")}
                             </span>
                           )}
                         </div>
@@ -388,7 +397,7 @@ export default function DonationModal({
                           handleCopy(primaryUpi, "modal-upi-primary");
                         }}
                         className="p-1.5 rounded-lg bg-brand-cream-200 hover:bg-brand-cream-300 text-brand-maroon-900 transition flex-shrink-0"
-                        title="यूपीआई कॉपी करें"
+                        title={t("यूपीआई कॉपी करें", "Copy UPI ID")}
                       >
                         {copiedField === "modal-upi-primary" ? (
                           <Check className="w-4 h-4 text-emerald-600" />
@@ -410,11 +419,11 @@ export default function DonationModal({
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-[10px] font-bold text-brand-maroon-800 bg-brand-cream-200 px-1.5 py-0.2 rounded">
-                            एसबीआई / भीम यूपीआई
+                            {t("एसबीआई / भीम यूपीआई", "SBI / BHIM UPI")}
                           </span>
                           {selectedUpiId === secondaryUpi && (
                             <span className="text-[10px] text-emerald-700 font-bold">
-                              • क्यूआर सक्रिय
+                              {t("• क्यूआर सक्रिय", "• Active QR")}
                             </span>
                           )}
                         </div>
@@ -429,7 +438,7 @@ export default function DonationModal({
                           handleCopy(secondaryUpi, "modal-upi-secondary");
                         }}
                         className="p-1.5 rounded-lg bg-brand-cream-200 hover:bg-brand-cream-300 text-brand-maroon-900 transition flex-shrink-0"
-                        title="यूपीआई कॉपी करें"
+                        title={t("यूपीआई कॉपी करें", "Copy UPI ID")}
                       >
                         {copiedField === "modal-upi-secondary" ? (
                           <Check className="w-4 h-4 text-emerald-600" />
@@ -449,12 +458,12 @@ export default function DonationModal({
                       {copiedField === "modal-upi-active-btn" ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>सक्रिय आईडी कॉपी हो गई!</span>
+                          <span>{t("सक्रिय आईडी कॉपी हो गई!", "Active ID Copied!")}</span>
                         </>
                       ) : (
                         <>
                           <Copy className="w-3.5 h-3.5 text-brand-gold-400" />
-                          <span>सक्रिय आईडी ({selectedUpiId}) कॉपी करें</span>
+                          <span>{t(`सक्रिय आईडी (${selectedUpiId}) कॉपी करें`, `Copy Active ID (${selectedUpiId})`)}</span>
                         </>
                       )}
                     </button>
@@ -463,7 +472,7 @@ export default function DonationModal({
                       className="w-full sm:w-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95"
                     >
                       <Smartphone className="w-3.5 h-3.5" />
-                      <span>सीधे UPI ऐप से भुगतान करें</span>
+                      <span>{t("सीधे UPI ऐप से भुगतान करें", "Pay directly via UPI App")}</span>
                     </a>
                   </div>
 
@@ -471,7 +480,7 @@ export default function DonationModal({
                   <div className="pt-2 border-t border-brand-maroon-100/70">
                     <div className="text-[10px] font-bold text-brand-charcoal-600 uppercase tracking-wider mb-1.5 text-center sm:text-left flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-brand-saffron-600" />
-                      <span>स्वीकृत यूपीआई ऐप्स (Accepted UPI Apps)</span>
+                      <span>{t("स्वीकृत यूपीआई ऐप्स (Accepted UPI Apps)", "Accepted UPI Payment Apps")}</span>
                     </div>
                     <PaymentAppBadges size="sm" className="justify-center sm:justify-start" />
                   </div>
@@ -481,14 +490,14 @@ export default function DonationModal({
               {/* Quick switch to receipt form */}
               <div className="p-3 bg-brand-cream-100 rounded-xl border border-brand-gold-300/60 flex items-center justify-between">
                 <span className="text-xs text-brand-charcoal-700">
-                  भुगतान पूर्ण होने के बाद आधिकारिक रसीद दर्ज करें:
+                  {t("भुगतान पूर्ण होने के बाद आधिकारिक रसीद दर्ज करें:", "After payment, submit details for donation receipt:")}
                 </span>
                 <button
                   type="button"
                   onClick={() => setActiveTab("receipt")}
                   className="px-3 py-1 rounded-lg bg-brand-maroon-900 text-white text-xs font-bold hover:bg-brand-maroon-950 transition"
                 >
-                  रसीद फॉर्म भरें →
+                  {t("रसीद फॉर्म भरें →", "Request Receipt →")}
                 </button>
               </div>
             </div>
@@ -503,10 +512,16 @@ export default function DonationModal({
                   <AlertCircle className="w-5 h-5 text-amber-700 flex-shrink-0 mt-0.5" />
                   <div className="space-y-1">
                     <h4 className="font-bold text-xs sm:text-sm text-amber-950 leading-snug">
-                      बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद हेतु कृपया सीधे हमारे कार्यालय फोन +91 91171 35379 पर संपर्क करें।
+                      {t(
+                        "बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद हेतु कृपया सीधे हमारे कार्यालय फोन +91 91171 35379 पर संपर्क करें।",
+                        "For Bank Transfer (NEFT/RTGS) details & 80G receipt, please contact our office helpline directly at +91 91171 35379."
+                      )}
                     </h4>
                     <p className="text-[11px] text-amber-900 leading-relaxed font-normal">
-                      सुरक्षा, पारदर्शिता एवं विधिक सत्यापन के तहत ट्रस्ट खाता विवरण कार्यालय द्वारा अधिकृत संपर्क पर तुरंत उपलब्ध कराया जाता है।
+                      {t(
+                        "सुरक्षा, पारदर्शिता एवं विधिक सत्यापन के तहत ट्रस्ट खाता विवरण कार्यालय द्वारा अधिकृत संपर्क पर तुरंत उपलब्ध कराया जाता है।",
+                        "For security and verification, trust bank details are promptly shared via authorized office communication."
+                      )}
                     </p>
                   </div>
                 </div>
@@ -517,36 +532,38 @@ export default function DonationModal({
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-maroon-900 hover:bg-brand-maroon-950 text-white font-bold text-xs shadow-xs transition"
                   >
                     <Phone className="w-3.5 h-3.5 text-brand-gold-400" />
-                    <span>कार्यालय हेल्पलाइन: +91 91171 35379</span>
+                    <span>{t("कार्यालय हेल्पलाइन: +91 91171 35379", "Office Helpline: +91 91171 35379")}</span>
                   </a>
                   <a
                     href={`https://wa.me/919117135379?text=${encodeURIComponent(
-                      "नमस्ते शिवशक्ति सेवा फाउंडेशन, कृपया बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद प्रक्रिया साझा करें।"
+                      isEn
+                        ? "Hello Shivshakti Seva Foundation, please share Bank Transfer (NEFT/RTGS) details and 80G receipt procedure."
+                        : "नमस्ते शिवशक्ति सेवा फाउंडेशन, कृपया बैंक हस्तांतरण (NEFT/RTGS) विवरण एवं 80G रसीद प्रक्रिया साझा करें।"
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs shadow-xs transition"
                   >
-                    <span>व्हाट्सएप पर विवरण प्राप्त करें</span>
+                    <span>{t("व्हाट्सएप पर विवरण प्राप्त करें", "Get Bank Details on WhatsApp")}</span>
                   </a>
                 </div>
               </div>
 
               <div className="p-4 sm:p-5 bg-brand-cream-50 rounded-2xl border border-brand-maroon-100 space-y-3 text-xs sm:text-sm">
                 <div className="flex justify-between py-1.5 border-b border-brand-cream-200">
-                  <span className="text-brand-charcoal-500 font-medium">खातेदार का नाम:</span>
+                  <span className="text-brand-charcoal-500 font-medium">{t("खातेदार का नाम:", "Account Name:")}</span>
                   <span className="font-bold text-brand-maroon-950">
                     {donationConfig?.accountName || "शिवशक्ति सेवा फाउंडेशन"}
                   </span>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-brand-cream-200">
-                  <span className="text-brand-charcoal-500 font-medium">बैंक का नाम:</span>
+                  <span className="text-brand-charcoal-500 font-medium">{t("बैंक का नाम:", "Bank Name:")}</span>
                   <span className="font-semibold text-brand-charcoal-800">
-                    {donationConfig?.bankName || "भारतीय स्टेट बैंक (SBI) / एयरटेल पेमेंट्स बैंक"}
+                    {donationConfig?.bankName || (isEn ? "State Bank of India / Airtel Payments Bank" : "भारतीय स्टेट बैंक (SBI) / एयरटेल पेमेंट्स बैंक")}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-1.5 border-b border-brand-cream-200">
-                  <span className="text-brand-charcoal-500 font-medium">खाता संख्या:</span>
+                  <span className="text-brand-charcoal-500 font-medium">{t("खाता संख्या:", "Account Number:")}</span>
                   {donationConfig?.accountNumber && !donationConfig.accountNumber.includes("XXXX") ? (
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-bold text-brand-maroon-950 text-sm">
@@ -558,7 +575,7 @@ export default function DonationModal({
                           handleCopy(donationConfig.accountNumber, "modal-acc")
                         }
                         className="p-1.5 rounded-md hover:bg-brand-cream-200 text-brand-maroon-700 transition"
-                        title="खाता संख्या कॉपी करें"
+                        title={t("खाता संख्या कॉपी करें", "Copy Account Number")}
                       >
                         {copiedField === "modal-acc" ? (
                           <Check className="w-4 h-4 text-emerald-600" />
@@ -569,12 +586,12 @@ export default function DonationModal({
                     </div>
                   ) : (
                     <span className="text-xs font-semibold text-brand-maroon-900 bg-brand-cream-200/80 px-2.5 py-1 rounded">
-                      कार्यालय संपर्क द्वारा सत्यापन पश्चात उपलब्ध (+91 91171 35379)
+                      {t("कार्यालय संपर्क द्वारा सत्यापन पश्चात उपलब्ध (+91 91171 35379)", "Available upon office verification (+91 91171 35379)")}
                     </span>
                   )}
                 </div>
                 <div className="flex justify-between items-center py-1.5 border-b border-brand-cream-200">
-                  <span className="text-brand-charcoal-500 font-medium">आईएफएससी कोड:</span>
+                  <span className="text-brand-charcoal-500 font-medium">{t("आईएफएससी कोड:", "IFSC Code:")}</span>
                   {donationConfig?.ifscCode && !donationConfig.ifscCode.includes("XXXX") ? (
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-bold text-brand-maroon-950 text-sm">
@@ -586,7 +603,7 @@ export default function DonationModal({
                           handleCopy(donationConfig.ifscCode, "modal-ifsc")
                         }
                         className="p-1.5 rounded-md hover:bg-brand-cream-200 text-brand-maroon-700 transition"
-                        title="IFSC कॉपी करें"
+                        title={t("IFSC कॉपी करें", "Copy IFSC")}
                       >
                         {copiedField === "modal-ifsc" ? (
                           <Check className="w-4 h-4 text-emerald-600" />
@@ -597,14 +614,14 @@ export default function DonationModal({
                     </div>
                   ) : (
                     <span className="text-xs font-medium text-brand-charcoal-700">
-                      SBIN / Airtel Payments Bank (सत्यापन पर उपलब्ध)
+                      SBIN / AIRP (Verified on Request)
                     </span>
                   )}
                 </div>
                 <div className="flex justify-between py-1.5">
-                  <span className="text-brand-charcoal-500 font-medium">शाखा:</span>
+                  <span className="text-brand-charcoal-500 font-medium">{t("शाखा:", "Branch:")}</span>
                   <span className="font-medium text-brand-charcoal-800">
-                    {donationConfig?.branch || "मुख्य शाखा, बिहार"}
+                    {donationConfig?.branch || (isEn ? "Main Branch, Bihar" : "मुख्य शाखा, बिहार")}
                   </span>
                 </div>
               </div>
@@ -612,30 +629,33 @@ export default function DonationModal({
               {/* Quick switch to receipt form */}
               <div className="p-3 bg-brand-cream-100 rounded-xl border border-brand-gold-300/60 flex items-center justify-between">
                 <span className="text-xs text-brand-charcoal-700">
-                  बैंक ट्रांसफर के बाद विवरण दर्ज करें:
+                  {t("बैंक ट्रांसफर के बाद विवरण दर्ज करें:", "After Bank Transfer, request receipt:")}
                 </span>
                 <button
                   type="button"
                   onClick={() => setActiveTab("receipt")}
                   className="px-3 py-1 rounded-lg bg-brand-maroon-900 text-white text-xs font-bold hover:bg-brand-maroon-950 transition"
                 >
-                  रसीद फॉर्म भरें →
+                  {t("रसीद फॉर्म भरें →", "Request Receipt →")}
                 </button>
               </div>
             </div>
           )}
 
-          {/* TAB 3: DONOR DETAILS & RECEIPT FORM (Addresses "returns only a blur screen with no forms") */}
+          {/* TAB 3: DONOR DETAILS & RECEIPT FORM */}
           {activeTab === "receipt" && (
             <div className="space-y-4">
               {receiptSubmitted ? (
                 <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-300 text-center space-y-3 animate-fadeIn">
                   <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
                   <h3 className="font-heading text-lg font-bold text-emerald-950">
-                    सहयोग विवरण सफलतापूर्वक दर्ज हुआ!
+                    {t("सहयोग विवरण सफलतापूर्वक दर्ज हुआ!", "Donation Details Submitted Successfully!")}
                   </h3>
                   <p className="text-xs text-emerald-800 leading-relaxed max-w-md mx-auto">
-                    आदरणीय <strong>{donorName}</strong> जी, शिवशक्ति सेवा कोष में ₹<strong>{effectiveAmount || "अंशदान"}</strong> के पावन सहयोग हेतु आपका कोटि-कोटि धन्यवाद। सत्यापन उपरांत डिजिटल रसीद आपके व्हाट्सएप/फोन पर प्रेषित कर दी जाएगी।
+                    {t(
+                      `आदरणीय ${donorName} जी, शिवशक्ति सेवा कोष में ₹${effectiveAmount || "अंशदान"} के पावन सहयोग हेतु आपका कोटि-कोटि धन्यवाद। सत्यापन उपरांत डिजिटल रसीद आपके व्हाट्सएप/फोन पर प्रेषित कर दी जाएगी।`,
+                      `Dear ${donorName}, thank you wholeheartedly for your noble contribution of ₹${effectiveAmount || "donation"} to the Shivshakti Seva Fund. Upon verification, your digital 80G receipt will be sent to your WhatsApp/email.`
+                    )}
                   </p>
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
                     <a
@@ -645,7 +665,7 @@ export default function DonationModal({
                       className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white font-bold text-xs sm:text-sm shadow-md transition inline-flex items-center justify-center gap-2 border border-emerald-400 active:scale-95 animate-pulse"
                     >
                       <MessageCircle className="w-4 h-4 text-emerald-200" />
-                      <span>📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)</span>
+                      <span>{t("📤 अपना फ़ॉर्म फाउंडेशन को भेजें (Send on WhatsApp)", "📤 Send Details on WhatsApp")}</span>
                     </a>
                     <button
                       type="button"
@@ -655,11 +675,14 @@ export default function DonationModal({
                       }}
                       className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-brand-maroon-900 text-white font-bold text-xs hover:bg-brand-maroon-950 transition shadow-sm"
                     >
-                      विंडो बंद करें
+                      {t("विंडो बंद करें", "Close Window")}
                     </button>
                   </div>
                   <p className="text-[11px] text-emerald-800 font-medium">
-                    WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।
+                    {t(
+                      "WhatsApp से भेजना आवश्यक है ताकि फाउंडेशन को आपका अनुरोध प्राप्त हो (+91 91171 35379)।",
+                      "Sending via WhatsApp is required so our team directly receives and verifies your receipt request (+91 91171 35379)."
+                    )}
                   </p>
                 </div>
               ) : (
@@ -671,13 +694,16 @@ export default function DonationModal({
                     </div>
                   )}
                   <div className="p-3 bg-brand-gold-50 rounded-xl border border-brand-gold-300 text-xs text-brand-maroon-900 leading-relaxed">
-                    कृपया अपने सहयोग का विवरण भरें ताकि संस्था आपके नाम से अधिकृत दान रसीद जारी कर सके।
+                    {t(
+                      "कृपया अपने सहयोग का विवरण भरें ताकि संस्था आपके नाम से अधिकृत दान रसीद जारी कर सके।",
+                      "Please provide your transaction details so our trust can issue your official 80G tax exemption receipt."
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
-                        दानदाता का पूरा नाम *
+                        {t("दानदाता का पूरा नाम *", "Donor's Full Name *")}
                       </label>
                       <div className="relative">
                         <User className="w-4 h-4 text-brand-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -686,7 +712,7 @@ export default function DonationModal({
                           required
                           value={donorName}
                           onChange={(e) => setDonorName(e.target.value)}
-                          placeholder="उदा. राहुल कुमार शर्मा"
+                          placeholder={t("उदा. राहुल कुमार शर्मा", "e.g. John Doe / Rajesh Sharma")}
                           className="w-full pl-9 pr-3 py-2 rounded-xl border border-brand-maroon-200 text-xs sm:text-sm bg-brand-cream-50 focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 font-sans"
                         />
                       </div>
@@ -694,7 +720,7 @@ export default function DonationModal({
 
                     <div>
                       <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
-                        मोबाइल / व्हाट्सएप नंबर *
+                        {t("मोबाइल / व्हाट्सएप नंबर *", "Mobile / WhatsApp Number *")}
                       </label>
                       <div className="relative">
                         <Phone className="w-4 h-4 text-brand-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -703,7 +729,7 @@ export default function DonationModal({
                           required
                           value={donorPhone}
                           onChange={(e) => setDonorPhone(e.target.value)}
-                          placeholder="१० अंकों का मोबाइल नंबर"
+                          placeholder={t("१० अंकों का मोबाइल नंबर", "10-digit mobile number")}
                           className="w-full pl-9 pr-3 py-2 rounded-xl border border-brand-maroon-200 text-xs sm:text-sm bg-brand-cream-50 focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 font-sans"
                         />
                       </div>
@@ -713,20 +739,20 @@ export default function DonationModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
-                        यूटीआर / ट्रांजेक्शन संदर्भ (UTR Ref No.)
+                        {t("यूटीआर / ट्रांजेक्शन संदर्भ (UTR Ref No.)", "UTR / Transaction Ref No.")}
                       </label>
                       <input
                         type="text"
                         value={transactionRef}
                         onChange={(e) => setTransactionRef(e.target.value)}
-                        placeholder="उदा. 427819034251 (वैकल्पिक)"
+                        placeholder={t("उदा. 427819034251 (वैकल्पिक)", "e.g. 427819034251 (Optional)")}
                         className="w-full px-3 py-2 rounded-xl border border-brand-maroon-200 text-xs sm:text-sm bg-brand-cream-50 focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 font-sans"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
-                        शहर / जिला
+                        {t("शहर / जिला", "City / District")}
                       </label>
                       <div className="relative">
                         <MapPin className="w-4 h-4 text-brand-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -734,7 +760,7 @@ export default function DonationModal({
                           type="text"
                           value={donorCity}
                           onChange={(e) => setDonorCity(e.target.value)}
-                          placeholder="उदा. गया, बिहार"
+                          placeholder={t("उदा. गया, बिहार", "e.g. Gaya, Bihar")}
                           className="w-full pl-9 pr-3 py-2 rounded-xl border border-brand-maroon-200 text-xs sm:text-sm bg-brand-cream-50 focus:outline-none focus:ring-2 focus:ring-brand-saffron-500 font-sans"
                         />
                       </div>
@@ -744,7 +770,7 @@ export default function DonationModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
-                        ईमेल पता (वैकल्पिक)
+                        {t("ईमेल पता (वैकल्पिक)", "Email Address (Optional)")}
                       </label>
                       <div className="relative">
                         <Mail className="w-4 h-4 text-brand-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -760,7 +786,7 @@ export default function DonationModal({
 
                     <div>
                       <label className="block text-xs font-bold text-brand-maroon-950 mb-1">
-                        पैन नंबर (80G रसीद हेतु, वैकल्पिक)
+                        {t("पैन नंबर (80G रसीद हेतु, वैकल्पिक)", "PAN Number (For 80G Receipt, Optional)")}
                       </label>
                       <input
                         type="text"
@@ -780,7 +806,9 @@ export default function DonationModal({
                   >
                     <Send className="w-4 h-4 text-brand-gold-400" />
                     <span>
-                      {isSubmitting ? "पंजीकरण दर्ज हो रहा है..." : "सहयोग विवरण एवं रसीद दर्ज करें"}
+                      {isSubmitting
+                        ? t("पंजीकरण दर्ज हो रहा है...", "Submitting details...")
+                        : t("सहयोग विवरण एवं रसीद दर्ज करें", "Submit Donation Details & Request Receipt")}
                     </span>
                   </button>
                 </form>
@@ -792,10 +820,13 @@ export default function DonationModal({
           <div className="p-3 bg-brand-gold-50 border border-brand-gold-200 rounded-xl text-xs text-brand-charcoal-700 space-y-1">
             <div className="flex items-center gap-1.5 font-bold text-brand-maroon-950">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>पारदर्शी एवं सुरक्षित हस्तांतरण</span>
+              <span>{t("पारदर्शी एवं सुरक्षित हस्तांतरण", "Transparent & Secure Transactions")}</span>
             </div>
             <p className="text-[11px] text-brand-charcoal-600 leading-relaxed">
-              सहयोग के उपरांत डिजिटल रसीद प्राप्त करने हेतु सीधे हमारे हेल्पलाइन नंबर पर व्हाट्सएप भी कर सकते हैं।
+              {t(
+                "सहयोग के उपरांत डिजिटल रसीद प्राप्त करने हेतु सीधे हमारे हेल्पलाइन नंबर पर व्हाट्सएप भी कर सकते हैं।",
+                "After contributing, you can also directly WhatsApp our helpline (+91 91171 35379) for instant verification and receipt."
+              )}
             </p>
           </div>
         </div>
@@ -803,14 +834,14 @@ export default function DonationModal({
         {/* Modal Footer */}
         <div className="p-3.5 sm:p-4 bg-brand-cream-100 border-t border-brand-maroon-200 flex items-center justify-between">
           <span className="text-[11px] text-brand-charcoal-600 font-medium hidden sm:inline">
-            शिवशक्ति सेवा फाउंडेशन • गैर-लाभकारी संस्था
+            {t("शिवशक्ति सेवा फाउंडेशन • गैर-लाभकारी संस्था", "Shivshakti Seva Foundation • Non-Profit Organization")}
           </span>
           <button
             type="button"
             onClick={onClose}
             className="px-5 py-2 rounded-xl bg-brand-maroon-800 text-white font-bold text-xs hover:bg-brand-maroon-900 transition shadow-sm ml-auto active:scale-95"
           >
-            बंद करें
+            {t("बंद करें", "Close")}
           </button>
         </div>
       </div>

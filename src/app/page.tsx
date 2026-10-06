@@ -12,7 +12,7 @@ import FoundersVision from "@/components/FoundersVision";
 import ServicesSection from "@/components/ServicesSection";
 import DailySankalpWidget from "@/components/DailySankalpWidget";
 import FieldWorkSpotlight from "@/components/FieldWorkSpotlight";
-import WomenEmpowermentCompetition from "@/components/WomenEmpowermentCompetition";
+import VisheshKaryakramBanner from "@/components/VisheshKaryakramBanner";
 import WhatsAppCommunity from "@/components/WhatsAppCommunity";
 import FeaturedCampaign from "@/components/FeaturedCampaign";
 import HowContributionsHelp from "@/components/HowContributionsHelp";
@@ -33,7 +33,6 @@ import FloatingQuickAction from "@/components/FloatingQuickAction";
 import FestivalGreetingBanner from "@/components/FestivalGreetingBanner";
 import StickyDonateBar from "@/components/StickyDonateBar";
 import FoundationTimeline from "@/components/FoundationTimeline";
-import EventCountdown from "@/components/EventCountdown";
 import HelpTracker from "@/components/HelpTracker";
 import QuickAccessBar from "@/components/SectionNavHub";
 import { initialFoundationData, FoundationData } from "@/data/foundationData";
@@ -191,8 +190,11 @@ export default function Home() {
         onToggleMobileMenu={setIsMobileMenuOpen}
       />
 
-      {/* 4. Top Live Marquee Ticker (Shifted back to its prominent original position below Header) */}
+      {/* 4. Top Live Marquee Ticker */}
       <MarqueeTicker />
+
+      {/* 5. Special Program Announcement (विशेष कार्यक्रम की जानकारियाँ) */}
+      <VisheshKaryakramBanner />
 
       {/* Ambient Sacred Logo Watermark */}
       <div
@@ -251,12 +253,7 @@ export default function Home() {
           <FieldWorkSpotlight />
         </div>
 
-        {/* SECTION 9: Women Empowerment & Self-Reliance Skill Competition */}
-        <div id="mahila-pratiyogita">
-          <WomenEmpowermentCompetition />
-        </div>
-
-        {/* SECTION 10: Featured Relief Campaign (Flood Relief) */}
+        {/* SECTION 9: Featured Relief Campaign (Flood Relief) */}
         <div id="hamare-abhiyan">
           <FeaturedCampaign
             campaign={data.featuredCampaign}
@@ -264,30 +261,25 @@ export default function Home() {
           />
         </div>
 
-        {/* SECTION 11: Donation Section (UPI, Bank, QR) */}
+        {/* SECTION 10: Donation Section (UPI, Bank, QR) */}
         <div id="sahyog-dan">
           <DonationSection donationConfig={data.donationConfig} />
         </div>
 
-        {/* SECTION 12: How Contributions Help (Transparent Journey) */}
+        {/* SECTION 11: How Contributions Help (Transparent Journey) */}
         <HowContributionsHelp />
 
-        {/* SECTION 13: Impact Stories */}
+        {/* SECTION 12: Impact Stories */}
         <div id="hamara-prabhav">
           <ImpactStories stories={data.stories} />
         </div>
 
-        {/* SECTION 14: Transparency & Accountability */}
+        {/* SECTION 13: Transparency & Accountability */}
         <div id="pardarshita">
           <TransparencySection />
         </div>
 
-        {/* SECTION 15: Upcoming Event Countdown & RSVP */}
-        <div id="ayojan-shiviram">
-          <EventCountdown />
-        </div>
-
-        {/* SECTION 16: News & Activities */}
+        {/* SECTION 14: News & Activities */}
         <div id="samachar">
           <NewsSection news={data.news} />
         </div>

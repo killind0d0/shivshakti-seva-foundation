@@ -3,6 +3,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { Sparkles, SlidersHorizontal, ArrowLeftRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface BeforeAfterSliderProps {
   beforeImage?: string;
@@ -17,14 +18,40 @@ interface BeforeAfterSliderProps {
 export default function BeforeAfterSlider({
   beforeImage = "/images/gallery/flood_relief_action.jpg",
   afterImage = "/images/gallery/hero_community.jpg",
-  beforeLabel = "आपदा से पहले / विपदा की स्थिति",
-  afterLabel = "फाउंडेशन के सहयोग के बाद — सुरक्षित परिवार",
-  title = "जमीनी सेवा का वास्तविक प्रभाव — पहले और बाद में",
-  description = "स्लाइडर को दाएँ-बाएँ खिसकाकर देखें कि आपके सहयोग से किस प्रकार संकटग्रस्त परिवारों के जीवन में सुरक्षा व स्वावलंबन आया।",
+  beforeLabel,
+  afterLabel,
+  title,
+  description,
 }: BeforeAfterSliderProps) {
+  const { isEn, t } = useLanguage();
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const displayTitle =
+    title ||
+    t(
+      "जमीनी सेवा का वास्तविक प्रभाव — पहले और बाद में",
+      "Real Impact on the Ground — Before & After"
+    );
+  const displayDescription =
+    description ||
+    t(
+      "स्लाइडर को दाएँ-बाएँ खिसकाकर देखें कि आपके सहयोग से किस प्रकार संकटग्रस्त परिवारों के जीवन में सुरक्षा व स्वावलंबन आया।",
+      "Drag the slider left and right to see how your support brings safety, sustenance, and self-reliance to vulnerable families."
+    );
+  const displayBeforeLabel =
+    beforeLabel ||
+    t(
+      "आपदा से पहले / विपदा की स्थिति",
+      "During Crisis / Before Support"
+    );
+  const displayAfterLabel =
+    afterLabel ||
+    t(
+      "फाउंडेशन के सहयोग के बाद — सुरक्षित परिवार",
+      "After Foundation Support — Safe & Rehabilitated"
+    );
 
   const handleMove = useCallback((clientX: number) => {
     if (!containerRef.current) return;
@@ -85,13 +112,13 @@ export default function BeforeAfterSlider({
       <div className="text-center max-w-2xl mx-auto mb-6">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-gold-100 border border-brand-gold-300 text-brand-maroon-900 text-xs font-semibold mb-2">
           <Sparkles className="w-3.5 h-3.5 text-brand-saffron-600" />
-          <span>प्रत्यक्ष परिवर्तन प्रमाण</span>
+          <span>{t("प्रत्यक्ष परिवर्तन प्रमाण", "Demonstrated Ground Transformation")}</span>
         </div>
         <h3 className="text-xl sm:text-2xl font-heading text-brand-maroon-950 font-bold">
-          {title}
+          {displayTitle}
         </h3>
         <p className="text-xs sm:text-sm text-brand-maroon-700 mt-1">
-          {description}
+          {displayDescription}
         </p>
       </div>
 
@@ -99,7 +126,7 @@ export default function BeforeAfterSlider({
       <div
         ref={containerRef}
         role="slider"
-        aria-label="पहले और बाद की तुलना स्लाइडर"
+        aria-label={t("पहले और बाद की तुलना स्लाइडर", "Before and After comparison slider")}
         aria-valuenow={Math.round(sliderPosition)}
         aria-valuemin={5}
         aria-valuemax={95}
@@ -119,14 +146,14 @@ export default function BeforeAfterSlider({
         <div className="absolute inset-0">
           <Image
             src={afterImage}
-            alt={afterLabel}
+            alt={displayAfterLabel}
             fill
             sizes="(max-width: 768px) 100vw, 800px"
             className="object-cover"
           />
           <div className="absolute top-4 right-4 bg-emerald-800/90 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md backdrop-blur-xs flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
-            <span>{afterLabel}</span>
+            <span>{displayAfterLabel}</span>
           </div>
         </div>
 
@@ -137,14 +164,14 @@ export default function BeforeAfterSlider({
         >
           <Image
             src={beforeImage}
-            alt={beforeLabel}
+            alt={displayBeforeLabel}
             fill
             sizes="(max-width: 768px) 100vw, 800px"
             className="object-cover"
           />
           <div className="absolute top-4 left-4 bg-brand-maroon-900/90 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md backdrop-blur-xs flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <span>{beforeLabel}</span>
+            <span>{displayBeforeLabel}</span>
           </div>
         </div>
 
@@ -161,7 +188,7 @@ export default function BeforeAfterSlider({
         {/* Bottom Helper Instruction */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-xs text-white px-3 py-1 rounded-full text-[11px] font-medium pointer-events-none flex items-center gap-1.5">
           <SlidersHorizontal className="w-3.5 h-3.5 text-brand-gold-300" />
-          <span>तुलना के लिए स्लाइडर को खींचें</span>
+          <span>{t("तुलना के लिए स्लाइडर को खींचें", "Drag slider to compare")}</span>
         </div>
       </div>
     </div>

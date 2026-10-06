@@ -15,6 +15,8 @@ import {
  * Replaces the old bloated SectionNavHub gateway + tab bar.
  */
 
+import { useLanguage } from "@/context/LanguageContext";
+
 export type TabKey = "all"; // Kept for backward compat with imports; site is now single-page
 
 interface QuickAccessBarProps {
@@ -26,6 +28,8 @@ export default function QuickAccessBar({
   onOpenHelp,
   onOpenDonation,
 }: QuickAccessBarProps) {
+  const { isEn } = useLanguage();
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -48,9 +52,11 @@ export default function QuickAccessBar({
             </div>
             <div className="text-left min-w-0">
               <div className="text-xs sm:text-sm font-heading font-bold text-red-800 truncate">
-                सहायता चाहिए
+                {isEn ? "Request Aid" : "सहायता चाहिए"}
               </div>
-              <div className="text-[10px] text-red-600 font-semibold">24×7 आपातकाल</div>
+              <div className="text-[10px] text-red-600 font-semibold">
+                {isEn ? "24×7 Emergency" : "24×7 आपातकाल"}
+              </div>
             </div>
           </button>
 
@@ -64,9 +70,11 @@ export default function QuickAccessBar({
             </div>
             <div className="text-left min-w-0">
               <div className="text-xs sm:text-sm font-heading font-bold text-amber-900 truncate">
-                सहयोग करें
+                {isEn ? "Support / Donate" : "सहयोग करें"}
               </div>
-              <div className="text-[10px] text-amber-700 font-semibold">UPI / QR दान</div>
+              <div className="text-[10px] text-amber-700 font-semibold">
+                {isEn ? "UPI / QR / Bank" : "UPI / QR दान"}
+              </div>
             </div>
           </button>
 
@@ -80,9 +88,11 @@ export default function QuickAccessBar({
             </div>
             <div className="text-left min-w-0">
               <div className="text-xs sm:text-sm font-heading font-bold text-emerald-900 truncate">
-                हमारी सेवाएँ
+                {isEn ? "Our Services" : "हमारी सेवाएँ"}
               </div>
-              <div className="text-[10px] text-emerald-700 font-semibold font-sans">10 प्रकल्प</div>
+              <div className="text-[10px] text-emerald-700 font-semibold font-sans">
+                {isEn ? "10 Initiatives" : "10 प्रकल्प"}
+              </div>
             </div>
           </button>
 
@@ -96,9 +106,11 @@ export default function QuickAccessBar({
             </div>
             <div className="text-left min-w-0">
               <div className="text-xs sm:text-sm font-heading font-bold text-brand-maroon-950 truncate">
-                कॉल करें
+                {isEn ? "Call Helpline" : "कॉल करें"}
               </div>
-              <div className="text-[10px] text-brand-maroon-700 font-semibold font-sans">91171 35379</div>
+              <div className="text-[10px] text-brand-charcoal-600 font-medium font-sans">
+                {isEn ? "+91 91171 35379" : "+91 91171 35379"}
+              </div>
             </div>
           </a>
         </div>

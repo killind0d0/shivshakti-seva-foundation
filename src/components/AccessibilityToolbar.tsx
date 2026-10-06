@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { Volume2, Eye, HelpCircle, PhoneCall, Lock } from "lucide-react";
+import LanguageSwitch from "./LanguageSwitch";
+
+import { useLanguage } from "@/context/LanguageContext";
 
 interface AccessibilityToolbarProps {
   onOpenHelp: () => void;
@@ -14,6 +17,7 @@ export default function AccessibilityToolbar({
 }: AccessibilityToolbarProps) {
   const [fontSize, setFontSize] = useState<"normal" | "large" | "xlarge">("normal");
   const [highContrast, setHighContrast] = useState<boolean>(false);
+  const { isEn } = useLanguage();
 
   useEffect(() => {
     try {
@@ -65,7 +69,7 @@ export default function AccessibilityToolbar({
   return (
     <div
       role="region"
-      aria-label="सुगमता एवं त्वरित संपर्क पट्टी"
+      aria-label={isEn ? "Accessibility and helpline toolbar" : "सुगमता एवं त्वरित संपर्क पट्टी"}
       className="bg-brand-maroon-950 text-brand-cream-200 text-[11px] sm:text-xs py-1 px-2 sm:px-6 border-b border-brand-maroon-900/80 select-none w-full max-w-full overflow-hidden"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-2 w-full min-w-0">
@@ -75,15 +79,17 @@ export default function AccessibilityToolbar({
             <PhoneCall className="w-2.5 h-2.5" />
           </span>
           <span className="font-medium text-brand-cream-300 hidden md:inline">
-            हेल्पलाइन:
+            {isEn ? "Helpline:" : "हेल्पलाइन:"}
           </span>
           <a
             href="tel:+919117135379"
             className="font-bold text-brand-gold-400 hover:text-white transition-colors underline underline-offset-2 truncate text-[11px] sm:text-xs"
-            title="हेल्पलाइन पर सीधे कॉल करें"
+            title={isEn ? "Call Helpline directly" : "हेल्पलाइन पर सीधे कॉल करें"}
           >
             <span className="sm:hidden font-sans font-bold">+91 91171 35379</span>
-            <span className="hidden sm:inline font-sans font-bold">+91 91171 35379 (२४×७ सदैव उपलब्ध)</span>
+            <span className="hidden sm:inline font-sans font-bold">
+              {isEn ? "+91 91171 35379 (24×7 Available)" : "+91 91171 35379 (२४×७ सदैव उपलब्ध)"}
+            </span>
           </a>
         </div>
 
@@ -93,16 +99,16 @@ export default function AccessibilityToolbar({
           <button
             onClick={onOpenHelp}
             className="flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full bg-brand-saffron-600 hover:bg-brand-saffron-500 text-white font-semibold text-[10px] sm:text-xs transition shadow-sm whitespace-nowrap active:scale-95"
-            aria-label="सहायता हेतु तुरंत अनुरोध दर्ज करें"
+            aria-label={isEn ? "Request assistance" : "सहायता हेतु तुरंत अनुरोध दर्ज करें"}
           >
             <HelpCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            <span className="hidden sm:inline">सहायता मांगें</span>
-            <span className="sm:hidden">सहायता</span>
+            <span className="hidden sm:inline">{isEn ? "Request Aid" : "सहायता मांगें"}</span>
+            <span className="sm:hidden">{isEn ? "Aid" : "सहायता"}</span>
           </button>
 
           {/* Font resizing - Visible on tablet/desktop */}
           <div className="hidden md:flex items-center gap-1 border-l border-brand-maroon-800 pl-2.5">
-            <span className="text-brand-cream-400 text-[10px]">अक्षर:</span>
+            <span className="text-brand-cream-400 text-[10px]">{isEn ? "Font:" : "अक्षर:"}</span>
             <button
               onClick={() => setFontSize("normal")}
               className={`px-1.5 py-0.2 rounded text-[10px] font-bold transition ${
@@ -110,9 +116,9 @@ export default function AccessibilityToolbar({
                   ? "bg-brand-gold-500 text-brand-maroon-950"
                   : "bg-brand-maroon-900 text-brand-cream-200 hover:bg-brand-maroon-800"
               }`}
-              title="सामान्य अक्षर आकार"
+              title={isEn ? "Normal font size" : "सामान्य अक्षर आकार"}
             >
-              अ
+              {isEn ? "A" : "अ"}
             </button>
             <button
               onClick={() => setFontSize("large")}
@@ -121,9 +127,9 @@ export default function AccessibilityToolbar({
                   ? "bg-brand-gold-500 text-brand-maroon-950"
                   : "bg-brand-maroon-900 text-brand-cream-200 hover:bg-brand-maroon-800"
               }`}
-              title="बड़ा अक्षर आकार"
+              title={isEn ? "Large font size" : "बड़ा अक्षर आकार"}
             >
-              अ+
+              {isEn ? "A+" : "अ+"}
             </button>
             <button
               onClick={() => setFontSize("xlarge")}
@@ -132,9 +138,9 @@ export default function AccessibilityToolbar({
                   ? "bg-brand-gold-500 text-brand-maroon-950"
                   : "bg-brand-maroon-900 text-brand-cream-200 hover:bg-brand-maroon-800"
               }`}
-              title="वृहद अक्षर आकार"
+              title={isEn ? "Extra large font size" : "वृहद अक्षर आकार"}
             >
-              अ++
+              {isEn ? "A++" : "अ++"}
             </button>
           </div>
 
@@ -146,21 +152,24 @@ export default function AccessibilityToolbar({
                 ? "bg-white text-black border-white"
                 : "border-brand-maroon-700 hover:bg-brand-maroon-900 text-brand-cream-300"
             }`}
-            title="उच्च कंट्रास्ट दृश्य बदलें"
+            title={isEn ? "Toggle high contrast mode" : "उच्च कंट्रास्ट दृश्य बदलें"}
           >
             <Eye className="w-2.5 h-2.5" />
-            <span>कंट्रास्ट</span>
+            <span>{isEn ? "Contrast" : "कंट्रास्ट"}</span>
           </button>
+
+          {/* English / Hindi Translation Switch */}
+          <LanguageSwitch variant="toolbar" />
 
           {/* Admin & Staff Portal Link */}
           <button
             onClick={onOpenAdmin}
             className="inline-flex items-center gap-1 text-brand-gold-300 hover:text-white text-[10px] sm:text-[11px] font-bold underline underline-offset-2 transition whitespace-nowrap pl-1 py-0.5 rounded hover:bg-white/10 active:scale-95"
-            title="प्रशासक एवं सेवादार लॉगिन पोर्टल"
+            title={isEn ? "Admin portal login" : "प्रशासक एवं सेवादार लॉगिन पोर्टल"}
           >
             <Lock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-brand-gold-400" />
-            <span className="hidden sm:inline">एडमिन / सेवादार लॉगिन</span>
-            <span className="sm:hidden">एडमिन</span>
+            <span className="hidden sm:inline">{isEn ? "Admin Login" : "एडमिन / सेवादार लॉगिन"}</span>
+            <span className="sm:hidden">{isEn ? "Admin" : "एडमिन"}</span>
           </button>
         </div>
       </div>

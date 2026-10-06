@@ -164,7 +164,7 @@ export default function AdminModal({
   const [newPhoto, setNewPhoto] = useState({
     title: "",
     category: "बाढ़ एवं आपदा राहत",
-    location: "माँ मंगलागौरी, गया जी",
+    location: "गयाजी, बिहार, भारत",
     image: "/images/gallery/sevadar-working.png",
     date: "आज का सेवा कार्य",
     summary: "",
@@ -199,10 +199,13 @@ export default function AdminModal({
         setVolunteers(v);
         const h = JSON.parse(localStorage.getItem("ssf_help_requests") || "[]");
         setHelpRequests(h);
-        const w = JSON.parse(
+        const w1 = JSON.parse(
+          localStorage.getItem("ssf_vishesh_karyakram_registrations") || "[]"
+        );
+        const w2 = JSON.parse(
           localStorage.getItem("ssf_women_competition_registrations") || "[]"
         );
-        setWomenRegs(w);
+        setWomenRegs([...w1, ...w2]);
 
         const storedStaff = localStorage.getItem("ssf_staff_accounts");
         if (storedStaff) {
@@ -494,7 +497,7 @@ export default function AdminModal({
     setNewPhoto({
       title: "",
       category: "बाढ़ एवं आपदा राहत",
-      location: "माँ मंगलागौरी, गया जी",
+      location: "गयाजी, बिहार, भारत",
       image: "/images/gallery/sevadar-working.png",
       date: "आज का सेवा कार्य",
       summary: "",
@@ -859,7 +862,7 @@ export default function AdminModal({
                   }`}
                 >
                   <FileSpreadsheet className="w-3.5 h-3.5 text-brand-gold-400" />
-                  <span>महिला प्रतियोगिता ({womenRegs.length})</span>
+                  <span>विशेष कार्यक्रम नामांकन ({womenRegs.length})</span>
                 </button>
               )}
             </div>
@@ -971,7 +974,7 @@ export default function AdminModal({
                         value={formData.address}
                         onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                         className="w-full px-3 py-2 rounded-xl border border-brand-maroon-200 text-sm"
-                        placeholder="माँ मंगलागौरी, गया जी (बिहार) - ८२३००१"
+                        placeholder="गयाजी, बिहार, भारत"
                       />
                     </div>
 
@@ -1602,7 +1605,7 @@ export default function AdminModal({
                           type="text"
                           value={newPhoto.location}
                           onChange={(e) => setNewPhoto({ ...newPhoto, location: e.target.value })}
-                          placeholder="माँ मंगलागौरी, गया जी"
+                          placeholder="गयाजी, बिहार, भारत"
                           className="w-full px-3 py-1.5 rounded-xl border border-brand-maroon-200 text-xs"
                         />
                       </div>
@@ -2050,34 +2053,59 @@ export default function AdminModal({
               {(isAdmin || perms?.canViewWomenRegs) && activeTab === "womenRegs" && (
                 <div className="space-y-4">
                   <h3 className="font-heading text-base font-bold text-brand-maroon-950">
-                    महिला स्वावलंबन प्रतियोगिता आवेदन ({womenRegs.length})
+                    विशेष कार्यक्रम (पितृपक्ष तर्पण एवं पूजन) नामांकन ({womenRegs.length})
                   </h3>
 
                   {womenRegs.length === 0 ? (
                     <div className="p-8 text-center text-xs text-brand-charcoal-500 bg-brand-cream-50 rounded-2xl">
-                      वर्तमान में कोई प्रतियोगिता पंजीकरण दर्ज नहीं है।
+                      वर्तमान में कोई विशेष कार्यक्रम नामांकन दर्ज नहीं है।
                     </div>
                   ) : (
                     <div className="space-y-3">
                       {womenRegs.map((reg, idx) => (
                         <div
                           key={idx}
-                          className="p-3.5 rounded-xl bg-white border border-brand-maroon-100 shadow-sm flex items-center justify-between text-xs"
+                          className="p-3.5 rounded-xl bg-white border border-brand-maroon-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
                         >
-                          <div>
-                            <div className="font-bold text-brand-maroon-950">
+                          <div className="space-y-1">
+                            <div className="font-bold text-brand-maroon-950 text-sm">
                               {reg.name} • {reg.phone}
                             </div>
-                            <div className="text-brand-charcoal-600 text-[11px]">
-                              हुनर/विधा: {reg.craftCategory || reg.craft || "हस्तकला"} | अनुभव: {reg.experienceYears || "आरंभिक"}
+                            {reg.fatherName && (
+                              <div className="text-brand-charcoal-700 text-[11px]">
+                                <strong>पिता का नाम:</strong> {reg.fatherName}
+                              </div>
+                            )}
+                            {reg.pitraDevtaName && (
+                              <div className="text-amber-900 font-medium text-[11px]">
+                                <strong>पितृ देवता:</strong> {reg.pitraDevtaName}
+                              </div>
+                            )}
+                            {reg.address && (
+                              <div className="text-brand-charcoal-600 text-[11px]">
+                                <strong>पता:</strong> {reg.address}
+                              </div>
+                            )}
+                            <div className="text-brand-charcoal-400 text-[10px]">
+                              दिनांक: {reg.date || "हाल ही में"}
                             </div>
                           </div>
-                          <a
-                            href={`tel:${reg.phone}`}
-                            className="px-2.5 py-1 rounded-lg bg-brand-cream-200 text-brand-maroon-900 font-bold text-[11px]"
-                          >
-                            संपर्क करें
-                          </a>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <a
+                              href={`https://wa.me/91${reg.phone?.replace(/[^0-9]/g, "").slice(-10)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] inline-flex items-center gap-1 shadow-xs"
+                            >
+                              <span>WhatsApp</span>
+                            </a>
+                            <a
+                              href={`tel:${reg.phone}`}
+                              className="px-3 py-1.5 rounded-lg bg-brand-cream-200 hover:bg-brand-cream-300 text-brand-maroon-900 font-bold text-[11px] inline-flex items-center gap-1"
+                            >
+                              <span>कॉल करें</span>
+                            </a>
+                          </div>
                         </div>
                       ))}
                     </div>
