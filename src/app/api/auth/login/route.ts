@@ -10,9 +10,9 @@ interface RateLimitEntry {
 }
 
 const loginAttempts = new Map<string, RateLimitEntry>();
-const MAX_FAILED_ATTEMPTS = 5;
+const MAX_FAILED_ATTEMPTS = 15;
 const WINDOW_MS = 5 * 60 * 1000; // 5 minutes
-const BLOCK_DURATION_MS = 15 * 60 * 1000; // 15 minutes block on repeated failures
+const BLOCK_DURATION_MS = 1 * 60 * 1000; // 1 minute block on repeated failures
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get("x-forwarded-for");

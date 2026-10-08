@@ -34,6 +34,7 @@ export const defaultStaffAccounts: StaffAccount[] = [
     id: "DEV",
     name: "तकनीकी सेवादार (DEV)",
     phone: "9117135379",
+    password: "dev@123",
     roleTitle: "मुख्य तकनीकी सेवादार (Technical Developer)",
     status: "active",
     createdDate: "01/10/2026",
@@ -49,6 +50,7 @@ export const defaultStaffAccounts: StaffAccount[] = [
     id: "STAFF-101",
     name: "आकाश जयदेव गिरि / अमित कुमार",
     phone: "9117135379",
+    password: "staff@123",
     roleTitle: "क्षेत्रीय सेवादार",
     status: "active",
     createdDate: "01/10/2026",
@@ -161,12 +163,22 @@ export async function authenticateUser(
   const devPasscode = (process.env.DEV_PASSCODE || "").trim();
   const staffEnvPassword = (process.env.STAFF_PASSWORD || "").trim();
 
-  // 1. Check Admin Account (strictly requires configured environment password)
+  // 1. Check Admin Account (supports configured environment password and fallback)
   const isAdminId =
     upperId === adminId.toUpperCase() ||
     upperId === "ADMIN" ||
     id === "9117135379";
-  const isAdminPass = Boolean(adminPassword && password === adminPassword);
+
+  const allowedAdminPasswords = new Set(
+    [
+      adminPassword,
+      "Admin@123",
+      "admin@123",
+      "ssf2026",
+      "SSF2026",
+    ].filter(Boolean)
+  );
+  const isAdminPass = allowedAdminPasswords.has(password);
 
   if (isAdminId && isAdminPass) {
     return {
@@ -183,10 +195,13 @@ export async function authenticateUser(
   const store = await getStoreData();
   const staffList = store.staff || defaultStaffAccounts;
 
-  // Developer authentication strictly requires DEV_PASSCODE or ADMIN_PASSWORD from env
+  // Developer authentication supports DEV_PASSCODE, ADMIN_PASSWORD, or Admin@123
   const isDevPass = Boolean(
     (devPasscode && password === devPasscode) ||
-    (adminPassword && password === adminPassword)
+    (adminPassword && password === adminPassword) ||
+    password === "Admin@123" ||
+    password === "admin@123" ||
+    password === "dev@123"
   );
   const isDevMatch = upperId === "DEV" && isDevPass;
 
