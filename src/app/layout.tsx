@@ -1,4 +1,3 @@
-import GatewayGuard from "@/components/GatewayGuard";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
@@ -98,11 +97,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-brand-cream-100 text-brand-charcoal-900 antialiased selection:bg-brand-saffron-500 selection:text-white">
         {/* Single Global Mount Point for Google Website Translator */}
         <div id="google_translate_element" aria-hidden="true" />
-        <GatewayGuard>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </GatewayGuard>
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
         <script
           dangerouslySetInnerHTML={{
             __html: `
